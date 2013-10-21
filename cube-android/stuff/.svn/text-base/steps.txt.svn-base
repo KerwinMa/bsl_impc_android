@@ -1,2 +1,0 @@
-1.°²×°jar
-mvn -f pom-install-jars.xml install
