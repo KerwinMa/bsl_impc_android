@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#00000000"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dip" >
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:focusable="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/msgbody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/listview_corner_white_top" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                
+                android:ellipsize="end"
+                android:text="titletitletitletitletitletiffffffffffffffffffftletitle"
+                android:layout_marginLeft="10dip"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textStyle="bold" 
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/date"
+                />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip"
+                android:text="12;00"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/listview_corner_white_bottom"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dip" >
+
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="255dip"
+                    android:layout_alignParentLeft="true"
+                    android:text="dddddddddddddddasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd"
+                     android:textColor="#000000"
+                	android:textSize="17sp" />
+                <TextView
+		            android:id="@+id/msg_readStatus"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_alignParentRight="true"
+		            android:layout_alignParentTop="true"
+		            android:layout_marginRight="1dip"
+		            android:clickable="false"
+		            android:gravity="right"
+		            android:text="未读"
+		            android:textColor="#FF0000" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dip" >
+
+                <TextView
+                    android:id="@+id/isread"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/font_grey"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/attment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dip"
+                    android:autoLink="all"
+                    android:textStyle="bold|italic"
+                    android:text="打开附件"
+                    android:textColor="@color/font_grey"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

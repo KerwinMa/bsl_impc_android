@@ -1,0 +1,75 @@
+@import "compass/css3";
+
+.contentScroller {
+	@include box-sizing(border-box);
+}
+
+.contentScroller > div > li {
+	border-bottom:1px solid #ccc;
+}
+
+.contentScroller > div > li{
+	border-bottom:2px solid #DDD;
+	border-left:1px solid #DDD;
+	border-right:1px solid #DDD;
+}
+
+.contentScroller > div > li:first-child {
+	border-top:1px solid #DDD;
+	@include border-top-left-radius(4px);
+	@include border-top-right-radius(4px);
+}
+
+.contentScroller > div > li:last-child {
+	border-bottom:1px solid #DDD;
+	@include border-bottom-left-radius(4px);
+	@include border-bottom-right-radius(4px);
+}
+
+
+.cube-list {
+	:first-child {
+		background: red;
+	}
+}
+
+.cube-list-item {
+	cursor: pointer;
+	@include background(linear-gradient(#ffffff, #f1f1f1));
+}
+
+.cube-list-item-more {
+	font-size: 16px;
+	line-height: 20px;
+	padding: 10px;
+	font-weight: bold;
+	font-family: Helvetica, Arial, sans-serif;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	text-align: center;
+	@extend .cube-list-item;
+
+}
+
+.cube-list-item-title{
+	padding: 0em 10px;
+	font-weight: bold;
+	color:white;
+	background: rgb(44, 133, 221);
+	font-size: 14px;
+	white-space: nowrap;
+	font-family: Helvetica, Arial, sans-serif;
+	text-shadow: 0px 0px 0px white;
+	
+}
+
+.cube-list-item-content{
+	padding: 0em 15px;
+	border: 1px solid #DAE8F6;
+	text-align: left;
+	font-size: 13px;
+	font-weight: bold;
+	line-height:15px;
+	@extend .cube-list-item;
+}

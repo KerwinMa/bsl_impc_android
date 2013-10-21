@@ -1,0 +1,457 @@
+#
+# generated on 2013/09/23 10:52:09
+#
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.AbstractMessage
+tableName=abstractmessage
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.ChanmeleonMessage
+tableName=ChanmeleonMessage
+# --table-fields-start--
+# --field-start--
+fieldName=packedMessage
+canBeNull=false
+foreign=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.CommonModuleMessage
+tableName=CommonModuleMessage
+# --table-fields-start--
+# --field-start--
+fieldName=identifier
+# --field-end--
+# --field-start--
+fieldName=linkable
+# --field-end--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.MDMMessage
+tableName=mdmmessage
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.ModuleMessage
+tableName=modulemessage
+# --table-fields-start--
+# --field-start--
+fieldName=identifier
+# --field-end--
+# --field-start--
+fieldName=linkable
+# --field-end--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessage
+tableName=NoticeModuleMessage
+# --table-fields-start--
+# --field-start--
+fieldName=noticeId
+# --field-end--
+# --field-start--
+fieldName=attachment
+# --field-end--
+# --field-start--
+fieldName=identifier
+# --field-end--
+# --field-start--
+fieldName=linkable
+# --field-end--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessageStub
+tableName=NoticeModuleMessageStub
+# --table-fields-start--
+# --field-start--
+fieldName=noticeId
+# --field-end--
+# --field-start--
+fieldName=attachment
+# --field-end--
+# --field-start--
+fieldName=identifier
+# --field-end--
+# --field-start--
+fieldName=linkable
+# --field-end--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.push.cubeparser.type.SystemMessage
+tableName=SystemMessage
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --field-start--
+fieldName=messsageId
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=groupBelong
+# --field-end--
+# --field-start--
+fieldName=hasRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.AutoDownloadRecord
+tableName=AutoDownloadRecord
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=userName
+# --field-end--
+# --field-start--
+fieldName=hasShow
+# --field-end--
+# --field-start--
+fieldName=identifier
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.AutoShowViewRecord
+tableName=AutoShowViewRecord
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=userName
+# --field-end--
+# --field-start--
+fieldName=timeUnit
+# --field-end--
+# --field-start--
+fieldName=showIntervalTime
+# --field-end--
+# --field-start--
+fieldName=showTime
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.ConversationMessage
+tableName=ConversationMessage
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=user
+# --field-end--
+# --field-start--
+fieldName=fromWho
+# --field-end--
+# --field-start--
+fieldName=toWho
+# --field-end--
+# --field-start--
+fieldName=content
+# --field-end--
+# --field-start--
+fieldName=localTime
+# --field-end--
+# --field-start--
+fieldName=type
+# --field-end--
+# --field-start--
+fieldName=picId
+# --field-end--
+# --field-start--
+fieldName=chater
+# --field-end--
+# --field-start--
+fieldName=fromType
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.MessageModule
+tableName=MessageModule
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=msgContent
+# --field-end--
+# --field-start--
+fieldName=recordId
+# --field-end--
+# --field-start--
+fieldName=msgTime
+# --field-end--
+# --field-start--
+fieldName=msgDate
+# --field-end--
+# --field-start--
+fieldName=msgSort
+# --field-end--
+# --field-start--
+fieldName=msgRead
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.SessionModel
+tableName=sessionModel
+# --table-fields-start--
+# --field-start--
+fieldName=fromType
+# --field-end--
+# --field-start--
+fieldName=fromWhich
+# --field-end--
+# --field-start--
+fieldName=toWhich
+# --field-end--
+# --field-start--
+fieldName=chatter
+id=true
+# --field-end--
+# --field-start--
+fieldName=status
+# --field-end--
+# --field-start--
+fieldName=lastContent
+# --field-end--
+# --field-start--
+fieldName=unreadMessageCount
+# --field-end--
+# --field-start--
+fieldName=sendTime
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.UserModel
+tableName=userModel
+# --table-fields-start--
+# --field-start--
+fieldName=jid
+id=true
+# --field-end--
+# --field-start--
+fieldName=name
+# --field-end--
+# --field-start--
+fieldName=sex
+# --field-end--
+# --field-start--
+fieldName=favor
+# --field-end--
+# --field-start--
+fieldName=unreadMessageCount
+# --field-end--
+# --field-start--
+fieldName=groupJson
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.foreveross.chameleon.store.model.ViewModuleRecord
+tableName=viewModuleRecord
+# --table-fields-start--
+# --field-start--
+fieldName=myid
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=moduleName
+# --field-end--
+# --field-start--
+fieldName=appName
+# --field-end--
+# --field-start--
+fieldName=userName
+# --field-end--
+# --field-start--
+fieldName=datetimes
+# --field-end--
+# --field-start--
+fieldName=className
+# --field-end--
+# --field-start--
+fieldName=methodName
+# --field-end--
+# --field-start--
+fieldName=action
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

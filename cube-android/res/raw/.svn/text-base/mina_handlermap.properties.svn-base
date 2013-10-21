@@ -1,0 +1,3 @@
+Auth_Rsp=com.foreveross.chameleon.push.mina.library.handler.AuthRspHandler
+Common_Rsp=com.foreveross.chameleon.push.mina.library.handler.CommonRspHandler
+MessageContent=com.foreveross.chameleon.push.mina.library.handler.MessageContentHandler

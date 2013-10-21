@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="dexedLibs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/httpclient-4.2.2-ac7c2229d63ef4bbfe55d32a09502fea.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/netmodule-2ec669b8dcb8f5ecae1927443b6de0ef.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/commons-io-1.3.2-e719077eaf25c5720664c70e2ef364d7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/httpmime-4.2.2-d3486e7d113e672932d1db46d4a65a75.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/asmack-level7-3.1.1-0f35b92ff349124caadfea3167f213be.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/android-support-v4-0fbb861c36ac85dfe8d5ad0994b24b7a.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/cordova-2.5.0-5649cd63b2b2714440342d92e02dc344.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/ormlite-android-4.45-3528c18c93f35afb9fbb9550d13169ef.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/jdom.1.1.1.android.patch-dc158c4fb1a2fe25fe57ebbf41b532d1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/otto-1.3.3-601984ffab9e9276dfdaf924ff90e7a9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/gson-2.2-3902b0f15ed25c0722d7c1dde3a55b0f.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/annotations-7cce2d93a86a970171f59d5c12a4e4cf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/ormlite-core-4.45-336399fb1139387a5b33f27743d46b01.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

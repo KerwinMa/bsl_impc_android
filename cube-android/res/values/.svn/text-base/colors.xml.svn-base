@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<drawable name="white">#FFFFFF</drawable>
+	<color name="White">#FFFFFF</color>
+	<color name="Black">#000000</color>
+	<!-- <color name="grey">#D7D4D4</color> -->
+	<color name="red">#FF0000</color>
+	<color name="whi">#ffffff</color>
+	<!-- <color name="blue">#FF0000FF</color> -->
+	<color name="green">#33cc00</color>
+	<color name="yellow">#ff6600FF</color>
+	<color name="orange">#ff6600</color>
+	<color name="trans">#0000</color>
+	<color name="trainpricetext">#ff6600</color>
+	<color name="trainticketinfo">#ff3300</color>
+	<color name="trainticketinfofield">#ffedd5</color>
+	<color name="maxticket">#ff0000</color>
+	<color name="textgreen">#33cc00</color>
+
+
+	<color name="white">#ffffffff</color>
+	<color name="black">#ff000000</color>
+	<color name="blue">#ffccddff</color>
+	<color name="grey">#ff58616d</color><!-- 灰色 -->
+	<color name="darkgrey">#ff404040</color><!-- 黑灰色 -->
+	<color name="toasterro">#ff9fd524</color>
+	<color name="lightgrey">#ff888888</color><!-- 亮灰色 -->
+	<color name="semitransparent">#80000000</color>
+	<color name="lightransparent">#a0000000</color>
+	<color name="transparent">#00000000</color>
+	<color name="ChattingSenderTextColor">#ff081c52</color>
+	<color name="ConversationVoiceTextColor">#ff339900</color>
+	<color name="navpage">#ffd1d1d1</color>
+	<color name="shake_info_text">#ffa1a1a1</color>
+	<color name="gray_list_cell">#f6f6f6</color>
+	<color name="font_black">#212121</color>
+	<color name="font_grey">#969696</color>
+</resources>

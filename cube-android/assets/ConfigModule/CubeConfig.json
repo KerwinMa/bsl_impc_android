@@ -1,0 +1,45 @@
+{
+	"platform" : "android",
+    "bundle" : "",
+    "identifier" : "com.fosseveross.chameleon",
+    "name" : "统一移动平台",
+    "version" : "1.1",
+    "build" : 1,
+    "releaseNote" : "1.1: Speed Boost. 1.0: First Release",
+    "icon" : "http://xxx.com/image/a.png",
+    "modifiedAt" : "2013-01-30 09:26:40",
+    "appKey" : "b5131a6065ba2e980f5b2180f5238385",
+    "modules":[
+    {
+            "version": "1.0.0.115",
+            "category": "基本功能",
+            "downloadUrl": "http://58.215.176.89:9000/bsl-web/mam/attachments/ff8080813e310905013e346c0e790163",
+            "releaseNote": "加入phonegap支持",
+            "icon": "http://58.215.176.89:9000/bsl-web/mam/attachments/ff8080813c99cf06013c9a1a4fe60016",
+            "identifier": "vendor",
+            
+            "name": "Cube框架",
+            "hidden": true,
+            "updatable": false,
+            "build": 115,
+            "moduleType": 1
+        },
+
+        {
+            "version": "1.0.0.60",
+            "category": "基本功能",
+            "downloadUrl": "http://58.215.176.89:9000/bsl-web/mam/attachments/ff8080813e1cd6f5013e30a18f9d01db",
+            "releaseNote": "1.加入phonegap支持",
+            "icon": "http://58.215.176.89:9000/bsl-web/mam/attachments/ff8080813e17dcbb013e1817b29d002a",
+            "identifier": "com.foss.login.demo",
+            
+            "name": "登陆模块-Demo",
+            "moduleType": 1,
+            "hidden": false,
+            "updatable": false,
+            "build": 60
+        }
+
+        
+	]
+}

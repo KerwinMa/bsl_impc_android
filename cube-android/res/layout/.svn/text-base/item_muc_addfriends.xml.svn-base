@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/item_search_icon"
+        android:layout_width="25dip"
+        android:layout_height="25dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:src="@drawable/male_on" />
+
+    <TextView
+        android:id="@+id/item_search_name"
+        android:layout_width="200dip"
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="25dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="25dip"
+        android:layout_toRightOf="@id/item_search_icon"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="#ff1b63ad"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/invite_checkbox"
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="20dip"
+        android:background="@drawable/checkbox_selector"
+        android:button="@null"
+        android:clickable="false" />
+
+</RelativeLayout>

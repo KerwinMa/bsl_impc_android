@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:id="@+id/chatroom_friend_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="20dip"
+        android:gravity="center_vertical" >
+        
+     <LinearLayout
+            android:id="@+id/chatroom_friend_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/chatroom_friend_icon"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:src="@drawable/chatroom_unknow_online" />
+
+            <TextView
+                android:id="@+id/chatroom_friend_name"
+                android:layout_width="40dip"
+                android:layout_height="wrap_content"
+                android:textColor="@color/font_black"
+                android:text="111111"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="30dip"
+            android:layout_toRightOf="@id/chatroom_friend_linear"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/left_conversation_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat_left"
+                android:orientation="horizontal"
+                android:visibility="visible" >
+
+                <ImageView
+                    android:layout_width="20dip"
+                    android:layout_height="20dip" />
+
+                <TextView
+                    android:id="@+id/chatroom_friend_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="15dip"
+                    android:focusable="false"
+                    android:text="asdfghjklasdfghjl"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/chatroom_friend_voice"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_gravity="center"
+                    android:background="@drawable/chat_record_f_3" />
+            </RelativeLayout>
+            <!-- 左边图片布局 -->
+
+            <RelativeLayout
+                android:id="@+id/image_left_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat_left"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <ImageView
+                    android:id="@+id/left_image"
+                    android:layout_width="100dip"
+                    android:layout_height="100dip"
+                    android:src="@drawable/pic_bg_02" />
+
+                <ProgressBar
+                    android:id="@+id/left_progressBar"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="100dip"
+                    android:layout_height="5dip"
+                    android:layout_below="@id/left_image"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/chatroom_friend_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dip"
+                android:gravity="left"
+                android:text="2012-02-03 18:30"
+                android:textColor="@color/font_black"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <!-- 当前账号发送消息布局 -->
+
+    <RelativeLayout
+        android:id="@+id/chatroom_my_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dip"
+        android:gravity="center_vertical" >
+
+        <LinearLayout
+            android:id="@+id/chatroom_my_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/chatroom_my_icon"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:src="@drawable/chatroom_unknow_online" />
+
+            <TextView
+                android:id="@+id/chatroom_my_name"
+                android:layout_width="40dip"
+                android:layout_height="wrap_content"
+                android:textColor="@color/font_black"
+                android:text="111111"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="10dip"
+            android:layout_toLeftOf="@id/chatroom_my_linear"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/right_conversation_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/chat_right"
+                android:orientation="horizontal"
+                android:visibility="visible" >
+
+                <ImageView
+                    android:id="@+id/chatroom_my_voice"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_gravity="center"
+                    android:background="@drawable/chat_record_m_3" />
+
+                <TextView
+                    android:id="@+id/chatroom_my_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:text="asdasdasdasdasdasdasdasd"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+            <!-- 右边图片布局 -->
+
+            <LinearLayout
+                android:id="@+id/image_right_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/chat_right"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <ImageView
+                    android:id="@+id/right_image"
+                    android:layout_width="100dip"
+                    android:layout_height="100dip"
+                    android:layout_gravity="center"
+                    android:src="@drawable/pic_bg_02" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/chatroom_my_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dip"
+                android:text="2012-02-03 18:30"
+                android:textColor="@color/font_black"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

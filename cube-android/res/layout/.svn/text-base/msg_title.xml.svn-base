@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="40dip"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_centerInParent="true"
+        android:background="@drawable/msg_title" />
+
+    <ImageView
+        android:id="@+id/msg_icon"
+        android:layout_width="12dip"
+        android:layout_height="12dip"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dip" />
+
+    <TextView
+        android:id="@+id/msg_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="6dip"
+        android:layout_toRightOf="@+id/msg_icon"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="18dip" />
+
+    <RelativeLayout
+        android:id="@+id/msg_num_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/delete_msg_layout"
+        android:background="@drawable/radius_bg"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/msg_num"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="33/100"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/delete_msg_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+         >
+
+        <TextView
+            android:id="@+id/delete_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/radius_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="删除"
+            android:textColor="@color/grey"
+            android:visibility="gone"
+            android:textSize="10sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

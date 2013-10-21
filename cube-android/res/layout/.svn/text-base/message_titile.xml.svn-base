@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="60dip"
+    android:background="@drawable/titile_msg"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/clear_btn"
+        android:layout_width="40dip"
+        android:layout_height="38dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="25dip"
+        android:background="@drawable/delete_msg"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/messagecenter"
+        android:textColor="#EDEDED"
+        android:textSize="20dip" >
+    </TextView>
+
+    <Button
+        android:id="@+id/export_btn"
+        android:layout_width="40dip"
+        android:layout_height="38dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="25dip"
+        android:background="@drawable/share"
+        android:gravity="center" />
+
+</RelativeLayout>

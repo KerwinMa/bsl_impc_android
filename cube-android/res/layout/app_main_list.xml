@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dip"
+    android:paddingTop="10dip" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dip"
+        android:orientation="horizontal"
+        android:paddingLeft="20dip" >
+
+        <TextView
+            android:id="@+id/list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:text="基本功能"
+            android:textColor="@color/font_grey"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <com.foreveross.chameleon.phone.view.NoScrollListView
+        android:id="@+id/list_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dip"
+        android:layout_marginRight="12dip"
+        android:cacheColorHint="#00000000"
+        android:scrollbars="none"
+        android:divider="#c2c2c2"
+        android:dividerHeight="0px" />
+    
+    <com.foreveross.chameleon.phone.view.NoScrollGridView
+        android:id="@+id/grid_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dip"
+        android:layout_marginRight="12dip"
+        android:scrollbars="none"
+        android:background="@drawable/listview_corner"
+        android:cacheColorHint="#00000000"
+        android:numColumns="4"
+        android:verticalSpacing="5dip" />
+    
+
+</LinearLayout>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>南航移动保障</title>
+
+<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="../vendor/cube/css/cube-form.css" rel="stylesheet"/>
+<link href="../vendor/cube/css/cube-loader.css" rel="stylesheet"/>
+
+<script type="text/javascript" src="../cordova-2.2.0.js"></script>
+
+<!-- requirejs -->
+<script data-main="main" src="../vendor/cube/js/cube-require.js"></script>
+
+<style type="text/css">
+#login_wrapper {
+	background: url(images/bg.jpg);
+	background-position: center;
+	background-attachment: fixed;
+	background-size: 100% 100%;
+	width:100%; height:100%;
+	min-height: 380px;
+	top:0px; left:0px;
+	margin: 0px;
+	padding: 0px;
+	/*position: fixed;*/
+}
+html,body{
+    padding:0;
+    margin:0;
+    height:100%;
+}
+</style>
+
+</head>
+<body id="login_wrapper">
+	<div style="width:100%;height:180px;">
+	</div>
+	<div style="min-height:220px;">
+		<form id="login-form">
+			<div class="cube-form-fieldset">
+		    	<div>
+		    		<div class="cube-form-field">
+		    			<div class="cube-form-label" style="min-width:60px;">员工号</div>
+		    			<div class="cube-form-textfield"><input type="text" id="username" name="username"/></div>
+		    		</div>
+		    		<div class="cube-form-field">
+		    			<div class="cube-form-label" style="min-width:60px;">密&nbsp;&nbsp;&nbsp;&nbsp;码</div>
+		    			<div class="cube-form-textfield"><input type="password" id="password" name="password"/></div>
+		    		</div>
+		    		<div style="float:left;width:100%">
+		    			<div style="float:left;margin:5px;">
+		    				<label>
+		    					<input id="rememberme" type="checkbox" name="rememberme" value="true" style="margin-top:0px;">
+		    					<span>保存密码</span>
+		    				</label>
+		    			</div>
+		    			<!--
+		    			<div style="float:right;margin:5px;">
+		    				<a href="amp.apk" class="btn btn-info">
+		    					<i class="icon-download"></i>&nbsp;客户端下载
+		    				</a>
+		    			</div>
+		    			-->
+		    		</div>
+		    	</div>
+		    </div>
+		    <div style="width:90%;margin-left:auto;margin-right:auto">
+				<button id="login" type="submit" class="btn btn-warning btn-large" value="登陆" style="width:100%">登陆</button>
+			</div>
+		</form>
+		
+	</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_window_id"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/autodownloadlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:background="@color/font_grey"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/dialog_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:layout_toRightOf="@+id/progressBar1"
+            android:gravity="center"
+            android:text="正在下载..."
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dip" />
+    </RelativeLayout>
+
+    <android.support.v4.view.ResizeLayout
+        android:id="@+id/layouts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/autodownloadlayout"
+        android:layout_alignParentTop="true"
+        android:background="@color/font_grey" >
+
+        <fragment
+            android:id="@+id/parent_fragment"
+            android:name="parentFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.foreveross.chameleon.pad.fragment.ParentDroidFragment" />
+
+        <FrameLayout
+            android:id="@+id/child_frame"
+            android:name="childFrame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shadow"
+            android:paddingLeft="21dip" >
+        </FrameLayout>
+    </android.support.v4.view.ResizeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@color/White">
+
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="1.0"
+		android:layout_marginLeft="@dimen/margin_left"
+		android:layout_marginRight="@dimen/margin_right" android:scrollbars="none">
+		<LinearLayout
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+		>
+			<ImageView
+				android:id="@+id/common_message_pwdresult_iv_pic"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+			/>
+			<TextView
+				android:id="@+id/common_message_pwdresult_tv_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:layout_weight="1"
+			/>
+			<Button
+				android:id="@+id/common_message_pwdresult_btn_back"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+			/>
+							
+		</LinearLayout>
+		
+	</ScrollView>
+
+</LinearLayout>

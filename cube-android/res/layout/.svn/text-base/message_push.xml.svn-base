@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/NavPage"
+    android:background="@drawable/background_msg"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="vertical" >
+
+    <include layout="@layout/message_titile" >
+    </include>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0" >
+
+        <ListView
+            android:id="@+id/chatting_history_lv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@null"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/line"
+            android:listSelector="@drawable/mm_chat_listitem"
+            android:scrollbars="vertical"
+            android:transcriptMode="alwaysScroll" />
+
+        <LinearLayout
+            android:id="@+id/chatting_volumn_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightransparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="20.0dip"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20.0dip"
+                android:text="@string/chatting_music_volumn"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/LargeTextSize" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <SeekBar
+                    android:id="@+id/chatting_volumn_bar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10.0dip"
+                    android:layout_marginLeft="30.0dip"
+                    android:layout_marginRight="30.0dip"
+                    android:layout_marginTop="10.0dip" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/chatting_handset_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chatting_use_handset"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/LargeTextSize" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

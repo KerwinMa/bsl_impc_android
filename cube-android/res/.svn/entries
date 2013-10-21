@@ -1,0 +1,67 @@
+10
+
+dir
+4757
+http://svn.foreveross.com/cubesec/code/andriod/cube-android/res
+http://svn.foreveross.com/cubesec
+
+
+
+2013-10-19T10:26:38.759545Z
+4755
+luyoulun
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+ba80e2c0-12b2-4e4d-a769-896fb1623f52
+
+anim
+dir
+
+color
+dir
+
+drawable
+dir
+
+drawable-hdpi
+dir
+
+drawable-ldpi
+dir
+
+drawable-mdpi
+dir
+
+drawable-xhdpi
+dir
+
+layout
+dir
+
+layout-large
+dir
+
+menu
+dir
+
+raw
+dir
+
+values
+dir
+
+xml
+dir
+

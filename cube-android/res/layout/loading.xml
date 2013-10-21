@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ViewStub
+        android:id="@+id/phone_splash_screen_stub"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:inflatedId="@+id/phone_splash_screen_import"
+        android:layout="@layout/phone_splash_screen" />
+
+    <ViewStub
+        android:id="@+id/pad_splash_screen_stub"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:inflatedId="@+id/pad_splash_screen_import"
+        android:layout="@layout/pad_splash_screen" />
+
+</RelativeLayout>

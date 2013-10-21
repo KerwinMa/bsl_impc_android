@@ -1,0 +1,16 @@
+{
+	"platform" : "android",
+	"bundle" : "",
+	"identifier" : "com.fosseveross.chameleon",
+	"name" : "统一移动平台",
+	"version" : "1.1",
+	"build" : 1,
+	"releaseNote" : "1.1: Speed Boost. 1.0: First Release",
+	"icon" : "http://xxx.com/image/a.png",
+	"modifiedAt" : "2013-01-30 09:26:40",
+	"modules":[
+		
+		
+
+	]
+}

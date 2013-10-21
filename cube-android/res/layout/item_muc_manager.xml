@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/item_muc_manager_icon"
+        android:layout_width="25dip"
+        android:layout_height="25dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:src="@drawable/male_on" />
+
+    <TextView
+        android:id="@+id/item_muc_manager_name"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="25dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="25dip"
+        android:layout_toRightOf="@id/item_muc_manager_icon"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="#ff1b63ad"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/item_muc_manager_delete"
+        android:layout_width="50dip"
+        android:layout_height="30dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/btn_shape_red_clickbg"
+        android:textStyle="bold"
+        android:text="删除"
+        android:textColor="@color/White"
+        android:textSize="12sp" />
+
+</RelativeLayout>

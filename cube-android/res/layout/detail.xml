@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffff66"
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:background="#cc6699" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="消息推送"
+                android:textColor="#003366"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/detail_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="back" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/itemll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="#ff9933"
+            android:orientation="vertical"
+            android:padding="20dp" >
+
+            <TextView
+                android:id="@+id/detail_message"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="3333333333333333333"
+                android:textColor="#663366" />
+
+            <TextView
+                android:id="@+id/detail_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="20:10"
+                android:textColor="#6699ff" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/itemll"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="22dp"
+            android:text="title"
+            android:textColor="#003366"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/detail_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/itemll"
+            android:layout_below="@+id/itemll"
+            android:layout_marginTop="39dp"
+            android:text="未回执" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/detail_answer"
+            android:layout_alignBottom="@id/detail_answer"
+            android:layout_toLeftOf="@id/detail_answer"
+            android:text="回执情况：" />
+
+    </RelativeLayout>
+
+</LinearLayout>

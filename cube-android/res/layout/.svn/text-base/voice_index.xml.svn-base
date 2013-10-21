@@ -1,0 +1,130 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF" >
+
+    <RelativeLayout
+        android:id="@+id/titlebar"
+        style="@style/titlebar"
+        android:background="@drawable/title_voice" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/helpcenter"
+            android:textColor="#FFFFFF"
+            android:textSize="23sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titlebar"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/forstseparator"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/Black" />
+
+        <RelativeLayout
+            android:id="@+id/left_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F8F8F8" >
+
+            <Button
+                android:id="@+id/onlineanswer"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/help_center_list_selected"
+                android:gravity="center"
+                android:text="@string/onlineanswer"
+                android:textColor="#000000"
+                android:textSize="23sp" />
+
+            <TextView
+                android:id="@+id/firstline"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/onlineanswer"
+                android:background="@android:color/darker_gray"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/normallline"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_below="@id/firstline"
+                android:background="@drawable/help_center_list_selector"
+                android:gravity="center"
+                android:text="@string/normallycontrol"
+                android:textColor="#000000"
+                android:textSize="23sp" />
+
+            <TextView
+                android:id="@+id/secondline"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/normallline"
+                android:background="@android:color/darker_gray"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/feedback"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_below="@id/secondline"
+                android:background="@drawable/help_center_list_selector"
+                android:gravity="center"
+                android:text="@string/feedback"
+                android:textColor="#000000"
+                android:textSize="23sp" />
+
+            <TextView
+                android:id="@+id/thirdline"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/feedback"
+                android:background="@android:color/darker_gray"
+                android:gravity="center" />
+
+           <Button
+                android:id="@+id/introduce"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/help_center_list_selector"
+                android:gravity="center"
+                 android:layout_below="@id/thirdline"
+                android:text="@string/functionintroduc"
+                android:textColor="#000000"
+                android:textSize="23sp" />
+
+            <TextView
+                android:id="@+id/fourline"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/onlineanswer"
+                android:background="@android:color/darker_gray"
+                android:gravity="center" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/separator"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/Black" />
+
+        <RelativeLayout
+            android:id="@+id/body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <!-- android:stackFromBottom="true" -->
+            <!-- android:transcriptMode="alwaysScroll" -->
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

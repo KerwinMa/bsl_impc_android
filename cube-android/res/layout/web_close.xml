@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ImageView
+        android:id="@+id/web_close_button"
+        android:adjustViewBounds="true"
+        android:layout_width="45dip"
+        android:layout_height="45dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginBottom="20dip"
+        android:contentDescription=""
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/blowup"/>
+
+ 
+
+</RelativeLayout>

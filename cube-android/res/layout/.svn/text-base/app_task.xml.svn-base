@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/scroll_content_backgorund"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/relativeLayout1_ref"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        layout="@layout/cube_titlebar" />
+
+    <ListView
+        android:id="@+id/task_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:scrollbars="none"
+        android:divider="#c2c2c2"
+        android:dividerHeight="0px"  />
+
+
+</LinearLayout>

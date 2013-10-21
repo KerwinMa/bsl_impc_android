@@ -1,0 +1,80 @@
+10
+
+dir
+4757
+http://svn.foreveross.com/cubesec/code/andriod/cube-android/src/com/foreveross/chameleon/phone
+http://svn.foreveross.com/cubesec
+
+
+
+2013-10-19T10:29:58.384950Z
+4756
+kuanghaojun
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+ba80e2c0-12b2-4e4d-a769-896fb1623f52
+
+ActivityManager.java
+file
+
+
+
+
+2013-09-25T06:30:58.000000Z
+5015fb23f1748b87ead4e41bc801c49b
+2013-09-25T03:27:19.623441Z
+3522
+kuanghaojun
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2895
+
+activity
+dir
+
+chat
+dir
+
+mdm
+dir
+
+modules
+dir
+
+muc
+dir
+
+view
+dir
+

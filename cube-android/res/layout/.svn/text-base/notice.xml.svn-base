@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/scroll_content_backgorund"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/relativeLayout1_ref"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        layout="@layout/cube_titlebar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/noticelist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:listSelector="@drawable/list_null_selector"
+            android:layout_above="@+id/editcheckbox"
+            >
+        </ListView>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/editcheckbox"
+            android:background="#000000"
+            android:padding="10dip"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+            <CheckBox
+                android:id="@+id/allselected"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"   
+                android:text="全选" />
+            <Button
+                android:layout_alignParentRight="true"
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删除 " />
+            <Button
+                android:id="@+id/mark"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/delete"
+                android:text="标记已读" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/relativeLayout1_ref"
+        android:layout_width="fill_parent"
+        android:layout_height="45dip"
+        layout="@layout/cube_titlebar" />
+
+    <LinearLayout
+        android:id="@+id/moreitem_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dip" >
+
+        <RelativeLayout
+            android:layout_width="65dip"
+            android:layout_height="65dip"
+            android:gravity="center"
+            android:padding="3dip" >
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/imageView_updata"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/update_icon"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_download"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="50dp"
+                android:layout_height="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+
+               <LinearLayout
+                    android:id="@+id/mi_layout2"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip" >
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dip"
+                        android:text=""
+                        android:textColor="#005EB4" />
+                    
+					<TextView
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_marginTop="10dip"
+					    android:text="模块简介"
+					    android:textColor="#000000" />
+                   
+                </LinearLayout>
+                
+                
+                <LinearLayout
+                    android:id="@+id/mi_layout3"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="5dp" >
+
+                    <com.foreveross.chameleon.phone.view.ItemButton
+                        android:id="@+id/app_dealbtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dip"
+                        android:textSize="12sp"
+                        android:textColor="#4a4a4a"
+                        android:background="@drawable/app_detailbtn_image" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/releaseNote"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="3"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/app_detail_bg"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="visible" >
+
+            <com.foreveross.chameleon.phone.view.SlidePageView
+                android:id="@+id/slidePageView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal" >
+            </com.foreveross.chameleon.phone.view.SlidePageView>
+
+            <LinearLayout
+                android:id="@+id/point"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="visible" >
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+</LinearLayout>

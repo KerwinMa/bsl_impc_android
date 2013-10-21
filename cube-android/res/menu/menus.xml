@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+   
+    <item  
+         android:id="@+id/ic_rotate_left"
+        android:showAsAction="always"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_rotate_left">
+    <menu>
+    <item 
+        android:id="@+id/ic_rotate_right"
+        android:showAsAction="always"
+         android:orderInCategory="2"
+         android:icon="@drawable/ic_rotate_right"
+        />
+    
+    <item 
+        android:id="@+id/save"
+        android:orderInCategory="3"
+        android:showAsAction="always"
+        android:title="裁剪"
+       />
+    </menu>
+    </item>
+ 
+    
+   
+</menu>

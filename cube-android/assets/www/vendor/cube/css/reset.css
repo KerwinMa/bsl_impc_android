@@ -1,0 +1,9 @@
+/* line 1, ../sass/reset.scss */
+html, body {
+  height: 100%;
+}
+
+/* line 5, ../sass/reset.scss */
+li {
+  list-style: none;
+}

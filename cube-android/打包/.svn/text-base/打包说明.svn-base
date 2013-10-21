@@ -1,0 +1,44 @@
+打包：
+
+1. 把应用订制的图片替换进drawable 文件夹（如 头像、欢迎界面等）
+
+2. 修改应用的包名（在eclipse中，项目点击右键-> Android tools -> Rename Application Package ）,修改成如 “com.foreveross.chameleon”
+
+3. AndroidManifest.xml中 app_name 修改 如：（移动保障/统一移动平台） 
+
+4. 修改推送端口 mina_client.properties 中端口 ，如 10.108.1.217
+
+5. MucManager中 MucServiceName 改成对应的 服务名 如“conference.snda-192-168-2-32”
+
+6. URL.java中， BASE_WS和 BASE_WEB的路径改成对应的服务器地址
+
+7. 移动运行网中打包的话，PAD_MAIN_URL, PAD_LOGIN_URL, PHONE_MAIN_URL, PHONE_MAIN_URL要改成对应的 socphone和socpad
+
+8. 移动运行网中，CubeModuleOperation中，把cubeApp.sync()方法里的showCustomDialog(true) 和cancelDialog两个方法去掉
+
+9. 签名文件为 chameleon.keystore, 密码为 000000 
+
+10. 详细请参考以下的打包用例，而应用版本号和构建号（build和version）,请去变色龙官网查找相关
+
+
+变色龙测试版：
+ packageName: com.foreveross.chameleon
+ appKey: b5131a6065ba2e980f5b2180f5238385
+ BASE_WS = "http://10.108.1.217:18860/";
+ BASE_WEB = "http://10.108.1.217:8081/bsl-web/";
+ mina_client: 10.108.1.217
+ 
+ 变色龙生产环境：
+ packageName： com.foreveross.bsl2
+ appKey: 9ac10bdf29e6cf120294703c95a60878
+ BASE_WS = "http://115.28.1.119:18860/";
+ BASE_WEB = "http://115.28.1.119:8081/bsl-web/";
+ mina_client: 115.28.1.119
+ 
+ 移动运行网
+ packageName： com.csair.soc
+ appKey: 984aac27e0d783297b89054ecb896e6d
+ BASE_WS = "http://10.103.124.90:18860/";
+ BASE_WEB = "http://10.103.124.90:8081/bsl-web/";
+ mina_client: 10.103.124.90
+ 

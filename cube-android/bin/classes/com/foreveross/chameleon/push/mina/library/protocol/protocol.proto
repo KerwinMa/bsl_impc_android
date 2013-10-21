@@ -1,0 +1,57 @@
+package com.foreveross.bsl.msgserver.protocol;
+option java_outer_classname = "PushProtocol";
+message Packet{
+    required string typeName=1;
+    required bytes  pbfBytes =2;
+}
+
+message Auth_Req{
+       required int64 id=1;
+       required string packageName=2;
+       required string encodedPackageName=3;
+}
+message Common_Rsp{
+       required int64 id=1;
+       required bool sucess=2;
+       optional string reason=3;
+}
+message Auth_Rsp{
+       required int64 id=1;
+       required bool sucess=2;
+       optional string ip=3;
+       optional string reason=4;
+       optional int64 sessionId=5;
+}
+
+message Version_Req{
+	required int64 id=1;
+       required int32 minVersion=2;
+       required int32 maxVersion=3;
+}
+message PushMessage{
+	required int64 id=1;
+	repeated int64 ids = 2 [packed=true];
+	optional bool needRsp=3 [default = false];
+	required bytes  msgBytes =4;
+}
+message MessageContent{
+  	required string id=1;
+        optional string type=2;
+	optional string title=3 ;
+	optional string content=4 ;
+        repeated MapEntity extras = 5;
+	optional int64 sendTime=6;
+
+}
+
+message MapEntity{
+  	required string key=1;
+  	required string value=2;
+
+}
+message MessageContent_Rsp{
+  	required string id=1;
+	required int64 sessionId=2;
+	required bool success=3;
+	optional string content=4;
+}
