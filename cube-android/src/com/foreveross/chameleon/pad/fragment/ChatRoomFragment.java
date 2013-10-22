@@ -380,6 +380,17 @@ public class ChatRoomFragment extends Fragment {
 
 		edittext = (EditText) view.findViewById(R.id.chat_content_et);
 		edittext.setOnFocusChangeListener(focusChangeListener);
+		edittext.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (local_module_layout.isShown()) {
+					local_module_layout.setVisibility(View.GONE);
+				}
+				local_ex_layout.setVisibility(View.GONE);
+				return false;
+			}
+		});
 		postButton = (Button) view.findViewById(R.id.chat_btn_sendcontent);
 		postButton.setOnClickListener(mClickListener);
 		chat_plus_btn = (Button) view.findViewById(R.id.chat_plus_btn);
