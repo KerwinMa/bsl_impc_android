@@ -6,6 +6,7 @@ import java.util.List;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.event.MessageCountChangeEvent;
+import com.foreveross.chameleon.util.FileCopeTool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -384,6 +385,11 @@ public class CubeModule implements Serializable {
 		if (countChangeListener != null) {
 			countChangeListener.onCountChange(msgCount, displayBadge);
 		}
+	}
+	
+	public boolean moduleIsInstalled(String path)
+	{
+		return FileCopeTool.fileIsExist(path, this.identifier);
 	}
 
 }

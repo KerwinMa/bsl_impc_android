@@ -133,7 +133,26 @@ public class FileCopeTool {
 		return false;
 
 	}
+	/**
+	 * 判断SD里某路径的文件是否存在。
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static boolean fileIsExist(String path, String name) {
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			File s = new File(path + "/" + name);
+			if (s.exists()) {
+				return true;
+			} else {
+				return false;
+			}
 
+		}
+		return false;
+
+	}
 	/**
 	 * 删除SD卡某路径下的某个文件
 	 * 

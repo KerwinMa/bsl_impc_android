@@ -28,6 +28,8 @@ public abstract class ModuleMessage<T> extends AbstractMessage<T> {
 	protected String identifier;
 	@DatabaseField
 	protected boolean linkable = false;
+	@DatabaseField
+	protected String userName;
 
 	public boolean isLinkable() {
 		return linkable;
@@ -43,6 +45,15 @@ public abstract class ModuleMessage<T> extends AbstractMessage<T> {
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
+	}
+
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public ModuleMessage(long sendTime, String messsageId, String title,

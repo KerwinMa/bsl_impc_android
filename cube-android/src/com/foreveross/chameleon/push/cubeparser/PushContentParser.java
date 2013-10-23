@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Delayed;
 
+import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
 import com.foreveross.chameleon.push.cubeparser.type.ChanmeleonMessage;
@@ -15,6 +16,7 @@ import com.foreveross.chameleon.push.cubeparser.type.SystemMessage;
 import com.foreveross.chameleon.push.mina.library.Constants;
 import com.foreveross.chameleon.push.mina.library.protocol.PushProtocol.MapEntity;
 import com.foreveross.chameleon.push.mina.library.protocol.PushProtocol.MessageContent;
+import com.foreveross.chameleon.util.Preferences;
 
 public class PushContentParser {
 	/**
@@ -31,12 +33,13 @@ public class PushContentParser {
 		String content = messageContent.getContent();
 		String messageType = messageContent.getType();
 		String messsageId = messageContent.getId();
+		String userName = Preferences.getUserName(Application.sharePref);
 		long sendTime = messageContent.getSendTime();
 		// 根据消息类型，转码成对应对象
 		ChanmeleonMessage messageDelay = null;
 		if (Constants.MESSAGE_TYPE_SYSTEM.equals(messageType)) {
 			messageDelay = new ChanmeleonMessage(new SystemMessage(sendTime,
-					messsageId, title, content));
+					messsageId, title, content),userName);
 		} else if (Constants.MESSAGE_TYPE_MODULE.equals(messageType)) {
 			// 模块类型消息
 			String moduleIdentifer = getMapEntityValue(messageContent,
@@ -76,7 +79,7 @@ public class PushContentParser {
 						sendTime, messsageId, title, content);
 				noticeModuleMessage.setIdentifier(moduleIdentifer);
 				noticeModuleMessage.setNoticeId(noticeId);
-				messageDelay = new ChanmeleonMessage(noticeModuleMessage);
+				messageDelay = new ChanmeleonMessage(noticeModuleMessage,userName);
 			} else {
 				// 模块消息
 				CommonModuleMessage commonModuleMessage = new CommonModuleMessage(
@@ -85,7 +88,7 @@ public class PushContentParser {
 				commonModuleMessage
 						.setGroupBelong(moduleName == null ? moduleIdentifer
 								: moduleName);
-				messageDelay = new ChanmeleonMessage(commonModuleMessage);
+				messageDelay = new ChanmeleonMessage(commonModuleMessage,userName);
 			}
 			ModuleMessage.class.cast(messageDelay.getPackedMessage())
 					.setLinkable(busiDetailBool);
