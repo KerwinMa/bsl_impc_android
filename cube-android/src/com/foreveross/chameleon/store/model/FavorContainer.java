@@ -46,7 +46,7 @@ public class FavorContainer extends AbstractContainerModel<String, UserModel> {
 		return filteredList;
 	}
 	@Override
-	protected void addStuff(UserModel v) {
+	public void addStuff(UserModel v) {
 		// TODO Auto-generated method stub
 		List<UserModel> list = getList();
 		if (!list.contains(v)){

@@ -43,9 +43,13 @@ public class CubeModuleListPlugin extends CordovaPlugin {
 					log.debug("installed list result is {} ", result);
 				} else if (action.equals("uninstallList")) {
 					log.debug("obtain uninstall list...");
-					result = CommonUtils.getGson().toJson(
-							CubeModuleManager.getInstance()
-									.getUninstalled_map());
+					try {
+						result = CommonUtils.getGson().toJson(
+								CubeModuleManager.getInstance()
+								.getUninstalled_map());
+					} catch (Exception e) {
+						System.out.println(e.getMessage());	
+					}
 					log.debug("uninstall list result is {} ", result);
 				} else if (action.equals("mainList")) {
 					log.debug("obtain main  list...");

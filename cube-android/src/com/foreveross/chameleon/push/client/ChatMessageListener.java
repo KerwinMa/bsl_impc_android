@@ -33,7 +33,6 @@ import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Message.Type;
 import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.util.Base64;
 import org.jivesoftware.smack.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +42,7 @@ import android.os.Environment;
 import android.text.format.DateFormat;
 
 import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
@@ -52,6 +52,7 @@ import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.phone.activity.ChatRoomActivity;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
+import com.foreveross.chameleon.phone.muc.MucBroadCastEvent;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
@@ -87,7 +88,7 @@ public class ChatMessageListener implements PacketListener {
 		this.application = Application.class.cast(xmppManager
 				.getNotificationService().getApplication());
 		propertiesUtil = PropertiesUtil.readProperties(
-				xmppManager.getNotificationService(), R.raw.cube);
+				xmppManager.getNotificationService(), CubeConstants.CUBE_CONFIG);
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 
 			@Override
@@ -139,10 +140,12 @@ public class ChatMessageListener implements PacketListener {
 			//如果是用户聊天
 			if (IMModelManager.instance().containUserModel(
 					conversationMessage.getChater())) {
-				IMModelManager.instance()
-						.getUserModel(conversationMessage.getFromWho())
-						.addConversationMessage(conversationMessage);
-
+				if (IMModelManager.instance()
+						.getUserModel(conversationMessage.getFromWho()) != null){
+					IMModelManager.instance()
+					.getUserModel(conversationMessage.getFromWho())
+					.addConversationMessage(conversationMessage);
+				}
 			} 
 			//如果是用户组聊天
 			else {
@@ -396,6 +399,20 @@ public class ChatMessageListener implements PacketListener {
 						//被踢出群
 						ChatGroupModel chatGroupModel = 
 								IMModelManager.instance().getChatRoomContainer().getStuff(roomJid);
+						List<ConversationMessage> list = ConversationMessage.findHistory(roomJid);
+						if (localTime != null && !"".equals(localTime)){
+							conversation.setLocalTime(TimeUnit.convert2long(localTime, TimeUnit.LONG_FORMAT));
+						} else {
+							conversation.setLocalTime(System.currentTimeMillis());
+						}
+						for(ConversationMessage conversationMessage : list){
+							if(conversationMessage.getLocalTime() == conversation.getLocalTime()){
+								return;
+							}
+						}
+						conversation.setChater(roomJid);
+						conversation.setFromWho(userJid);
+						conversation.setFromType(SessionModel.SESSION_ROOM);
 						if (chatGroupModel != null){
 							final String roomName = chatGroupModel.getGroupName();
 							application.getUIHandler().post(new Runnable() {
@@ -409,6 +426,8 @@ public class ChatMessageListener implements PacketListener {
 								}
 							});
 						}
+						conversation.setContent("您已被" + chatGroupModel.getGroupName() + "群组踢出群组");
+						StaticReference.userMf.createOrUpdate(conversation);
 						String content = message.getBody();
 						if (content.equals(XmppManager.getMeJid())){
 							IMModelManager.instance().getChatRoomContainer().
@@ -428,14 +447,16 @@ public class ChatMessageListener implements PacketListener {
 							UserModel userModel = IMModelManager.instance().getUserModel(leaveUser);
 							ChatGroupModel chatGroupModel = 
 									IMModelManager.instance().getChatRoomContainer().getStuff(roomJid);
-							chatGroupModel.getList().remove(userModel);
+							if (chatGroupModel != null && userModel != null){
+								chatGroupModel.getList().remove(userModel);
+							}
 						}
 						conversation.setType("text");
-//						if (leaveUser.contains("@")){
-//							String s1[] = leaveUser.split("@");
-//							leaveUser = s1[0];
-//						}
-						conversation.setContent("我离开用户组");
+						if (leaveUser.contains("@")){
+							String s1[] = leaveUser.split("@");
+							leaveUser = s1[0];
+						}
+						conversation.setContent(leaveUser + "离开用户组");
 					}
 //					//如果是陌生人
 //					if (!IMModelManager.instance().containUserModel(userJid)){
@@ -460,28 +481,38 @@ public class ChatMessageListener implements PacketListener {
 					if (IMModelManager.instance().containUserModel(jid)) {
 						UserModel userModel = IMModelManager.instance().getUserModel(jid);
 						if (userModel != null){
-							ConversationMessage cMessage = userModel.getLastMessage();
-							if(cMessage != null && cMessage.getLocalTime() != conversation.getLocalTime()){
-								convs.add(conversation);
+							List<ConversationMessage>  conversationMessages = userModel.findLastHistory(1);
+							if (conversationMessages.size() > 0){
+								ConversationMessage cMessage = conversationMessages.get(0);
+								if(cMessage != null && cMessage.getLocalTime() < conversation.getLocalTime()){
+									convs.add(conversation);
+								}
+								if (cMessage == null){
+									convs.add(conversation);
+								}
 							}
-							if (cMessage == null){
-								convs.add(conversation);
-							}
+
 						}
 					} 
 					else {
 						ChatGroupModel chatGroupModel = IMModelManager.instance()
 								.getChatRoomContainer().getStuff(jid);
 						if (chatGroupModel != null){
-							ConversationMessage cMessage = chatGroupModel.getLastMessage();
-							if(cMessage != null && cMessage.getLocalTime() != conversation.getLocalTime()){
-								convs.add(conversation);
-							}
-							if (cMessage == null){
-								convs.add(conversation);
+							List<ConversationMessage>  conversationMessages = chatGroupModel.findLastHistory(1);
+							if (conversationMessages.size() > 0){
+								ConversationMessage cMessage = conversationMessages.get(0);
+								if(cMessage != null && cMessage.getLocalTime() < conversation.getLocalTime()){
+									convs.add(conversation);
+								}
+								if (cMessage == null){
+									convs.add(conversation);
+								}
 							}
 						}
 					}
+					// 通知刷新界面
+//					EventBus.getEventBus(TmpConstants.EVENTBUS_MESSAGE_CONTENT,
+//							ThreadEnforcer.MAIN).post(new ConversationChangedEvent());
 				}
 			} else if (message.getType() == Type.normal) {
 				log.info("received a normal message,ignore it!");

@@ -3,8 +3,8 @@
  */
 package com.foreveross.chameleon.push.mina.library;
 
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
-import com.foreveross.chameleon.URL;
 
 /**
  * [常量文件]<BR>
@@ -22,7 +22,7 @@ public class Constants {
 	/**
 	 * server configuration
 	 */
-	public static final int AndroidClientProsPath = R.raw.cube;
+	public static final int AndroidClientProsPath = CubeConstants.CUBE_CONFIG;
 	
 	public static final String SAFE_CLOSE = "SAFE_CLOSE";
 	public static final String MESSAGE_TYPE_SYSTEM="SYS";

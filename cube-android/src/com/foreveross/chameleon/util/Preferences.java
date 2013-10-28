@@ -145,7 +145,6 @@ public class Preferences
     {
         return preference.getString(PASSWORD, "");
     }
-    
     /**
      * 从SP文件中获取用户密码
      * 

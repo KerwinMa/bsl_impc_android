@@ -3,27 +3,22 @@ package com.foreveross.chameleon.phone.activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
 import com.foreveross.chameleon.event.EventBus;
-import com.foreveross.chameleon.event.MultiAccountEvent;
 import com.foreveross.chameleon.push.client.NotificationService;
 import com.foreveross.chameleon.push.mina.library.service.MinaPushService;
 import com.foreveross.chameleon.push.mina.library.util.NetworkUtil;
-import com.foreveross.chameleon.util.PadUtils;
+import com.foreveross.chameleon.util.SharedPreferencesUtil;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -112,7 +107,8 @@ public class PushSettingActivity extends BaseActivity {
 				if (notificationService != null
 						&& !NetworkUtil
 								.isNetworkConnected(PushSettingActivity.this)) {
-					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！", Toast.LENGTH_SHORT).show();
+					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！",
+							Toast.LENGTH_SHORT).show();
 					cbStatusMina.setText("未连接");
 					minaCheckBox.setChecked(false);
 					cbStatusXmpp.setText("未连接");
@@ -138,7 +134,8 @@ public class PushSettingActivity extends BaseActivity {
 				if (notificationService != null
 						&& !NetworkUtil
 								.isNetworkConnected(PushSettingActivity.this)) {
-					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！", Toast.LENGTH_SHORT).show();
+					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！",
+							Toast.LENGTH_SHORT).show();
 					cbStatusMina.setText("未连接");
 					minaCheckBox.setChecked(false);
 					cbStatusXmpp.setText("未连接");
@@ -148,9 +145,14 @@ public class PushSettingActivity extends BaseActivity {
 				if (minaCheckBox.isChecked()) {
 					cbStatusMina.setText("正在打开...");
 					minaPushService.reconnect();
+					SharedPreferencesUtil.getInstance(PushSettingActivity.this)
+							.saveBoolean(TmpConstants.SELECT_OPEN, true);
 				} else {
+
 					cbStatusMina.setText("正在关闭...");
 					minaPushService.disConnected();
+					SharedPreferencesUtil.getInstance(PushSettingActivity.this)
+							.saveBoolean(TmpConstants.SELECT_OPEN, false);
 				}
 			}
 		});

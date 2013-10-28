@@ -73,7 +73,7 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 		if (null == convertView) {
 			holder = new ChildHolder();
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.item_group_child, null, false);
+					R.layout.item_group_child, parent, false);
 			holder.headIv = (ImageView) convertView
 					.findViewById(R.id.item_group_head_iv);
 			holder.nameTv = (TextView) convertView

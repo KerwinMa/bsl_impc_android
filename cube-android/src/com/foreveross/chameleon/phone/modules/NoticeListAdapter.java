@@ -2,21 +2,17 @@ package com.foreveross.chameleon.phone.modules;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.foreveross.chameleon.Application;
@@ -24,8 +20,6 @@ import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.push.cubeparser.type.AbstractMessage;
 import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessage;
-import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessageStub;
-import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.util.Pool;
 import common.extras.plugins.FileIntent;
 

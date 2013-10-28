@@ -72,7 +72,7 @@ public class MessageFragmentModel {
 	 * 1.先异步取每组前十条<BR>
 	 * 2.再后续取以后的记录<BR>
 	 */
-	public void init() {
+	public synchronized void init() {
 		msgSortMap.clear();
 		cacheList.clear();
 		List<AbstractMessage<?>> queryResult = new ArrayList<AbstractMessage<?>>();
@@ -124,7 +124,7 @@ public class MessageFragmentModel {
 		}
 	}
 
-	private void addMessageInner(AbstractMessage<?> am) {
+	private synchronized void addMessageInner(AbstractMessage<?> am) {
 		/** 将消息分组分类 */
 		MsgModel msgModel = msgSortMap.get(am.getGroupBelong());
 		if (msgModel == null) {
@@ -144,7 +144,7 @@ public class MessageFragmentModel {
 		msgModel.addMessage(am);
 	}
 
-	public void addMessage(AbstractMessage<?> am) {
+	public synchronized  void addMessage(AbstractMessage<?> am) {
 		addMessageInner(am);
 		coupMsgInfo();
 		notifyContentChange();
@@ -161,7 +161,7 @@ public class MessageFragmentModel {
 	 * [设置第一个为展开 ，其它合并]<BR>
 	 * [功能详细描述] 2013-10-12 上午11:43:48
 	 */
-	public void setExpendFirstMsgModel() {
+	public synchronized void setExpendFirstMsgModel() {
 		for (int i = 0; i < cacheList.size(); i++) {
 			if (i == 0) {
 				cacheList.get(i).setExpend(true);
@@ -172,7 +172,7 @@ public class MessageFragmentModel {
 		notifyContentChange();
 	}
 
-	public void addMessages(List<AbstractMessage<?>> ams) {
+	public synchronized void addMessages(List<AbstractMessage<?>> ams) {
 		for (AbstractMessage<?> am : ams) {
 			this.addMessageInner(am);
 		}
@@ -191,7 +191,7 @@ public class MessageFragmentModel {
 	 * @param messageIds
 	 *            2013-10-12 上午11:45:13
 	 */
-	public void removeNotices(Set<String> messageIds) {
+	public synchronized void removeNotices(Set<String> messageIds) {
 		MsgModel msgModel = getNoticeMsgModel();
 
 		if (msgModel != null) {
@@ -229,7 +229,7 @@ public class MessageFragmentModel {
 	 * @param am
 	 *            2013-10-12 上午11:49:06
 	 */
-	public void readMsg(AbstractMessage<?> am) {
+	public synchronized void readMsg(AbstractMessage<?> am) {
 		if (!am.isHasRead()) {
 			MsgModel msgModel = msgSortMap.get(am.getGroupBelong());
 			msgModel.readMessage(am);
@@ -242,7 +242,7 @@ public class MessageFragmentModel {
 	 * [删除选中消息]<BR>
 	 * [功能详细描述] 2013-10-12 上午11:49:23
 	 */
-	public void deleteSelectedMsg() {
+	public synchronized void deleteSelectedMsg() {
 		List<MsgModel> selectedMsgModels = getSelectedMsgModels();
 		for (MsgModel msgModel : selectedMsgModels) {
 			msgModel.removeSelectedMessages();
@@ -261,7 +261,7 @@ public class MessageFragmentModel {
 	 * [标识选中消息为已读]<BR>
 	 * [功能详细描述] 2013-10-12 上午11:49:36
 	 */
-	public void markSelectedMsgRead() {
+	public synchronized void markSelectedMsgRead() {
 		List<MsgModel> selectedMsgModels = getSelectedMsgModels();
 		for (MsgModel msgModel : selectedMsgModels) {
 			msgModel.markSelectedMessages();
@@ -277,7 +277,7 @@ public class MessageFragmentModel {
 	 * @param am
 	 *            2013-10-12 上午11:49:06
 	 */
-	public void readMessage(int groupPosition, int childPosition) {
+	public synchronized void readMessage(int groupPosition, int childPosition) {
 		MsgModel msgModel = cacheList.get(groupPosition);
 		msgModel.readMessage(childPosition);
 		coupMsgInfo();
@@ -293,7 +293,7 @@ public class MessageFragmentModel {
 	 * @param selected
 	 *            2013-10-12 上午11:50:23
 	 */
-	public void selectMessage(int groupPosition, int childPosition,
+	public synchronized void selectMessage(int groupPosition, int childPosition,
 			boolean selected) {
 		AbstractMessage<?> am = cacheList.get(groupPosition).getMsgList()
 				.get(childPosition);
@@ -308,7 +308,7 @@ public class MessageFragmentModel {
 	 * @param groupName
 	 * @return 2013-10-12 上午11:50:38
 	 */
-	public boolean removeGroup(String groupName) {
+	public synchronized boolean removeGroup(String groupName) {
 		MsgModel model = msgSortMap.remove(groupName);
 		model.removeAll();
 		cacheList.remove(model);
@@ -332,7 +332,7 @@ public class MessageFragmentModel {
 		return am;
 	}
 
-	public void readAllRecordsByModule(String identifier) {
+	public synchronized void readAllRecordsByModule(String identifier) {
 		MsgModel msgModel = msgSortMap.get(identifier);
 		if (msgModel != null) {
 			msgModel.readAllMessages();
@@ -341,7 +341,7 @@ public class MessageFragmentModel {
 		}
 	}
 
-	public void readNotices(Set<String> noticeIds) {
+	public synchronized void readNotices(Set<String> noticeIds) {
 		MsgModel msgModel = getNoticeMsgModel();
 		if (msgModel != null) {
 			msgModel.readMessages(noticeIds);
@@ -351,7 +351,7 @@ public class MessageFragmentModel {
 
 	}
 
-	public void readNotice(String noticeId) {
+	public synchronized void readNotice(String noticeId) {
 		Set<String> ids = new HashSet<String>();
 		ids.add(noticeId);
 		readNotices(ids);
@@ -380,7 +380,7 @@ public class MessageFragmentModel {
 	 * @param selected
 	 *            2013-10-12 上午11:52:37
 	 */
-	public void setSelected(boolean selected) {
+	public synchronized  void setSelected(boolean selected) {
 		this.selected = selected;
 		for (MsgModel msgModel : cacheList) {
 			msgModel.setSelectAll(selected);
@@ -395,7 +395,7 @@ public class MessageFragmentModel {
 	 * @param isEditing
 	 *            2013-10-12 上午11:52:46
 	 */
-	public void setEditing(boolean isEditing) {
+	public synchronized void setEditing(boolean isEditing) {
 		this.isEditing = isEditing;
 		for (MsgModel msgModel : cacheList) {
 			msgModel.setEditable(isEditing);
@@ -403,7 +403,9 @@ public class MessageFragmentModel {
 		notifyContentChange();
 	}
 
-	private transient List<ContentChangeListener> contentChangeListeners = new ArrayList<ContentChangeListener>();
+	private transient List<ContentChangeListener> contentChangeListeners = new 
+
+ArrayList<ContentChangeListener>();
 
 	public void addContentChangeListener(
 			ContentChangeListener contentChangeListener) {

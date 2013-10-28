@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
 import com.foreveross.chameleon.phone.view.ItemButton;
-import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.util.Preferences;
 import com.foreveross.chameleon.util.PushUtil;
 import com.foreveross.chameleon.util.imageTool.CubeAsyncImage;

@@ -7,7 +7,11 @@ import java.util.Collection;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.foreveross.chameleon.TmpConstants;
+import com.foreveross.chameleon.event.EventBus;
+import com.foreveross.chameleon.phone.muc.MucBroadCastEvent;
 import com.foreveross.chameleon.phone.muc.MucManager;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.util.Pool;
@@ -27,6 +31,8 @@ public class ChatGroupModel extends AbstractUserGroupModel implements
 	private int unreadMessageCount = 0;
 	private transient List<ConversationMessage> conversations = new ArrayList<ConversationMessage>();
 
+	private long kickTime;
+	
 	public List<ConversationMessage> getConversations() {
 		return conversations;
 	}
@@ -80,13 +86,15 @@ public class ChatGroupModel extends AbstractUserGroupModel implements
 	}
 
 	public void addConversationMessage(ConversationMessage conversationMessage) {
-		if (lastMessage != null && lastMessage.getLocalTime() < conversationMessage.getLocalTime()){
+		if (lastMessage != null
+				&& lastMessage.getLocalTime() < conversationMessage
+						.getLocalTime()) {
 			conversations.add(conversationMessage);
 			lastMessage = conversationMessage;
-		} else {
+		} else if (lastMessage == null) {
+			conversations.add(conversationMessage);
 			lastMessage = conversationMessage;
-		}
-	}
+		}}
 
 	public void findHistory(int limit) {
 		conversations.clear();
@@ -109,6 +117,28 @@ public class ChatGroupModel extends AbstractUserGroupModel implements
 		}
 
 	}
+	
+	public List<ConversationMessage> findLastHistory(int limit) {
+		List<ConversationMessage> lastConversations = new ArrayList<ConversationMessage>();
+		try {
+			if (limit == -1) {
+				lastConversations.addAll(StaticReference.userMf
+						.queryBuilder(ConversationMessage.class).where()
+						.eq("chater", roomJid).query());
+			} else {
+				long count = StaticReference.userMf
+						.queryBuilder(ConversationMessage.class).where()
+						.eq("chater", roomJid).countOf();
+				long offset = count > limit ? count - limit : 0l;
+				lastConversations.addAll(StaticReference.userMf
+						.queryBuilder(ConversationMessage.class)
+						.limit((long) limit).offset(offset).where()
+						.eq("chater", roomJid).query());
+			}
+		} catch (SQLException e) {
+		}
+		return lastConversations;
+	}
 
 	// /**
 	// * [发送消息]<BR>
@@ -130,6 +160,7 @@ public class ChatGroupModel extends AbstractUserGroupModel implements
 	 */
 	public void kick(Context context, String jid) {
 		removeStuff(jid);
+		Log.i("test", "testkick");
 		MucManager.getInstanse(context).kick(getRoomJid(), jid);
 	}
 
@@ -186,10 +217,18 @@ public class ChatGroupModel extends AbstractUserGroupModel implements
 			@Override
 			public void run() {
 				super.run();
-				MucManager.getInstanse(addcontext).invite(model, Arrays.asList(addmodels));
+				boolean success = MucManager.getInstanse(addcontext).invite(model, Arrays.asList(addmodels));
+				if (success){
+					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+					.post(MucBroadCastEvent.PUSH_MUC_ADDFRIEND_SUCCESS);
+					addMembersToList(Arrays.asList(addmodels));
+				}
+				else {
+					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+					.post(MucBroadCastEvent.PUSH_MUC_ADDFRIEND_FAIL);
+				}
 			}
 		}.start();
-		addMembersToList(Arrays.asList(models));
 	}
 	
 	public void addMembersToList(List<UserModel> list){
@@ -245,5 +284,13 @@ public class ChatGroupModel extends AbstractUserGroupModel implements
 
 	public int getUnreadMessageCount() {
 		return unreadMessageCount;
+	}
+
+	public long getKickTime() {
+		return kickTime;
+	}
+
+	public void setKickTime(long kickTime) {
+		this.kickTime = kickTime;
 	}
 }

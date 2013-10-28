@@ -642,6 +642,8 @@ public class ModuleOperationService extends Service {
 								sendBroadcast(i);
 								System.out.println("已下载完成全部模块");
 								ThreadPlatformUtils.setAutodownLoadallcount(0);
+								Intent intent = new Intent(BroadcastConstans.CANCEELDIOLOG);
+								sendBroadcast(intent);
 							}
 							Toast.makeText(context, "网络状态不稳定!", Toast.LENGTH_SHORT)
 									.show();

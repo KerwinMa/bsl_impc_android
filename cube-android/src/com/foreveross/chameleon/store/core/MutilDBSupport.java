@@ -6,7 +6,7 @@ import java.util.WeakHashMap;
 
 import android.app.Application;
 
-import com.csair.impc.R;
+import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -21,14 +21,14 @@ public class MutilDBSupport {
 	private int dbVersion;
 
 	public static MutilDBSupport build(Application aContext) {
-		String dbName = PropertiesUtil.readProperties(aContext, R.raw.cube)
+		String dbName = PropertiesUtil.readProperties(aContext, CubeConstants.CUBE_CONFIG)
 				.getString("STORE_DB_NAME", "CUBE");
 		return build(aContext, dbName);
 
 	}
 
 	public static MutilDBSupport build(Application aContext, String dbName) {
-		int dbVersion = PropertiesUtil.readProperties(aContext, R.raw.cube)
+		int dbVersion = PropertiesUtil.readProperties(aContext, CubeConstants.CUBE_CONFIG)
 				.getInteger("STORE_DB_VERSION", 1);
 		return build(aContext, dbName, dbVersion);
 	}

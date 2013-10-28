@@ -1,6 +1,11 @@
 package com.foreveross.chameleon.store.model;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.foreveross.chameleon.store.core.BaseModel;
+import com.foreveross.chameleon.store.core.StaticReference;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -78,7 +83,10 @@ public class ConversationMessage extends BaseModel<ConversationMessage, Long> {
 	final public static int StatusFailed = 0x02;
 	final public static int StatusReceiving = 0x03;
 	private int status;
-
+	
+	private static List<ConversationMessage> conversations = new ArrayList<ConversationMessage>();
+	private static List<ConversationMessage> conversations2 = new ArrayList<ConversationMessage>();
+	private static List<ConversationMessage> conversations3 = new ArrayList<ConversationMessage>();
 	public String getFromWho() {
 		return fromWho;
 	}
@@ -165,6 +173,26 @@ public class ConversationMessage extends BaseModel<ConversationMessage, Long> {
 				+ ", content=" + content + ", localTime=" + localTime
 				+ ", user=" + user + " type=" + type + ", picId=" + picId
 				+ ", status=" + status + "]";
+	}
+	
+	public static List<ConversationMessage> findHistory(String jid) {
+		try {
+			conversations.addAll(StaticReference.userMf
+					.queryBuilder(ConversationMessage.class).where()
+					.eq("type", "killperson").query());
+			
+			conversations2.addAll(StaticReference.userMf
+					.queryBuilder(ConversationMessage.class).where()
+					.eq("chater", jid).query());
+			for(ConversationMessage message : conversations2){
+				if (message.getType().equals("killperson")){
+					conversations3.add(message);
+				}
+			}
+		} catch (SQLException e) {
+			// TODO[FENGWEILI] ADD LOG
+		}
+		return conversations3;
 	}
 
 }

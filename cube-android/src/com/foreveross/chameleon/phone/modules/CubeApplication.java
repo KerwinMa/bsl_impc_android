@@ -24,7 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.foreveross.chameleon.Application;
-import com.csair.impc.R;
+import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.event.EventBus;
@@ -45,7 +45,6 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.squareup.otto.ThreadEnforcer;
-import common.extras.plugins.CubeModuleOperatorPlugin;
 
 public class CubeApplication implements Serializable {
 	/**
@@ -581,7 +580,7 @@ public class CubeApplication implements Serializable {
 						}
 					}else {
 						PropertiesUtil propertiesUtil = PropertiesUtil
-								.readProperties(mContext, R.raw.cube);
+								.readProperties(mContext, CubeConstants.CUBE_CONFIG);
 						// 判断本地模块是否存在
 						String icon = propertiesUtil.getString(
 								"icon_"+cubeModule.getIdentifier(), "");
@@ -640,7 +639,7 @@ public class CubeApplication implements Serializable {
 				// + oldOne.getAppKey());
 				if(cubeNew.getLocal()!=null) {
 					PropertiesUtil propertiesUtil = PropertiesUtil
-							.readProperties(mContext, R.raw.cube);
+							.readProperties(mContext, CubeConstants.CUBE_CONFIG);
 					// 判断本地模块是否存在
 					String icon = propertiesUtil.getString(
 							"icon_"+cubeNew.getIdentifier(), "");
@@ -782,7 +781,7 @@ public class CubeApplication implements Serializable {
 					
 					 
 					PropertiesUtil propertiesUtil = PropertiesUtil
-							.readProperties(mContext, R.raw.cube);
+							.readProperties(mContext, CubeConstants.CUBE_CONFIG);
 					// 判断本地模块是否存在
 					if (!propertiesUtil.containsValue(each.getIdentifier())) {
 						unExistModules.add(each);
@@ -991,7 +990,7 @@ public class CubeApplication implements Serializable {
 	}
 
 	public String getAppKey() {
-		return PropertiesUtil.readProperties(mContext, R.raw.cube).getString(
+		return PropertiesUtil.readProperties(mContext, CubeConstants.CUBE_CONFIG).getString(
 				"appKey", "");
 
 	}

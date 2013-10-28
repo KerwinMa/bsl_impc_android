@@ -44,6 +44,7 @@ import com.foreveross.chameleon.push.mina.library.util.NetworkUtil;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.push.mina.library.util.RSACoder;
 import com.foreveross.chameleon.push.mina.library.util.SessionHelper;
+import com.foreveross.chameleon.util.SharedPreferencesUtil;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.squareup.otto.ThreadEnforcer;
@@ -325,7 +326,12 @@ public class MinaMobileClient extends IoHandlerAdapter implements Runnable {
 
 			@Override
 			public void run() {
-				submitReq();
+				Boolean keepOpen = SharedPreferencesUtil.getInstance(minaPushService)
+						.getBoolean(TmpConstants.SELECT_OPEN, true);
+				if(keepOpen){
+					submitReq();	
+				}
+				
 			}
 		}).start();
 	}
@@ -367,7 +373,7 @@ public class MinaMobileClient extends IoHandlerAdapter implements Runnable {
 							}
 							if (!NetworkUtil
 									.isNetworkConnected(minaPushService)) {
-								Toast.makeText(minaPushService, "网络异常，请检查设置！", Toast.LENGTH_SHORT).show();
+//								Toast.makeText(minaPushService, "网络异常，请检查设置！", Toast.LENGTH_SHORT).show();
 								sendOfflineBroadCast();
 								reqQueue.clear();
 								continue;

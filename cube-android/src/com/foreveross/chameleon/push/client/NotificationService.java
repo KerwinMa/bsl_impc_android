@@ -16,7 +16,7 @@ import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import com.csair.impc.R;
+import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
 import com.foreveross.chameleon.event.EventBus;
@@ -69,7 +69,7 @@ public class NotificationService extends Service {
 	public void onCreate() {
 		log.debug("NotificationService  onCreate()...");
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		xmppManager = new XmppManager(this,R.raw.cube);
+		xmppManager = new XmppManager(this,CubeConstants.CUBE_CONFIG);
 
 		rosterManager = xmppManager.new RosterManager(new Handler() {
 			@Override
@@ -107,7 +107,7 @@ public class NotificationService extends Service {
 
 	public XmppManager getXmppManager() {
 		if (xmppManager == null) {
-			xmppManager = new XmppManager(this,R.raw.cube);
+			xmppManager = new XmppManager(this,CubeConstants.CUBE_CONFIG);
 		}
 		return xmppManager;
 	}

@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
 import com.foreveross.chameleon.phone.chat.image.CropImage;
 import com.foreveross.chameleon.phone.chat.image.Util;
@@ -109,6 +110,9 @@ public class PicutureDetailActivity extends Activity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat_pic_detail);
+		Application application = Application.class.cast(PicutureDetailActivity.this
+				.getApplication());
+		application.getActivityManager().pushActivity(this);
 		canSend = false;
 		cropImage = (ImageView) findViewById(R.id.cropImage);
 		back_btn = (Button) findViewById(R.id.back_btn);
@@ -131,53 +135,98 @@ public class PicutureDetailActivity extends Activity implements
 		flag = getIntent().getBooleanExtra("showFlag", true);
 		dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		if (!flag) {
+		if (flag) {
+			if (imagePath != null) {
+				Log.e("---------点击打开图片：", imagePath);
+				path = Environment.getExternalStorageDirectory()
+						+ "/CubeImageCache/sendFiles/";
+				File dir = new File(path);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				path += "temp_photo_org.jpg";
+				File fileTemp = new File(path);
+				if (!fileTemp.exists()) {
+					try {
+						fileTemp.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+				new AsyncTask<String, Void, Bitmap>() {
+
+					@Override
+					protected Bitmap doInBackground(String... params) {
+						Bitmap bitmap = null;
+						try {
+							bitmap = getimage(params[0], params[1]);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						return bitmap;
+					}
+
+					protected void onPostExecute(Bitmap result) {
+						if (result != null) {
+							canSend = true;
+							sendFilePath = path;
+
+							minZoom(result);
+							myImage.setImageBitmap(result);
+							center(result);
+							myImage.setImageMatrix(matrix);
+							// finish();
+						} else {
+							//
+							Toast.makeText(PicutureDetailActivity.this,
+									"图片加载失败", Toast.LENGTH_SHORT).show();
+							myImage.setImageResource(R.drawable.pic_bg_03);
+						}
+					};
+				}.execute(imagePath, path);
+			}
+		}
+		else {
 			pic_send.setVisibility(View.GONE);
 			bottom_layout.setVisibility(View.GONE);
+			if (imagePath != null) {
+				Log.e("---------点击打开图片：", imagePath);
+				new AsyncTask<Void, Void, Bitmap>() {
 
-		}
-		if (imagePath != null) {
-			Log.e("---------点击打开图片：", imagePath);
-			path = Environment.getExternalStorageDirectory()
-					+ "/CubeImageCache/sendFiles/";
-			File dir = new File(path);
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
-			path += "temp_photo_org.jpg";
-			File fileTemp = new File(path);
-			if (!fileTemp.exists()) {
-				try {
-					fileTemp.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			new AsyncTask<String, Void, Bitmap>() {
-
-				@Override
-				protected Bitmap doInBackground(String... params) {
-					Bitmap bitmap = getimage(params[0] , params[1]);
-					return bitmap;
-				}
-				protected void onPostExecute(Bitmap result) {
-					if (result != null) {
-						canSend = true;
-						sendFilePath = path;
-
-						minZoom(result);
-						myImage.setImageBitmap(result);
-						center(result);
-						myImage.setImageMatrix(matrix);
-						// finish();
-					} else {
-						myImage.setImageResource(R.drawable.pic_bg_03);
+					@Override
+					protected Bitmap doInBackground(Void... arg0) {
+						Bitmap bitmap = null;
+						try {
+							bitmap = getimage(imagePath , 1);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						return bitmap;
 					}
-				};
-			}.execute(imagePath , path);
-		}
 
+					protected void onPostExecute(Bitmap result) {
+						
+						if (result != null) {
+							int degree = Util.readPictureDegree(imagePath);
+							result = Util.rotateImage(result, degree);
+							minZoom(result);
+							myImage.setImageBitmap(result);
+							center(result);
+							myImage.setImageMatrix(matrix);
+							// finish();
+						} else {
+							myImage.setImageResource(R.drawable.pic_bg_03);
+							Toast.makeText(PicutureDetailActivity.this,
+									"图片加载失败", Toast.LENGTH_SHORT).show();
+						}
+					};
+				}.execute();
+				
+			}
+		}
 		// final Bitmap bitmap = getIntent().getParcelableExtra("image");
 
 		// mHandler = new Handler() {
@@ -572,7 +621,7 @@ public class PicutureDetailActivity extends Activity implements
 			if (!imageFile.exists()) {
 				try {
 					imageFile.createNewFile();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -581,12 +630,18 @@ public class PicutureDetailActivity extends Activity implements
 				@Override
 				protected String doInBackground(String... params) {
 					try {
-						copyFile(new File(params[0]), new File(params[1]));
-					} catch (IOException e1) {
+						if (params[0] != null && params[1] != null){
+							File file0 = new File(params[0]);
+							File file1 = new File(params[1]);
+							if (file0.exists() && file1.exists()){
+								copyFile(file0, file1);
+							}
+						}
+					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
+						return null;
 					}
-					
 /*					String path = params[0];
 					Bitmap bitmap = BitmapFactory.decodeFile(path);
 					FileOutputStream fos = null;
@@ -616,13 +671,15 @@ public class PicutureDetailActivity extends Activity implements
 				@Override
 				protected void onPostExecute(String result) {
 					super.onPostExecute(result);
-					Intent sendintent = getIntent();
-					sendintent.putExtra(CropImage.IMAGE_PATH, result);
-					setResult(RESULT_OK, sendintent);
-					myImage.setImageBitmap(null);
-					cropImage.setImageBitmap(null);
-					System.gc();
-					finish();
+					if (result != null){
+						Intent sendintent = getIntent();
+						sendintent.putExtra(CropImage.IMAGE_PATH, result);
+						setResult(RESULT_OK, sendintent);
+						myImage.setImageBitmap(null);
+						cropImage.setImageBitmap(null);
+						System.gc();
+						finish();
+					}
 				}
 			}.execute(sendFilePath, imageFile.getAbsolutePath());
 
@@ -717,13 +774,14 @@ public class PicutureDetailActivity extends Activity implements
 			sendFilePath = path;
 		}
 	}
-
-	private Bitmap getimage(String srcPath , String  path) {
+	private Bitmap getimage(String srcPath , String  path) throws FileNotFoundException {
+		File f = new File(srcPath);
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
 		// 开始读入图片，此时把options.inJustDecodeBounds 设回true了
 		newOpts.inJustDecodeBounds = true;
-		Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);// 此时返回bm为空
-
+		newOpts.inPurgeable=true;
+		newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+		Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);// 此时返回bm为空
 		newOpts.inJustDecodeBounds = false;
 		int w = newOpts.outWidth;
 		int h = newOpts.outHeight;
@@ -745,22 +803,39 @@ public class PicutureDetailActivity extends Activity implements
 			be = 1;
 		newOpts.inSampleSize = be;// 设置缩放比例
 		// 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-		bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+		
+		bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);
 		return compressImage1(bitmap , path);// 压缩好比例大小后再进行质量压缩
 	}
+	
+	private Bitmap getimage(String srcPath  ,int inSampleSize) throws FileNotFoundException {
+		File f = new File(srcPath);
+		BitmapFactory.Options newOpts = new BitmapFactory.Options();
+		// 开始读入图片，此时把options.inJustDecodeBounds 设回true了
+		newOpts.inJustDecodeBounds = true;
+		newOpts.inPurgeable=true;
+		newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+		Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);// 此时返回bm为空
+		newOpts.inJustDecodeBounds = false;
+		newOpts.inSampleSize = inSampleSize;// 设置缩放比例
+		// 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+		bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);
+		return bitmap;// 压缩好比例大小后再进行质量压缩
+	}
+
 
 	private Bitmap compressImage1(Bitmap image , String path) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-		int options = 100;
-		while (baos.toByteArray().length / 1024 > 100) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-			baos.reset();// 重置baos即清空baos
-			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
-			options -= 10;// 每次都减少10
-		}
-		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
-		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+		image.compress(Bitmap.CompressFormat.JPEG, 70, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+//		int options = 100;
+//		while (baos.toByteArray().length / 1024 > 100) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+//			baos.reset();// 重置baos即清空baos
+//			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+//			options -= 10;// 每次都减少10
+//		}
+//		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+//		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(path);
@@ -769,7 +844,7 @@ public class PicutureDetailActivity extends Activity implements
 			e.printStackTrace();
 		}
 		int degree = Util.readPictureDegree(imagePath);
-		bitmap = Util.rotateImage(bitmap, degree);
+		image = Util.rotateImage(image, degree);
 		/*
 		 * if (baos.toByteArray().length / 1024 > 1024) {//
 		 * 判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
@@ -779,8 +854,8 @@ public class PicutureDetailActivity extends Activity implements
 		 * bitmap.compress(CompressFormat.JPEG, 100, fos); }
 		 */
 		// 压缩 50%
-		bitmap.compress(CompressFormat.JPEG, 50, fos);
-		return bitmap;
+		image.compress(CompressFormat.JPEG, 50, fos);
+		return image;
 	}
 	
     // 复制文件

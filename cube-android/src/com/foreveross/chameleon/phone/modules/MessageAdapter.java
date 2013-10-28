@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foreveross.chameleon.CubeAndroid;
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -68,7 +68,7 @@ public class MessageAdapter extends BaseExpandableListAdapter {
 			if (PadUtils.isPad(context)) {
 				intent.setClass(context, FacadeActivity.class);
 				PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
-						context, R.raw.cube);
+						context, CubeConstants.CUBE_CONFIG);
 				String noticeViewClassName = propertiesUtil.getString(
 						"com.foss.announcement", "");
 				intent.putExtra("direction", 2);

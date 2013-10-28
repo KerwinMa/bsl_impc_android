@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
@@ -158,7 +158,7 @@ public class ModuleDetailFragment extends Fragment {
 		if(cubeModule.getLocal()!=null) {
 			
 			PropertiesUtil propertiesUtil = PropertiesUtil
-					.readProperties(getAssocActivity(), R.raw.cube);
+					.readProperties(getAssocActivity(), CubeConstants.CUBE_CONFIG);
 			// 判断本地模块是否存在
 			String icons = propertiesUtil.getString(
 					"icon_"+cubeModule.getIdentifier(), "");
@@ -226,7 +226,7 @@ public class ModuleDetailFragment extends Fragment {
 				// inputStream = asm.open("www/res/icon/android/" + urlName);
 				inputStream = asm.open(urlName);
 				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 4;
+				options.inSampleSize = 1;
 				Bitmap myBitmap = BitmapFactory.decodeStream(inputStream, null, options);
 				icon.setImageBitmap(myBitmap);
 				list.add(new SoftReference<Bitmap>(myBitmap));
@@ -252,7 +252,7 @@ public class ModuleDetailFragment extends Fragment {
 			try {
 				inputStream = asm.open("image/snapshot/" + url);
 				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 4;
+				options.inSampleSize = 2;
 				Bitmap myBitmap = BitmapFactory.decodeStream(inputStream, null, options);
 				icon.setImageBitmap(myBitmap);
 				list.add(new SoftReference<Bitmap>(myBitmap));

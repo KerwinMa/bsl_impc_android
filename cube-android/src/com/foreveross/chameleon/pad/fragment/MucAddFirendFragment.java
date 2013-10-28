@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,8 +22,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -41,13 +43,13 @@ import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.phone.chat.search.SearchFriendAdapter;
 import com.foreveross.chameleon.phone.muc.MucAddFriendAdapter;
 import com.foreveross.chameleon.phone.muc.MucBroadCastEvent;
-import com.foreveross.chameleon.phone.muc.MucManagerFragment;
 import com.foreveross.chameleon.push.client.XmppManager;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
-import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.squareup.otto.Subscribe;
+import com.squareup.otto.ThreadEnforcer;
 
 /**
  * [一句话功能简述]<BR>
@@ -75,6 +77,8 @@ public class MucAddFirendFragment extends Fragment {
 
 	private List<UserModel> searchFriendList;
 	private Button searchBtn;
+	
+	private ProgressDialog progressDialog;  
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,7 @@ public class MucAddFirendFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.chat_muc_addfriend, null);
+		return inflater.inflate(R.layout.chat_muc_addfriend, container,false);
 	}
 
 	/**
@@ -111,6 +115,8 @@ public class MucAddFirendFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		initValues(view);
+		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
+				ThreadEnforcer.MAIN).register(this);
 	}
 
 	public void initValues(View view) {
@@ -311,7 +317,7 @@ public class MucAddFirendFragment extends Fragment {
 				// 创建
 				String roomName = "";
 				PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
-						MucAddFirendFragment.this.getAssocActivity(), R.raw.cube);
+						MucAddFirendFragment.this.getAssocActivity(), CubeConstants.CUBE_CONFIG);
 				
 				final String roomJid = UUID.randomUUID().toString() + "@"
 						+ propertiesUtil.getString("MucServiceName", "conference.snda-192-168-2-32");
@@ -320,7 +326,7 @@ public class MucAddFirendFragment extends Fragment {
 					View dialogView= LayoutInflater.from(getAssocActivity()).inflate(R.layout.dialog_muc_createroom,null);
 					final EditText edt = (EditText) dialogView.findViewById(R.id.dialog_muc_edt);
 					new AlertDialog.Builder(getAssocActivity())
-					.setTitle("修改群组名称")
+					.setTitle("输入群组名称")
 					.setView(dialogView)
 					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 						
@@ -339,12 +345,7 @@ public class MucAddFirendFragment extends Fragment {
 										.getChatRoomContainer()
 										.createChatRoom(MucAddFirendFragment.this.getAssocActivity(),chatGroupModel,
 												selectFriends.values());
-								Toast.makeText(MucAddFirendFragment.this.getAssocActivity(), "新建群组成功", Toast.LENGTH_SHORT).show();
-								if (getAssocActivity() instanceof FacadeActivity) {
-									FacadeActivity.class.cast(getAssocActivity()).popRight();
-								} else {
-									getAssocActivity().finish();
-								}
+								progressDialog = ProgressDialog.show(getAssocActivity(), "创建群组", "请稍候", true, false);   
 							}
 						}	
 					})
@@ -353,20 +354,10 @@ public class MucAddFirendFragment extends Fragment {
 				}
 				// 更新
 				else {
+					progressDialog = ProgressDialog.show(getAssocActivity(), "添加成员", "请稍候", true, false);   
 					UserModel[] us = selectFriends.values().toArray(
 							new UserModel[selectFriends.values().size()]);
 					chatGroupModel.addMembers(application, us);
-					HashMap<String , Object> hashMap = new HashMap<String, Object>();
-					hashMap.put(MucBroadCastEvent.PUSH_MUC_ADDFRIEND, us);
-					//发消息刷新界面
-					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST).post(
-							hashMap);
-					Toast.makeText(MucAddFirendFragment.this.getAssocActivity(), "新建成员成功", Toast.LENGTH_SHORT).show();
-					if (getAssocActivity() instanceof FacadeActivity) {
-						FacadeActivity.class.cast(getAssocActivity()).popRight();
-					} else {
-						getAssocActivity().finish();
-					}
 				}
 				InputMethodManager imm = (InputMethodManager) getAssocActivity()
 						.getSystemService(Context.INPUT_METHOD_SERVICE); 
@@ -377,4 +368,58 @@ public class MucAddFirendFragment extends Fragment {
 		}
 	};
 
+	@Subscribe
+	public void onMucManagerAddEvent(String event) {
+		if (MucBroadCastEvent.PUSH_MUC_CREATE_ROOM_SUCCESS.equals(event)){
+			Toast.makeText(MucAddFirendFragment.this.getAssocActivity(), "新建群组成功", Toast.LENGTH_SHORT).show();
+			UserModel  me = IMModelManager.instance().getMe();
+			if(!IMModelManager.instance().containGroup(chatGroupModel.getGroupName())){
+				IMModelManager.instance().addUserGroupModel(chatGroupModel);	
+			}
+			chatGroupModel.addStuff(me);
+			for (UserModel userModel : selectFriends.values()) {
+				chatGroupModel.addStuff(userModel);
+			}
+			progressDialog.dismiss();
+			if (getAssocActivity() instanceof FacadeActivity) {
+				FacadeActivity.class.cast(getAssocActivity()).popRight();
+			} else {
+				getAssocActivity().finish();
+			}
+		}
+		if (MucBroadCastEvent.PUSH_MUC_CREATE_ROOM_FAIL.equals(event)){
+			progressDialog.dismiss();
+			Toast.makeText(MucAddFirendFragment.this.getAssocActivity(), "新建群组失败", Toast.LENGTH_SHORT).show();
+		}
+		if (MucBroadCastEvent.PUSH_MUC_ADDFRIEND_SUCCESS.equals(event)){
+			
+			UserModel[] us = selectFriends.values().toArray(
+					new UserModel[selectFriends.values().size()]);
+			HashMap<String , Object> hashMap = new HashMap<String, Object>();
+			hashMap.put(MucBroadCastEvent.PUSH_MUC_ADDFRIEND, us);
+			//发消息刷新界面
+			EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST).post(
+					hashMap);
+			Toast.makeText(MucAddFirendFragment.this.getAssocActivity(), "新建成员成功", Toast.LENGTH_SHORT).show();
+			progressDialog.dismiss();
+			if (getAssocActivity() instanceof FacadeActivity) {
+				FacadeActivity.class.cast(getAssocActivity()).popRight();
+			} else {
+				getAssocActivity().finish();
+			}
+		}
+		if (MucBroadCastEvent.PUSH_MUC_ADDFRIEND_FAIL.equals(event)){
+			progressDialog.dismiss();
+			Toast.makeText(MucAddFirendFragment.this.getAssocActivity(), "新建成员失败", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		// TODO Auto-generated method stub
+		super.onDestroyView();
+		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
+				ThreadEnforcer.MAIN).unregister(this);
+	}
+	
 }

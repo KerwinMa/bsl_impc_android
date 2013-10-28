@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.phone.modules.task.ThreadPlatformUtils;

@@ -2,15 +2,6 @@ package com.foreveross.chameleon.phone.muc;
 
 import java.util.List;
 
-import com.foreveross.chameleon.Application;
-import com.csair.impc.R;
-import com.foreveross.chameleon.activity.FacadeActivity;
-import com.foreveross.chameleon.push.client.XmppManager;
-import com.foreveross.chameleon.store.model.ChatGroupModel;
-import com.foreveross.chameleon.store.model.ConversationMessage;
-import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.Preferences;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.foreveross.chameleon.Application;
+import com.csair.impc.R;
+import com.foreveross.chameleon.push.client.XmppManager;
+import com.foreveross.chameleon.store.model.ChatGroupModel;
+import com.foreveross.chameleon.store.model.ConversationMessage;
+import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.util.Preferences;
 
 
 public class MucManagerAdapter extends BaseAdapter {

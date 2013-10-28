@@ -51,8 +51,6 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 	protected String groupBelong = "未知";
 	@DatabaseField
 	protected boolean hasRead = false;
-	@DatabaseField
-	protected String userName;
 
 	public boolean isHasRead() {
 		return hasRead;
@@ -140,15 +138,6 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 
 	public void setGroupBelong(String groupBelong) {
 		this.groupBelong = groupBelong;
-	}
-
-	
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public void read() {

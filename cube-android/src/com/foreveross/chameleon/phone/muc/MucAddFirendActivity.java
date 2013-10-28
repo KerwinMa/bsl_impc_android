@@ -3,6 +3,7 @@ package com.foreveross.chameleon.phone.muc;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
 
 public class MucAddFirendActivity extends FragmentActivity {
@@ -18,6 +19,9 @@ public class MucAddFirendActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.muc_add_friend_activity);
+		Application application = Application.class.cast(MucAddFirendActivity.this
+				.getApplication());
+		application.getActivityManager().pushActivity(this);
 	}
 
 	/**

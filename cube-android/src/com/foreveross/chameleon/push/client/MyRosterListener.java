@@ -76,10 +76,12 @@ public class MyRosterListener implements RosterListener {
 			if (IMModelManager.instance().containUserModel(jid)) {
 				UserModel userModel = IMModelManager.instance().getUserModel(
 						jid);
-				userModel.killMe();
-				userModel.delete();
+				if (userModel != null){
+					userModel.killMe();
+					userModel.delete();
 
-				StaticReference.userMf.delete(userModel);
+					StaticReference.userMf.delete(userModel);
+				}
 			}
 		}
 		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).post(

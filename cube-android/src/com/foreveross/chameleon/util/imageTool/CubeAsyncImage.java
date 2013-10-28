@@ -23,6 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
@@ -40,7 +41,7 @@ public class CubeAsyncImage {
 	private ImageUtil imageUtil;
 	public static final String TAG = CubeAsyncImage.class.getSimpleName();
 
-	private int sampleSize = 3;
+	private int sampleSize = 4;
 
 	/** 图片宽度 */
 	private int bitmapW = ImageUtil.WRAP_CONTENT;
@@ -468,10 +469,8 @@ public class CubeAsyncImage {
 			f.createNewFile();
 			BufferedOutputStream bos = new BufferedOutputStream(
 					new FileOutputStream(f));
-			if (url.indexOf(".png") > 0)
-				bitmap.compress(Bitmap.CompressFormat.PNG, 40, bos);
-			else
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos);
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+			
 			bos.flush();
 			bos.close();
 			Log.e(TAG, "缓存sd卡成功");

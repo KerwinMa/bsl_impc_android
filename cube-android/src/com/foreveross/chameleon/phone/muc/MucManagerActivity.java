@@ -3,6 +3,7 @@ package com.foreveross.chameleon.phone.muc;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
 
 public class MucManagerActivity extends FragmentActivity {
@@ -17,6 +18,9 @@ public class MucManagerActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mucmanager_activity_layout);
+		Application application = Application.class.cast(MucManagerActivity.this
+				.getApplication());
+		application.getActivityManager().pushActivity(this);
 	}
 
 }

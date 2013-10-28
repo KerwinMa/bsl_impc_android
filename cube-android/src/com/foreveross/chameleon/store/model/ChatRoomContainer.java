@@ -49,11 +49,6 @@ public class ChatRoomContainer extends
 		}
 		
 		MucManager.getInstanse(ctx).createMutiUserChatroom(chatGroupModel, me, invitors);
-		if(!IMModelManager.instance().containGroup(chatGroupModel.getGroupName())){
-			IMModelManager.instance().addUserGroupModel(chatGroupModel);	
-		}
-		chatGroupModel.addStuff(me);
-		chatGroupModel.addMembersToList(invitors);
 		//发消息刷新界面
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST).post(
 				MucBroadCastEvent.PUSH_MUC_MANAGER_MEMBER);
@@ -115,6 +110,7 @@ public class ChatRoomContainer extends
 					userModel.freeGroup(roomJid);
 					userModel.update();
 				}
+				IMModelManager.instance().removeChatGroupModelsByJid(roomJid);
 			}
 		});
 
@@ -141,6 +137,11 @@ public class ChatRoomContainer extends
 	@Override
 	public void addStuffs(List<ChatGroupModel> vs) {
 		// TODO Auto-generated method stub
-		super.addStuffs(vs);
+		List<ChatGroupModel> us = getList();
+		for(ChatGroupModel chatGroupModel : vs){
+			if (!us.contains(chatGroupModel)){
+				super.addStuff(chatGroupModel);
+			}
+		}
 	}
 }

@@ -3,6 +3,9 @@ package com.foreveross.chameleon.push.mina.library.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.foreveross.chameleon.TmpConstants;
+import com.foreveross.chameleon.util.SharedPreferencesUtil;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,8 +41,14 @@ public class ConnectivityReceiver extends BroadcastReceiver {
 		if (networkInfo != null) {
 			if (networkInfo.isConnected()) {
 				log.info("Network is  connecting ,and then try reconnect....");
-				minaMobileClient.reConnect();
-			}else{
+				Boolean keepOpen = SharedPreferencesUtil.getInstance(
+						context).getBoolean(TmpConstants.SELECT_OPEN,
+						true);
+				if (keepOpen) {
+					minaMobileClient.reConnect();
+				}
+
+			} else {
 				log.debug("Network unavailable,begin close mobile client...");
 				minaMobileClient.safeClose();
 				log.debug("mobile client has been closed");

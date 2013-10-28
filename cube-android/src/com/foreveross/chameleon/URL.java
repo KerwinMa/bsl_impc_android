@@ -22,18 +22,18 @@ public class URL {
 	public static String PHONE_LOGIN_URL = null;
 	
 	
-	public static String UPLOAD_URL = BASE_WEB + "mam/attachment/clientUpload";
+	public static String UPLOAD_URL = BASE_WEB + "csair-mam/attachment/clientUpload";
 	public static String SYNC = BASE_WS + "csair-extension/api/extendClients/android/";
-	public static String UPLOAD = BASE_WS + "mam/api/mam/attachment/upload";
+	public static String UPLOAD = BASE_WS + "csair-mam/api/mam/attachment/upload";
 	public static String LOGIN = BASE_WS+ "csair-extension/api/accounts/login";
-	public static String UPDATE = BASE_WS+ "mam/api/mam/clients/update/android";
-	public static String SNAPSHOT = BASE_WS + "mam/api/mam/clients/widget/";
-	public static  String PUSH_BASE_URL = BASE_WS + "push/api/";
+	public static String UPDATE = BASE_WS+ "csair-mam/api/mam/clients/update/android";
+	public static String SNAPSHOT = BASE_WS + "csair-mam/api/mam/clients/widget/";
+	public static  String PUSH_BASE_URL = BASE_WS + "csair-push/api/";
 	public static  String CHECKIN_URL = PUSH_BASE_URL+ "checkinservice/checkins";
 	public static  String CHECKOUT_URL = PUSH_BASE_URL+ "checkinservice/checkout";
 	public static  String FEEDBACK_URL = PUSH_BASE_URL + "receipts";
 	//下载后更新服务端计数
-	public static String UPDATE_RECORD = BASE_WS+ "mam/api/mam/clients/update/appcount/android/";
+	public static String UPDATE_RECORD = BASE_WS+ "csair-mam/api/mam/clients/update/appcount/android/";
 		
 
 
@@ -54,14 +54,14 @@ public class URL {
 																// post
 
 	public static String getDownloadUrl(Context context, String bundle) {
-		String DOWNLOAD = BASE_WS + "mam/api/mam/clients/files/";
+		String DOWNLOAD = BASE_WS + "csair-mam/api/mam/clients/files/";
 		String sessionKey = Preferences.getSESSION(Application.sharePref);
 		String appKey = Application.class.cast(context.getApplicationContext()).getCubeApplication().getAppKey();
 		return DOWNLOAD + bundle + "?sessionKey=" + sessionKey + "&appKey="+ appKey;
 	}
 	
 	public static String getUpdateAppplicationUrl(Context context, String bundle) {
-		String DOWNLOAD = BASE_WS + "mam/api/mam/clients/files/";
+		String DOWNLOAD = BASE_WS + "csair-mam/api/mam/clients/files/";
 		String appKey = Application.class.cast(context.getApplicationContext()).getCubeApplication().getAppKey();
 		return DOWNLOAD + bundle + "?&appKey="+ appKey;
 	}

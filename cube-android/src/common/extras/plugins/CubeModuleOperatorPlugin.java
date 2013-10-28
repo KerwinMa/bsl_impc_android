@@ -3,7 +3,6 @@ package common.extras.plugins;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.BroadcastConstans;
 import com.foreveross.chameleon.CubeAndroid;
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -36,7 +36,6 @@ import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.AutoDownloadRecord;
 import com.foreveross.chameleon.store.model.AutoShowViewRecord;
-import com.foreveross.chameleon.util.CommonUtils;
 import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Pool;
@@ -297,7 +296,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 						PropertiesUtil propertiesUtil = PropertiesUtil
 								.readProperties(
 										CubeModuleOperatorPlugin.this.cordova
-												.getActivity(), R.raw.cube);
+												.getActivity(), CubeConstants.CUBE_CONFIG);
 						String moduleDetailFragment = propertiesUtil.getString(
 								"moduleDetailFragment", "");
 						i.putExtra("identifier", module.getIdentifier());
@@ -536,7 +535,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 			if (PadUtils.isPad(cordova.getActivity())) {
 				PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
 						CubeModuleOperatorPlugin.this.cordova.getActivity(),
-						R.raw.cube);
+						CubeConstants.CUBE_CONFIG);
 				String className = propertiesUtil.getString(
 						module.getIdentifier(), "");
 
@@ -552,7 +551,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 
 				PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
 						CubeModuleOperatorPlugin.this.cordova.getActivity(),
-						R.raw.cube);
+						CubeConstants.CUBE_CONFIG);
 				String className = propertiesUtil.getString(
 						"phone_" + module.getIdentifier(), "");
 				Intent i = new Intent();

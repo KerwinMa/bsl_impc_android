@@ -72,7 +72,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
@@ -80,7 +79,6 @@ import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.event.ModelChangeEvent;
-import com.foreveross.chameleon.event.MultiAccountEvent;
 import com.foreveross.chameleon.phone.muc.MucInvitationListener;
 import com.foreveross.chameleon.phone.muc.MucManager;
 import com.foreveross.chameleon.push.mina.library.util.NetworkUtil;
@@ -88,7 +86,6 @@ import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
-import com.foreveross.chameleon.store.model.AbstractContainerModel;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
@@ -953,10 +950,12 @@ public class XmppManager {
 						} else {
 							UserModel userModel = IMModelManager.instance()
 									.getUserModel(jid);
-							userModel.sync(new RosterEntryWrapper(rosterEntry));
-							// 恢复所有组
-							userModel.transGroups();
-							StaticReference.userMf.createOrUpdate(userModel);
+							if (userModel != null){
+								userModel.sync(new RosterEntryWrapper(rosterEntry));
+								// 恢复所有组
+								userModel.transGroups();
+								StaticReference.userMf.createOrUpdate(userModel);
+							}
 						}
 					}
 					// TODO[FENGWIELI] 同步其它类型用户组

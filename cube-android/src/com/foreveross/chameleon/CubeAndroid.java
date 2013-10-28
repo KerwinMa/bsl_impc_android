@@ -237,9 +237,9 @@ public class CubeAndroid extends DroidGap {
 					touchable = false;
 					
 					
-					//效能监控点击模块保存数据
 					
-					 
+					//效能监控点击模块保存数据
+
 					
 					String zhengze = "www/[^/]+/";
 					
@@ -256,10 +256,14 @@ public class CubeAndroid extends DroidGap {
 					}
 					if(null != id)
 					{
-						CubeModule module = CubeModuleManager.getInstance().getCubeModuleByIdentifier(id);
-						Application.class.cast(getActivity().getApplication()).saveModulerRecord(module);
+						 CubeModule module = CubeModuleManager.getInstance().getCubeModuleByIdentifier(id);
+						if(module == null) {
+							module = CubeModuleManager.getInstance().getIdentifier_new_version_map().get(id);
+							 if(module!=null)
+								 Application.class.cast(getActivity().getApplication()).saveModulerRecord(module);
+						}
 					}
-					
+		//			
 					
 				}
 

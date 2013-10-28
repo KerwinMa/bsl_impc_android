@@ -64,7 +64,9 @@ public class SearchRecentlyAdapter extends BaseAdapter {
 			}
 		} else {
 			UserModel userModel = IMModelManager.instance().getUserModel(chatter);
-			name = userModel.getName();
+			if (userModel != null){
+				name = userModel.getName();
+			}
 		}
 		holder.name.setText(name);
 //		friend.setIcon(holder.icon);

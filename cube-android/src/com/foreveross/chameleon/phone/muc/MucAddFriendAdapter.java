@@ -3,10 +3,6 @@ package com.foreveross.chameleon.phone.muc;
 import java.util.List;
 import java.util.Map;
 
-import com.csair.impc.R;
-import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.PushUtil;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +16,9 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.csair.impc.R;
+import com.foreveross.chameleon.store.model.UserModel;
 
 
 public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {

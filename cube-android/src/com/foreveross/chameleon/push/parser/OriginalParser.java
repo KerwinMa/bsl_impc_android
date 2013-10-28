@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
@@ -24,8 +25,6 @@ import com.foreveross.chameleon.event.PatchMessageModelEvent;
 import com.foreveross.chameleon.event.PatchNoticeModelEvent;
 import com.foreveross.chameleon.phone.activity.MessageActivity;
 import com.foreveross.chameleon.phone.activity.NoticeActivity;
-import com.foreveross.chameleon.phone.modules.CubeModule;
-import com.foreveross.chameleon.phone.modules.CubeModuleManager;
 import com.foreveross.chameleon.phone.modules.MessageFragmentModel;
 import com.foreveross.chameleon.push.client.Constants;
 import com.foreveross.chameleon.push.client.Notifier;
@@ -53,7 +52,7 @@ public class OriginalParser {
 	private PropertiesUtil propertiesUtil;
 
 	public OriginalParser(final Context context) {
-		propertiesUtil = PropertiesUtil.readProperties(context, R.raw.cube);
+		propertiesUtil = PropertiesUtil.readProperties(context, CubeConstants.CUBE_CONFIG);
 		this.context = context;
 		this.application = com.foreveross.chameleon.Application.class
 				.cast(context.getApplicationContext());

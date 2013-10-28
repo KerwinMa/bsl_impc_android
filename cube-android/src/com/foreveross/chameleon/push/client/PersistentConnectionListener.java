@@ -21,13 +21,10 @@ import org.jivesoftware.smack.packet.StreamError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.content.Intent;
-
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.event.MultiAccountEvent;
-import com.foreveross.chameleon.phone.muc.MucBroadCastEvent;
 import com.squareup.otto.ThreadEnforcer;
 
 /**
@@ -66,7 +63,7 @@ public class PersistentConnectionListener implements ConnectionListener {
 	}
 
 	@Override
-	public void connectionClosedOnError(Exception e) {
+	public synchronized void connectionClosedOnError(Exception e) {
 		log.debug("xmpp connectionClosedOnError()...");
 
 		if (e instanceof XMPPException) {
@@ -107,12 +104,12 @@ public class PersistentConnectionListener implements ConnectionListener {
 	}
 
 	@Override
-	public void reconnectingIn(int seconds) {
+	public synchronized void reconnectingIn(int seconds) {
 		log.info("xmpp reconnectingIn()...");
 	}
 	
 	@Override
-	public void reconnectionFailed(Exception e) {
+	public synchronized void reconnectionFailed(Exception e) {
 		log.error("xmpp reconnectionFailed()...", e);
 	}
 

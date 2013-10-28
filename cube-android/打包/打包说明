@@ -32,8 +32,8 @@
  packageName： com.foreveross.bsl2
  appKey: 9ac10bdf29e6cf120294703c95a60878
  BASE_WS = "http://115.28.1.119:18860/";
- BASE_WEB = "http://115.28.1.119:8081/bsl-web/";
- mina_client: 115.28.1.119
+ BASE_WEB = "http://115.28.1.119:8080/bsl-web/";
+ mina_client: 115.28.1.109
  
  移动运行网
  packageName： com.csair.soc

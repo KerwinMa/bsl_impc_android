@@ -153,11 +153,9 @@ public class MessageFragment extends Fragment {
 								ajustViewDisplay();
 								// changeMessageRecordCount(unreadCount);
 								// expendFirstMsgModel();
-								if(!titlebar_right.isShown())
-								{
-									titlebar_right.setVisibility(View.VISIBLE);
+								synchronized (messageFragmentModel) {
+									messageAdapter.notifyDataSetChanged();	
 								}
-								messageAdapter.notifyDataSetChanged();
 							}
 						});
 			}
@@ -258,10 +256,6 @@ public class MessageFragment extends Fragment {
 				messageFragmentModel.markSelectedMsgRead();
 			}
 		});
-		if(messageFragmentModel.getMessageData().size()==0)
-		{
-			titlebar_right.setVisibility(View.GONE);
-		}
 		messageAdapter = new MessageAdapter(getAssocActivity(),
 				messageFragmentModel.getMessageData());
 		msglist.setGroupIndicator(null);

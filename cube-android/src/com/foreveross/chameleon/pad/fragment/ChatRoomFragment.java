@@ -67,8 +67,9 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
+import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -274,7 +275,7 @@ public class ChatRoomFragment extends Fragment {
 				ThreadEnforcer.MAIN).register(this);
 		EventBus.getEventBus(TmpConstants.EVENTBUS_PUSH,
 				ThreadEnforcer.MAIN).register(this);
-		return inflater.inflate(R.layout.chat_chatroom, null);
+		return inflater.inflate(R.layout.chat_chatroom, container,false);
 	}
 
 	@Override
@@ -391,6 +392,7 @@ public class ChatRoomFragment extends Fragment {
 				return false;
 			}
 		});
+
 		postButton = (Button) view.findViewById(R.id.chat_btn_sendcontent);
 		postButton.setOnClickListener(mClickListener);
 		chat_plus_btn = (Button) view.findViewById(R.id.chat_plus_btn);
@@ -424,6 +426,13 @@ public class ChatRoomFragment extends Fragment {
 					ampThread.start();
 				}
 				if (event.getAction() == MotionEvent.ACTION_UP) {
+					// 延时一秒
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					mHandler.sendEmptyMessage(RECORD_END);
 					isStart.set(false);
 					voiceButton
@@ -431,7 +440,7 @@ public class ChatRoomFragment extends Fragment {
 					// 此处触发停止事件
 					if (mr != null) {
 						// 停止录音
-						// mr.stop();
+						 mr.stop();
 						// 释放录音
 						try {
 							mr.reset();
@@ -466,7 +475,7 @@ public class ChatRoomFragment extends Fragment {
 							protected void doPostExecute(String result) {
 
 								if("error".equals(result)){
-									Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "上传声音文件异常", Toast.LENGTH_SHORT).show();
+									Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "发送失败", Toast.LENGTH_SHORT).show();
 									return;
 								}
 								try {
@@ -476,7 +485,7 @@ public class ChatRoomFragment extends Fragment {
 									sendMessage(conversation);
 								} catch (JSONException e) {
 									e.printStackTrace();
-									Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "上传声音文件异常", Toast.LENGTH_SHORT).show();
+									Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "发送失败", Toast.LENGTH_SHORT).show();
 								}
 							}
 						};
@@ -732,7 +741,7 @@ public class ChatRoomFragment extends Fragment {
 					return;
 				}
 				if (PadUtils.isPad(getAssocActivity())) {
-					PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(ChatRoomFragment.this.getAssocActivity(), R.raw.cube);
+					PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(ChatRoomFragment.this.getAssocActivity(), CubeConstants.CUBE_CONFIG);
 					String mucmanager = propertiesUtil.getString("mucmanager", "");
 					Intent intent = new Intent();
 					intent.putExtra("direction", 2);
@@ -935,6 +944,16 @@ public class ChatRoomFragment extends Fragment {
 		EventBus.getEventBus(TmpConstants.EVENTBUS_PUSH,ThreadEnforcer.MAIN).unregister(this);
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
 				ThreadEnforcer.MAIN).unregister(this);
+		CubeModule messageModule = CubeModuleManager.getInstance()
+				.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
+		if (userModel != null){
+			messageModule.decreaseMsgCountBy(userModel.getUnreadMessageCount());
+			userModel.clearNewMessageCount();
+		}
+		if (chatGroupModel != null){
+			messageModule.decreaseMsgCountBy(chatGroupModel.getUnreadMessageCount());
+			chatGroupModel.clearNewMessageCount();
+		}
 	}
 
 	/** 录音文件路径 */
@@ -1110,7 +1129,7 @@ public class ChatRoomFragment extends Fragment {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
-					closeKeyboard();
+//					closeKeyboard();
 					int selection = edittext.getSelectionStart();
 					if (arg2 > ExpressionUtil.getInstance().getLength() - 1) {
 
@@ -1349,7 +1368,7 @@ public class ChatRoomFragment extends Fragment {
 					@Override
 					protected void doPostExecute(String result) {
 						if("error".equals(result)){
-							Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "上传图片异常", Toast.LENGTH_SHORT).show();
+							Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "发送失败", Toast.LENGTH_SHORT).show();
 							return;
 						}
 						try {
@@ -1359,7 +1378,7 @@ public class ChatRoomFragment extends Fragment {
 							sendMessage(conversation);
 						} catch (JSONException e) {
 							e.printStackTrace();
-							Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "上传图片异常", Toast.LENGTH_SHORT).show();
+							Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "发送失败", Toast.LENGTH_SHORT).show();
 						}
 					}
 				};

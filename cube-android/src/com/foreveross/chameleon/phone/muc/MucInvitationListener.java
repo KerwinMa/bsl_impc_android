@@ -3,16 +3,16 @@ package com.foreveross.chameleon.phone.muc;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.muc.InvitationListener;
+
+import android.content.Context;
+import android.util.Log;
+
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.push.client.XmppManager;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.util.Preferences;
-
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 public class MucInvitationListener implements InvitationListener{
 	String Tag = "MucInvitationListener";

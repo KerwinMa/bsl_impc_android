@@ -3,10 +3,10 @@ package com.foreveross.chameleon.push.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.foreveross.chameleon.Application;
-
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+
+import com.foreveross.chameleon.Application;
 
 /**
  * [一句话功能简述]<BR>

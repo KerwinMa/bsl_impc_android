@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
+import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.phone.view.NoScrollListView;
@@ -38,6 +42,7 @@ import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.PadUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
@@ -76,7 +81,7 @@ public class MucManagerFragment extends Fragment{
 				.getApplicationContext());
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
 				ThreadEnforcer.MAIN).register(this);
-		return inflater.inflate(R.layout.chat_muc_manager, null);
+		return inflater.inflate(R.layout.chat_muc_manager, container,false);
 	}
 
 	@Override
@@ -123,6 +128,49 @@ public class MucManagerFragment extends Fragment{
 				};
 				@Override
 				protected Boolean doInBackground(String... params) {
+					 List<UserModel> ulist = chatGroupModel.getList();
+					if(ulist == null || ulist.size() == 0){
+						List<String> jids = new ArrayList<String>();
+						String url = URL.MUC_QueryMembers + chatGroupModel.getGroupCode()
+								+ URL.getSessionKeyappKey();
+						String result = null;
+						try {
+							result = HttpUtil.doWrapedHttp(getAssocActivity(), new String[] { url, "",
+									HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET });
+							if (result != null && result.length() != 0) {
+								JSONArray jay = new JSONArray(result);
+								for (int i = 0; i < jay.length(); i++) {
+									JSONObject jb = jay.getJSONObject(i);
+									String userJid = jb.getString("jid");
+									if (userJid != null) {
+										jids.add(userJid);
+									}
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						if (ulist != null){
+							for (String jid : jids) {
+								UserModel userModel = IMModelManager.instance().getUserModel(jid);
+								if (userModel != null){
+									if (!ulist.contains(userModel)){
+										chatGroupModel.addStuff(userModel);
+									}
+								}
+							}
+							UserModel me = IMModelManager.instance().getMe();
+							if (me != null){
+								if (!ulist.contains(me)){
+									chatGroupModel.addStuff(me);
+								}
+							}
+						}
+					}
 					return chatGroupModel.isCreator(getAssocActivity(),XmppManager.getMeJid());
 				}
 				
@@ -163,7 +211,7 @@ public class MucManagerFragment extends Fragment{
 				
 				if (PadUtils.isPad(getAssocActivity())) {
 					PropertiesUtil propertiesUtil = 
-							PropertiesUtil.readProperties(getAssocActivity(), R.raw.cube); 
+							PropertiesUtil.readProperties(getAssocActivity(), R.raw.cube1); 
 					String addfirend = propertiesUtil.getString("addfirend", "");
 					Intent intent = new Intent();
 					intent.putExtra("direction", 2);
@@ -214,37 +262,39 @@ public class MucManagerFragment extends Fragment{
 				
 				break;
 			case R.id.muc_btn_leave:
-				if(kickable){
-//					chatGroupModel.free(getAssocActivity());
-					//解散群组
-					String fromWho = XmppManager.getMeJid();
-					String toWho = roomJid;
-					String content = fromWho;
-					ConversationMessage conversation = createConversation(
-							content, fromWho, toWho, "quitgroup");
-					MucManager.getInstanse(getAssocActivity()).sendMucMessage(conversation);
-					IMModelManager.instance().getChatRoomContainer().free(getAssocActivity(),chatGroupModel.getRoomJid());
-					Toast.makeText(getAssocActivity(), "解散群组成功", Toast.LENGTH_SHORT).show();
-					IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
-					StaticReference.defMf.deleteById(chatGroupModel.getRoomJid(), SessionModel.class);
-				}else{
-					//个人主动离开房间
-					String fromWho = XmppManager.getMeJid();
-					String toWho = roomJid;
-					String content = fromWho;
-					ConversationMessage conversation = createConversation(
-							content, fromWho, toWho, "quitperson");
-					MucManager.getInstanse(getAssocActivity()).sendMucMessage(conversation);
-//					chatGroupModel.leave(getAssocActivity());
-					IMModelManager.instance().getChatRoomContainer().leave(getAssocActivity(),chatGroupModel.getRoomJid());
-					Toast.makeText(getAssocActivity(), "退出群组成功", Toast.LENGTH_SHORT).show();
-					IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
-					StaticReference.defMf.deleteById(chatGroupModel.getRoomJid(), SessionModel.class);
-				}
-				if (getAssocActivity() instanceof FacadeActivity) {
-					FacadeActivity.class.cast(getAssocActivity()).popRight();
-				} else {
-					getAssocActivity().finish();
+				if (chatGroupModel != null){
+					if(kickable){
+//						chatGroupModel.free(getAssocActivity());
+						//解散群组
+						String fromWho = XmppManager.getMeJid();
+						String toWho = roomJid;
+						String content = fromWho;
+						ConversationMessage conversation = createConversation(
+								content, fromWho, toWho, "quitgroup");
+						MucManager.getInstanse(getAssocActivity()).sendMucMessage(conversation);
+						IMModelManager.instance().getChatRoomContainer().free(getAssocActivity(),chatGroupModel.getRoomJid());
+						Toast.makeText(getAssocActivity(), "解散群组成功", Toast.LENGTH_SHORT).show();
+						IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
+						StaticReference.defMf.deleteById(chatGroupModel.getRoomJid(), SessionModel.class);
+					}else{
+						//个人主动离开房间
+						String fromWho = XmppManager.getMeJid();
+						String toWho = roomJid;
+						String content = fromWho;
+						ConversationMessage conversation = createConversation(
+								content, fromWho, toWho, "quitperson");
+						MucManager.getInstanse(getAssocActivity()).sendMucMessage(conversation);
+//						chatGroupModel.leave(getAssocActivity());
+						IMModelManager.instance().getChatRoomContainer().leave(getAssocActivity(),chatGroupModel.getRoomJid());
+						Toast.makeText(getAssocActivity(), "退出群组成功", Toast.LENGTH_SHORT).show();
+						IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
+						StaticReference.defMf.deleteById(chatGroupModel.getRoomJid(), SessionModel.class);
+					}
+					if (getAssocActivity() instanceof FacadeActivity) {
+						FacadeActivity.class.cast(getAssocActivity()).popRight();
+					} else {
+						getAssocActivity().finish();
+					}
 				}
 //				System.gc();
 				break;

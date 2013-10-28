@@ -14,13 +14,11 @@ import org.jivesoftware.smack.packet.RosterPacket.ItemStatus;
 import org.jivesoftware.smack.packet.RosterPacket.ItemType;
 import org.jivesoftware.smack.util.StringUtils;
 
-import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.store.model.AbstractContainerModel;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.FriendGroupModel;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.Preferences;
 
 /**
  * [一句话功能简述]<BR>

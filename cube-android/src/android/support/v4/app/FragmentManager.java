@@ -1310,10 +1310,10 @@ final class FragmentManagerImpl extends FragmentManager {
     }
     
     private void checkStateLoss() {
-        if (mStateSaved) {
-            throw new IllegalStateException(
-                    "Can not perform this action after onSaveInstanceState");
-        }
+//        if (mStateSaved) {
+//            throw new IllegalStateException(
+//                    "Can not perform this action after onSaveInstanceState");
+//        }
         if (mNoTransactionsBecause != null) {
             throw new IllegalStateException(
                     "Can not perform this action inside of " + mNoTransactionsBecause);

@@ -1,6 +1,5 @@
 package common.extras.plugins;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.cordova.CallbackContext;
@@ -27,8 +26,6 @@ import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
-import com.foreveross.chameleon.store.model.AbstractContainerModel;
-import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
@@ -36,7 +33,6 @@ import com.foreveross.chameleon.util.CheckNetworkUtil;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.PadUtils;
-import com.foreveross.chameleon.util.Pool;
 import com.foreveross.chameleon.util.Preferences;
 
 /**
@@ -296,7 +292,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 						} else {
 							// {"result":"false","code":"2100007","message":"Username is not exist or Wrong password! ,错误码[2100007]"}
-							String message = jb.getString("message");
+							String message="";
+							try {
+								message = jb.getString("message");
+							} catch (Exception e) {
+								message = "用户名或密码错误";
+							}
 							Log.i("KKK", "登录错误并返回 ");
 							Toast.makeText(cordova.getActivity(), message,
 									Toast.LENGTH_SHORT).show();

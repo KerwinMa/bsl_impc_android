@@ -667,7 +667,7 @@ public class Application extends android.app.Application implements
 	private void initWebUrls() {
 
 		PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(this,
-				R.raw.cube);
+				CubeConstants.CUBE_CONFIG);
 		URL.ANNOUNCE = propertiesUtil.getString("ANNOUNCE", "");
 		URL.BASE_WEB = propertiesUtil.getString("BASE_WEB", "");
 		URL.MUC_BASE = propertiesUtil.getString("MUC_BASE", "");
@@ -681,13 +681,13 @@ public class Application extends android.app.Application implements
 
 		URL.UPLOAD_URL = URL.BASE_WEB + "mam/attachment/clientUpload";
 		URL.SYNC = URL.BASE_WS + "csair-extension/api/extendClients/android/";
-		URL.UPLOAD = URL.BASE_WS + "mam/api/mam/attachment/upload";
-		URL.LOGIN = URL.BASE_WS + "csair-extension/api/accounts/login";
-		URL.UPDATE = URL.BASE_WS + "mam/api/mam/clients/update/android";
+		URL.UPLOAD = URL.BASE_WS + "csair-mam/api/mam/attachment/upload";
+		URL.LOGIN = URL.BASE_WS + "csair-extension/api/oalogin/validate";
+		URL.UPDATE = URL.BASE_WS + "csair-mam/api/mam/clients/update/android";
 		URL.UPDATE_RECORD = URL.BASE_WS
-				+ "mam/api/mam/clients/update/appcount/android/";
-		URL.SNAPSHOT = URL.BASE_WS + "mam/api/mam/clients/widget/";
-		URL.PUSH_BASE_URL = URL.BASE_WS + "push/api/";
+				+ "csair-mam/api/mam/clients/update/appcount/android/";
+		URL.SNAPSHOT = URL.BASE_WS + "csair-mam/api/mam/clients/widget/";
+		URL.PUSH_BASE_URL = URL.BASE_WS + "csair-push/api/";
 		URL.CHECKIN_URL = URL.PUSH_BASE_URL + "checkinservice/checkins";
 		URL.CHECKOUT_URL = URL.PUSH_BASE_URL + "checkinservice/checkout";
 		URL.FEEDBACK_URL = URL.PUSH_BASE_URL + "receipts";

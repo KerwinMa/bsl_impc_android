@@ -28,12 +28,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
+import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.event.EventBus;
-import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
+//import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.push.client.Constants;
 import com.foreveross.chameleon.push.client.Monitor;
 import com.foreveross.chameleon.push.client.Notifier;
@@ -164,13 +164,19 @@ public class MucManager {
 					muc.sendConfigurationForm(submitForm);
 					// 把自己加进群组
 					if (!joinRoom(roomJid, creator.getJid(), new Date())) {
+						// 创建成功则退出添加好友界面
 						Log.e("muc create room", "创建群组失败");
+						EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+						.post(MucBroadCastEvent.PUSH_MUC_CREATE_ROOM_FAIL);
 						return false;
 					}
 					return true;
 				} catch (Exception e) {
 					e.printStackTrace();
 					Log.e("muc create room", "创建群组失败");
+					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+					.post(MucBroadCastEvent.PUSH_MUC_CREATE_ROOM_FAIL);
+					// 创建失败后提示失败
 					return false;
 				}
 			};
@@ -195,16 +201,17 @@ public class MucManager {
 							createinvite(room, inviteUsers, creator.getJid());
 						}
 					}.start();
-					Toast.makeText(context, "创建群组成功", Toast.LENGTH_SHORT)
-							.show();
+					Log.e("muc create room", "创建群组成功");
+					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+					.post(MucBroadCastEvent.PUSH_MUC_CREATE_ROOM_SUCCESS);
 					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
 							.post(MucBroadCastEvent.PUSH_MUC_MANAGER_MEMBER);
 					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
 							.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
 
 				} else {
-					Toast.makeText(context, "创建群组失败", Toast.LENGTH_SHORT)
-							.show();
+					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+					.post(MucBroadCastEvent.PUSH_MUC_CREATE_ROOM_FAIL);
 				}
 			};
 		}.execute();
@@ -223,74 +230,102 @@ public class MucManager {
 		try {
 			muc.kickParticipant(userJid, "出去吧");
 			// final MucRoomModel room = getAllMucRoomMap().get(muc.getRoom());
-			HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//			HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//				@Override
+//				protected void doPostExecute(String result) {
+//					super.doPostExecute(result);
+//					// Log.i("MucManager", "kick member " + user.getName() +
+//					// "success");
+//					// room.deleteMember(user);
+//					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//							.post(MucBroadCastEvent.PUSH_MUC_MANAGER_MEMBER);
+//
+//				}
+//			};
+//			task.setLockScreen(false);
+//			task.setShowProgressDialog(false);
+//			task.setNeedProgressDialog(false);
+//			String url = URL.MUC_DeleteMember + muc.getRoom() + "/" + userJid
+//					+ URL.getSessionKeyappKey();
+//			task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
+			
+			new AsyncTask<String, Integer, String>(){
+				
 				@Override
-				protected void doPostExecute(String result) {
-					super.doPostExecute(result);
-					// Log.i("MucManager", "kick member " + user.getName() +
-					// "success");
-					// room.deleteMember(user);
-					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-							.post(MucBroadCastEvent.PUSH_MUC_MANAGER_MEMBER);
-
+				protected String doInBackground(String... params) {
+					String url = URL.MUC_DeleteMember + muc.getRoom() + "/" + userJid
+							+ URL.getSessionKeyappKey();
+					try {
+						String result = HttpUtil.doWrapedHttp(context, new String[] { url,
+								"", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET });
+						return result; 
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return null;
+					}
+					
 				}
-			};
-			task.setLockScreen(false);
-			task.setShowProgressDialog(false);
-			task.setNeedProgressDialog(false);
-			String url = URL.MUC_DeleteMember + muc.getRoom() + "/" + userJid
-					+ URL.getSessionKeyappKey();
-			task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
+				
+				protected void onPostExecute(String result) {
+					if(result!=null){
+						EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+						.post(MucBroadCastEvent.PUSH_MUC_MANAGER_MEMBER);
+					}
+					
+				};
+			}.execute();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	/**
-	 * 踢人出群组
-	 * 
-	 * @param users
-	 */
-	public void kick(String roomJid, List<UserModel> users) {
-		if (!isInstanse())
-			return;
-		final MultiUserChat muc = getMuc(roomJid);
-		List<Map<String, Object>> requestData = new ArrayList<Map<String, Object>>();
-		for (UserModel user : users) {
-			try {
-				muc.kickParticipant(user.getJid(), "出去吧");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			Map<String, Object> userM = new HashMap<String, Object>();
-			userM.put("jid", user.getJid());
-			userM.put("roomId", muc.getRoom());
-			requestData.add(userM);
-		}
-		HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
-			@Override
-			protected void doPostExecute(String result) {
-				super.doPostExecute(result);
-				Log.i("MucManager", "kick members success");
-			}
-		};
-		task.setLockScreen(false);
-		task.setShowProgressDialog(false);
-		task.setNeedProgressDialog(false);
-
-		StringBuffer sb = new StringBuffer();
-
-		sb = sb.append("Form:deleteJson=")
-				.append(new Gson().toJson(requestData)).append(";sessionKey=")
-				.append(URL.getSessionKey()).append(";appKey=")
-				.append(URL.getAppKey());
-		;
-		String s = sb.toString();
-		task.execute(URL.MUC_DeleteMembers, s, HttpUtil.UTF8_ENCODING,
-				HttpUtil.HTTP_POST);
-
-	}
+//	/**
+//	 * 踢人出群组
+//	 * 
+//	 * @param users
+//	 */
+//	public void kick(String roomJid, List<UserModel> users) {
+//		if (!isInstanse())
+//			return;
+//		final MultiUserChat muc = getMuc(roomJid);
+//		List<Map<String, Object>> requestData = new ArrayList<Map<String, Object>>();
+//		for (UserModel user : users) {
+//			try {
+//				muc.kickParticipant(user.getJid(), "出去吧");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			Map<String, Object> userM = new HashMap<String, Object>();
+//			userM.put("jid", user.getJid());
+//			userM.put("roomId", muc.getRoom());
+//			requestData.add(userM);
+//		}
+//		HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//			@Override
+//			protected void doPostExecute(String result) {
+//				super.doPostExecute(result);
+//				Log.i("MucManager", "kick members success");
+//			}
+//		};
+//		task.setLockScreen(false);
+//		task.setShowProgressDialog(false);
+//		task.setNeedProgressDialog(false);
+//
+//		StringBuffer sb = new StringBuffer();
+//
+//		sb = sb.append("Form:deleteJson=")
+//				.append(new Gson().toJson(requestData)).append(";sessionKey=")
+//				.append(URL.getSessionKey()).append(";appKey=")
+//				.append(URL.getAppKey());
+//		;
+//		String s = sb.toString();
+//		task.execute(URL.MUC_DeleteMembers, s, HttpUtil.UTF8_ENCODING,
+//				HttpUtil.HTTP_POST);
+//
+//	}
 
 	/**
 	 * 邀请多个用户进群组
@@ -473,33 +508,64 @@ public class MucManager {
 		// Preferences.getUserName(Application.sharePref)+"@"+conn.getServiceName();
 		try {
 			muc.destroy("解散吧", null);
-			// 离开群组，通知服务器
-			HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+			
+			new AsyncTask<String, Integer, String>(){
+				
 				@Override
-				protected void doPostExecute(String result) {
-					super.doPostExecute(result);
-					Log.i("MucManager", "leave success");
-
-					// Iterator<MucRoomModel> i = mucRoomList.iterator();
-					// while (i.hasNext()) {
-					// MucRoomModel room = i.next();
-					// if (room.getRoomJid().equals(muc.getRoom())) {
-					// i.remove();
-					// }
-					// }
-
-					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-							.post(MucBroadCastEvent.PUSH_MUC_LEAVE);
-					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-							.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+				protected String doInBackground(String... params) {
+					String url = URL.MUC_DeleteRoom + muc.getRoom()
+							+ URL.getSessionKeyappKey();
+					try {
+						String result = HttpUtil.doWrapedHttp(context, new String[] { url,
+								"", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET });
+						return result; 
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return null;
+					}
+					
 				}
-			};
-			task.setLockScreen(false);
-			task.setShowProgressDialog(false);
-			task.setNeedProgressDialog(false);
-			String url = URL.MUC_DeleteRoom + muc.getRoom()
-					+ URL.getSessionKeyappKey();
-			task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
+				
+				protected void onPostExecute(String result) {
+					if(result!=null){
+						EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+						.post(MucBroadCastEvent.PUSH_MUC_LEAVE);
+						EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+						.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+					}
+					
+				};
+			}.execute();
+			
+			
+//			// 离开群组，通知服务器
+//			HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//				@Override
+//				protected void doPostExecute(String result) {
+//					super.doPostExecute(result);
+//					Log.i("MucManager", "leave success");
+//
+//					// Iterator<MucRoomModel> i = mucRoomList.iterator();
+//					// while (i.hasNext()) {
+//					// MucRoomModel room = i.next();
+//					// if (room.getRoomJid().equals(muc.getRoom())) {
+//					// i.remove();
+//					// }
+//					// }
+//
+//					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//							.post(MucBroadCastEvent.PUSH_MUC_LEAVE);
+//					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//							.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+//				}
+//			};
+//			task.setLockScreen(false);
+//			task.setShowProgressDialog(false);
+//			task.setNeedProgressDialog(false);
+//			String url = URL.MUC_DeleteRoom + muc.getRoom()
+//					+ URL.getSessionKeyappKey();
+//			task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -516,40 +582,69 @@ public class MucManager {
 		if (!isInstanse())
 			return;
 		final MultiUserChat muc = getMuc(roomJid);
-		String account = Preferences.getUserName(Application.sharePref) + "@"
+		final String account = Preferences.getUserName(Application.sharePref) + "@"
 				+ conn.getServiceName();
 		try {
 			muc.leave();
 			// 离开群组，通知服务器
-			HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//			HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//				@Override
+//				protected void doPostExecute(String result) {
+//					super.doPostExecute(result);
+//					Log.i("MucManager", "leave success");
+//
+//					// Iterator<MucRoomModel> i = mucRoomList.iterator();
+//					// while (i.hasNext()) {
+//					// MucRoomModel room = i.next();
+//					// if (room.getRoomJid().equals(muc.getRoom())) {
+//					// i.remove();
+//					// EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//					// .post(MucBroadCastEvent.PUSH_MUC_LEAVE);
+//					// EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//					// .post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+//					// }
+//					// }
+//					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//							.post(MucBroadCastEvent.PUSH_MUC_LEAVE);
+//					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+//							.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+//				}
+//			};
+//			task.setLockScreen(false);
+//			task.setShowProgressDialog(false);
+//			task.setNeedProgressDialog(false);
+//			String url = URL.MUC_DeleteMember + muc.getRoom() + "/" + account
+//					+ URL.getSessionKeyappKey();
+//			task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
+			
+			new AsyncTask<String, Integer, String>(){
+				
 				@Override
-				protected void doPostExecute(String result) {
-					super.doPostExecute(result);
-					Log.i("MucManager", "leave success");
-
-					// Iterator<MucRoomModel> i = mucRoomList.iterator();
-					// while (i.hasNext()) {
-					// MucRoomModel room = i.next();
-					// if (room.getRoomJid().equals(muc.getRoom())) {
-					// i.remove();
-					// EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-					// .post(MucBroadCastEvent.PUSH_MUC_LEAVE);
-					// EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-					// .post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
-					// }
-					// }
-					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-							.post(MucBroadCastEvent.PUSH_MUC_LEAVE);
-					EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
-							.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+				protected String doInBackground(String... params) {
+					String url = URL.MUC_DeleteMember + muc.getRoom() + "/" + account
+							+ URL.getSessionKeyappKey();
+					try {
+						String result = HttpUtil.doWrapedHttp(context, new String[] { url,
+								"", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET });
+						return result; 
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return null;
+					}
+					
 				}
-			};
-			task.setLockScreen(false);
-			task.setShowProgressDialog(false);
-			task.setNeedProgressDialog(false);
-			String url = URL.MUC_DeleteMember + muc.getRoom() + "/" + account
-					+ URL.getSessionKeyappKey();
-			task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
+				
+				protected void onPostExecute(String result) {
+					if(result!=null){
+						EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+								.post(MucBroadCastEvent.PUSH_MUC_LEAVE);
+						EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+								.post(MucBroadCastEvent.PUSH_MUC_INITROOMS);
+					}
+					
+				};
+			}.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -879,9 +974,6 @@ public class MucManager {
 		Log.i("test", "obtainRooms");
 		try {
 			List<ChatGroupModel> chatGroupModels = asemblyRooms(userJid);
-			IMModelManager.instance().getChatRoomContainer().clear();
-			IMModelManager.instance().getChatRoomContainer()
-					.addStuffs(chatGroupModels);
 			final String currentUserJid = userJid;
 			final CountDownLatch countDownLatch = new CountDownLatch(
 					chatGroupModels.size());
@@ -983,11 +1075,9 @@ public class MucManager {
 						chatGroupModel.setGroupCode(roomId);
 						chatGroupModel.setGroupName(roomName);
 						chatGroupModel.setCreatorJid(creator);
-						if (!IMModelManager.instance().containGroup(
-								chatGroupModel.getGroupCode())) {
-							IMModelManager.instance().addUserGroupModel(
-									chatGroupModel);
-						}
+						IMModelManager.instance().addUserGroupModel(
+								chatGroupModel);
+					
 					} else {
 						chatGroupModel = (ChatGroupModel) IMModelManager
 								.instance().getUserGroupModel(roomId);
@@ -1005,11 +1095,10 @@ public class MucManager {
 
 	private void obtainUsers(String currentUserJid,
 			ChatGroupModel chatGroupModel) {
-		if (chatGroupModel == null){
+		if (chatGroupModel == null) {
 			return;
 		}
 		Log.i("test", "obtainUsers");
-		chatGroupModel.findHistory(1);
 		List<String> jids = new ArrayList<String>();
 		String url = URL.MUC_QueryMembers + chatGroupModel.getGroupCode()
 				+ URL.getSessionKeyappKey();
@@ -1028,9 +1117,13 @@ public class MucManager {
 						if (userJid.equals(currentUserJid)) {
 							Log.i("test", "obtainUsers" + userJid);
 							Date date = null;
-							if (chatGroupModel.getLastMessage() != null) {
-								date = new Date(chatGroupModel.getLastMessage()
-										.getLocalTime());
+							List<ConversationMessage>  conversationMessages = chatGroupModel.findLastHistory(1);
+							ConversationMessage lastMessage = null;
+							if (conversationMessages.size() > 0){
+								lastMessage = conversationMessages.get(0);
+							}
+							if (lastMessage != null) {
+								date = new Date(lastMessage.getLocalTime());
 							} else {
 								date = TimeUnit.strToLongDate(offLineTime);
 							}
@@ -1048,7 +1141,22 @@ public class MucManager {
 		}
 
 		for (String jid : jids) {
-			IMModelManager.instance().addChatgroup(jid, chatGroupModel);
+			if (!chatGroupModel.containStuff(jid)) {
+				UserModel userModel = IMModelManager.instance().getUserModel(
+						jid);
+				if (userModel != null) {
+					chatGroupModel.addStuff(userModel);
+				}
+
+			}
+		}
+
+		UserModel me = IMModelManager.instance().getMe();
+		if (me != null) {
+			if (!chatGroupModel.containStuff(me)) {
+				chatGroupModel.addStuff(me);
+			}
+
 		}
 	}
 

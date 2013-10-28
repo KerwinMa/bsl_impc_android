@@ -46,6 +46,9 @@ public class SearchFriendActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat_search);
+		if (application.getNotificationService() == null ){
+			return;
+		}
 		this.rosterManager = application.getNotificationService().getRosterManager();
 		if(null!=getIntent()){
 			String friendJid=getIntent().getStringExtra("jid");

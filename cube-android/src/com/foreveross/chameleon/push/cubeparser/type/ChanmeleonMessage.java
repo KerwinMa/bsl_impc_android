@@ -42,10 +42,6 @@ public class ChanmeleonMessage implements Delayed {
 	public ChanmeleonMessage(AbstractMessage<?> packedMessage) {
 		this.packedMessage = packedMessage;
 	}
-	public ChanmeleonMessage(AbstractMessage<?> packedMessage,String userName) {
-		this.packedMessage = packedMessage;
-		this.packedMessage.setUserName(userName);
-	}
 
 	@Override
 	public int compareTo(Delayed another) {

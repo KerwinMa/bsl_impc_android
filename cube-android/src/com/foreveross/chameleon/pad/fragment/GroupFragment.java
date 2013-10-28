@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 
 import org.jivesoftware.smack.XMPPConnection;
 
@@ -32,9 +31,9 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -66,7 +65,6 @@ import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.SessionContainer;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.CommonUtils;
 import com.foreveross.chameleon.util.PadUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
@@ -136,7 +134,7 @@ public class GroupFragment extends Fragment {
 		sessionContainer = IMModelManager.instance().getSessionContainer();
 		chatRoomContainer = IMModelManager.instance().getChatRoomContainer();
 		propertiesUtil = PropertiesUtil.readProperties(
-				GroupFragment.this.getAssocActivity(), R.raw.cube);
+				GroupFragment.this.getAssocActivity(), CubeConstants.CUBE_CONFIG);
 //		mucManager = MucManager.getInstanse(getAssocActivity());
 //		initRoomContentData();
 	}
@@ -155,7 +153,7 @@ public class GroupFragment extends Fragment {
 				.register(this);
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
 				ThreadEnforcer.MAIN).register(this);
-		return inflater.inflate(R.layout.chat_group, null);
+		return inflater.inflate(R.layout.chat_group, container,false);
 	}
 
 	@Override
@@ -1073,15 +1071,25 @@ public class GroupFragment extends Fragment {
 	public void onMucManagerEvent(String mucBroadCastEvent) {
 		if (MucBroadCastEvent.PUSH_MUC_MANAGER_MEMBER.equals(mucBroadCastEvent)) {
 			// 刷新界面
-			if(roomAdapter != null){
-				roomAdapter.notifyDataSetChanged();
-			}
+			getAssocActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					if(roomAdapter != null){
+					roomAdapter.notifyDataSetChanged();
+				}}
+			});
 		}
 		if (MucBroadCastEvent.PUSH_MUC_INITROOMS.equals(mucBroadCastEvent)) {
 			// 刷新界面
-			if(roomAdapter != null){
-				roomAdapter.notifyDataSetChanged();
-			}
+			getAssocActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					if(roomAdapter != null){
+					roomAdapter.notifyDataSetChanged();
+				}}
+			});
 		}
 	}
 	

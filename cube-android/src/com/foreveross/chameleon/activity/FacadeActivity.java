@@ -58,9 +58,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.BroadcastConstans;
+import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.event.EventBus;
@@ -77,6 +77,7 @@ import com.foreveross.chameleon.pad.fragment.PageStartListener;
 import com.foreveross.chameleon.pad.fragment.ParentDroidFragment;
 import com.foreveross.chameleon.pad.fragment.ViewCreateCallBack;
 import com.foreveross.chameleon.pad.modle.SkinModel;
+import com.foreveross.chameleon.phone.modules.CountChangeListener;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
 import com.foreveross.chameleon.phone.modules.task.ThreadPlatformUtils;
@@ -210,11 +211,6 @@ public class FacadeActivity extends FragmentActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		popRight = true;
-/*		if (pending) {
-			popRight();
-			pending = false;
-		}*/
 	}
 
 	public void registerReceiver() {

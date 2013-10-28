@@ -1,6 +1,5 @@
 package com.foreveross.chameleon.phone.modules;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

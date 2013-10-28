@@ -39,8 +39,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
 
-import com.csair.impc.R;
-
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -57,6 +55,10 @@ import android.os.Looper;
 import android.os.StatFs;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.foreveross.chameleon.Application;
+import com.csair.impc.R;
+import com.foreveross.chameleon.phone.modules.CubeApplication;
 
 /**
  * <p>
@@ -572,7 +574,10 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 				notifySendReport(reportFileName);
 			}
 		}
-
+		//报错退出应用
+		Application.class.cast(
+				CubeApplication.getmContext().getApplicationContext())
+				.exitApp();
 	}
 
 	/**

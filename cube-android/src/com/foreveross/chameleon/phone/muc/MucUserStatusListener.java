@@ -4,12 +4,11 @@ import java.util.HashMap;
 
 import org.jivesoftware.smackx.muc.DefaultUserStatusListener;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.EventBus;
-
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 
 /**
  * <BR>

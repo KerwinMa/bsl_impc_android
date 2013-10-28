@@ -15,5 +15,9 @@ public class MucBroadCastEvent {
 	
 	public static final String PUSH_MUC_ADDFRIEND = "PUSH_MUC_ADDFRIEND";
 	
+	public static final String PUSH_MUC_CREATE_ROOM_SUCCESS = "PUSH_MUC_CREATE_ROOM_SUCCESS";
+	public static final String PUSH_MUC_CREATE_ROOM_FAIL = "PUSH_MUC_CREATE_ROOM_FAIL";
 	
+	public static final String PUSH_MUC_ADDFRIEND_SUCCESS = "PUSH_MUC_ADDFRIEND_SUCCESS";
+	public static final String PUSH_MUC_ADDFRIEND_FAIL = "PUSH_MUC_ADDFRIEND_FAIL";
 }

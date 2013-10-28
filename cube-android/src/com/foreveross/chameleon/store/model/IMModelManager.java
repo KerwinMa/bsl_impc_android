@@ -391,6 +391,10 @@ public class IMModelManager {
 		return roomMap.get(jid);
 	}
 	
+	public void removeChatGroupModelsByJid(String jid){
+		roomMap.remove(jid);
+		usergroupMap.remove(jid);
+	}
 	public void addCollectUserList(ArrayList<String> list){
 		if(collectUserList != null){
 			if (collectUserList.size() > 0){

@@ -1,6 +1,5 @@
 package com.foreveross.chameleon.phone.chat.chatroom;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,11 +13,9 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.SpannableString;
@@ -810,137 +807,98 @@ public class ChatRoomAdapter extends BaseAdapter {
 		
 		@Override
 		protected Bitmap doInBackground(String... params) {
-//			long time = System.currentTimeMillis();
 			String path = params[0];
 			final String picId = params[1];
+			String dirPath = Environment
+					.getExternalStorageDirectory()
+					+ "/CubeImageCache/";
 			Bitmap bitmap = null;
 			if (path == null || "".equals(path)) {
 				
-				// String url = URL.DOWNLOAD + picId;
 				String url = URL.getDownloadUrl(context, picId);
-//				Log.e("doInBackground", "Time_=" + (System.currentTimeMillis()));
 				try {
-					java.net.URL imgURL = new java.net.URL(url);
-
-					HttpURLConnection connect = (HttpURLConnection) imgURL
-							.openConnection();
-					// 这里用带有请求协议的Connection，以后如果做断电续传都需要http头。
-					int bitmapSize = connect.getContentLength();
-
-					// URLConnection connect = imgURL.openConnection();
-					// connect.connect();
-					// int bitmapSize = connect.getContentLength();
-					/**
-					 * 这里不做断点续传，如果图片传送失败就仿照QQ一样显示图裂
-					 * 若要做续传需要服务器支持，同时设置connect.setAllowUserInteraction
-					 * setRequestProperty
-					 * 
-					 */
-
-					InputStream is = connect.getInputStream();
-					ByteArrayOutputStream os = new ByteArrayOutputStream(
-							bitmapSize);
-					byte[] b = new byte[1024 * 4];
-					int nRead;
-					int download_position = 0;
-
-					while ((nRead = is.read(b, 0, 1024 * 4)) > 0) { // 等于零死循环
-						os.write(b, 0, nRead);
-						download_position += nRead;
-						int present = download_position * 100 / bitmapSize;
-
-						this.publishProgress(present);
-					}
-
-					byte[] bitmapArray = os.toByteArray();
-					Options opt = new BitmapFactory.Options();
-					// _MARK_标记这里压缩图片
-					// Log.e("ChatRoomAdapter",
-					// "bitmapArray.length="+bitmapArray.length);
-//					if (bitmapArray.length / 1024 > 300) {
-//						opt.inSampleSize = 6;
-//					}
-					bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-							bitmapArray.length);
-					if (bitmap != null) {
-						String dirPath = Environment
-								.getExternalStorageDirectory()
-								+ "/CubeImageCache/";
+					FileOutputStream output = null;
+					InputStream is = null;
+					try {
+						Log.i("test", "url" + url);
+						java.net.URL imgURL = new java.net.URL(url);
+						HttpURLConnection connect = (HttpURLConnection) imgURL
+								.openConnection();
+						int voiceSize = connect.getContentLength();
+						if (voiceSize == 0){
+							return null;
+						}
+						is = connect.getInputStream();
+						
 						File file = new File(dirPath);
 						if (!file.exists()) {
 							file.mkdirs();
 						}
-						File realFile = new File(dirPath + picId);
-						FileOutputStream fos = null;
-						try {
-							fos = new FileOutputStream(realFile);
-							if (bitmap.compress(CompressFormat.PNG, 100, fos)) {
-								imageView.setTag(dirPath + picId);
-								conversation.setContent(dirPath + picId);
-								conversation.update();
-								// conversation.save();
-							}
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						} finally {
-							if (fos != null) {
-								try {
-									fos.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+						output = new FileOutputStream(dirPath + picId);
+						int ch = 0; 
+				        while((ch=is.read()) != -1){  
+				        	output.write(ch);  
+				        }  
+						output.flush();
+
+						imageView.setTag(dirPath + picId);
+						conversation.setContent(dirPath + picId);
+						conversation.update();
+						Options opt = new BitmapFactory.Options();
+						opt.inSampleSize = 4; 
+						bitmap = BitmapFactory.decodeFile(dirPath + picId, opt);
+//						bitmap = dealwithImage(dirPath + picId);
+						return bitmap;
+					} catch (MalformedURLException e1) {
+						Log.e("URL_TAG", "url 出错");
+						return null;
+					} catch (IOException e) {
+						return null;
+					} finally{  
+		                  //关闭输入流等（略）  
+						if (output != null){
+							
+							try {
+								output.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 						}
-					}
-
-				} catch (MalformedURLException e1) {
+						if (is != null){
+							try {
+								is.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+				    }  
+				} catch (Exception e1) {
 					Log.e("URL_TAG", "url 出错");
 					return null;
-				} catch (IOException e) {
-					return null;
 				}
 
-				if (null != bitmap)
-					bitmap = ThumbnailUtils.extractThumbnail(bitmap, 100, 100);
 
 			} else {
-//				Log.e("doInBackground", "Time_2="
-//						+ (System.currentTimeMillis() - time));
 				imageView.setTag(path);
-				// Log.e("path_TAG", "path= "+path);
-				InputStream is = null;
 				try {
-					File file = new File(path);
-					is = new FileInputStream(file);
 					Options opt = new BitmapFactory.Options();
-					// //_MARK_标记这里压缩图片
-					 if(file.length()/1024>300){
-						 opt.inSampleSize = 6;
-					 } else {
-						 opt.inSampleSize = 4; 
-					 }
-					// Log.e("Adapter_OutOfMemory_file.SIZE",file.length()/1024+"m");
-//					bitmap = BitmapFactory.decodeStream(is);// ,null,opt);
-					bitmap = BitmapFactory.decodeStream(is, null, opt);
-					if (null != bitmap) {
-						bitmap = ThumbnailUtils.extractThumbnail(bitmap, 100,
-								100);
-					}
-
-				} catch (FileNotFoundException e) {
+					opt.inSampleSize = 4; 
+					bitmap = BitmapFactory.decodeFile(path , opt);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//				Log.i("doInBackground", "Time_3="+ (System.currentTimeMillis() - time));
-				// bitmap = BitmapFactory.decodeFile(path);
-				// bitmap = ThumbnailUtils.extractThumbnail(bitmap, 100, 100);
-			}
-			return bitmap;
+				return bitmap;
+				}
 		}
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			if (null != result)
+			if (null != result){
 				imageView.setImageBitmap(result);
+			}
 		}
 
 	}
@@ -1088,6 +1046,23 @@ public class ChatRoomAdapter extends BaseAdapter {
 		String voicePath = dir + "/" + chater + " " + datetime + ".aac";
 		return voicePath;
 	}
-	
+	public Bitmap dealwithImage(String dirPath) throws FileNotFoundException {
+		File f = new File(dirPath);
+		Bitmap bitmap = null ;
+		BitmapFactory.Options newOpts = null;
+		if(f.exists()) {
+			newOpts = new BitmapFactory.Options();
+			// 开始读入图片，此时把options.inJustDecodeBounds 设回true了
+			newOpts.inJustDecodeBounds = true;
+			newOpts.inPurgeable=true;
+			newOpts.inSampleSize =4;
+			newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+			 bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);// 此时返回bm为空
+			 newOpts.inJustDecodeBounds = false;
+			 return BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);
+		}
+		return bitmap;
+		
+	}
 
 }

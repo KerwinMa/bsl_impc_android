@@ -57,7 +57,7 @@ public abstract class AbstractContainerModel<ID, V extends IDObject<ID>> {
 		return stuffMap.get(id);
 	}
 
-	protected void addStuff(V v) {
+	public void addStuff(V v) {
 		list.add(v);
 		stuffMap.put(v.getMyId(), v);
 		notifyContentChange();

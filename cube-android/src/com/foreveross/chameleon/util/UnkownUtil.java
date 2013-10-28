@@ -150,7 +150,10 @@ public class UnkownUtil {
 	}
 
 	public static Application getApplication(Context context) {
-		return Application.class.cast(context.getApplicationContext());
+		if (context != null){
+			return Application.class.cast(context.getApplicationContext());
+		}
+		return null;
 	}
 	public static void runAsyncInUIThread(Context context,final AsyncTask<?, ?, ?> asyncTask){
 		getApplication(context).getUIHandler().post(new Runnable() {

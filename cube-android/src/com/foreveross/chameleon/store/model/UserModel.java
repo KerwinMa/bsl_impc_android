@@ -229,6 +229,30 @@ public class UserModel extends BaseModel<UserModel, String> implements
 		}
 
 	}
+	
+	public List<ConversationMessage> findLastHistory(int limit) {
+		List<ConversationMessage> lastConversations = new ArrayList<ConversationMessage>();
+		try {
+			if (limit == -1) {
+				lastConversations.addAll(StaticReference.userMf
+						.queryBuilder(ConversationMessage.class).where()
+						.eq("chater", jid).query());
+			} else {
+				long count = StaticReference.userMf
+						.queryBuilder(ConversationMessage.class).where()
+						.eq("chater", jid).countOf();
+				long offset = count > limit ? count - limit : 0l;
+				lastConversations.addAll(StaticReference.userMf
+						.queryBuilder(ConversationMessage.class)
+						.limit((long) limit).offset(offset).where()
+						.eq("chater", jid).query());
+			}
+
+		} catch (SQLException e) {
+			// TODO[FENGWEILI] ADD LOG
+		}
+		return lastConversations;
+	}
 
 	public void clearNewMessageCount() {
 		Collection<AbstractContainerModel<String, UserModel>> groups = groupMap

@@ -22,6 +22,7 @@ public class TmpConstants {
 	 *            2013-7-16 上午11:29:14
 	 */
 
+	public static final String SELECT_OPEN="SELECT_OPEN";
 	// public static final String XMPP_ACTION = "xmpp.connection";
 	// 取得ROOT
 	public static final String ROOT = "CubeRecorder";
