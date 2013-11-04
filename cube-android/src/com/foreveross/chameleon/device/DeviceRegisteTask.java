@@ -50,7 +50,7 @@ public class DeviceRegisteTask extends AsyncTask<Integer, Void, Boolean> {
 		boolean flag = false;
 		String deviceId = DeviceInfoUtil.getDeviceId(mContext);
 		String appKey = Application.class.cast(mContext).getCubeApplication().getAppKey();
-		String url = URL.BASE_WS +"/csair-extention/deviceRegInfo/check/"+deviceId+"?appKey="+appKey;
+		String url = URL.BASE_WS +"csair-extension/api/deviceRegInfo/check/"+deviceId+"?appKey="+appKey;
 		HttpGet request = new HttpGet(url);
 		HttpClient client = new DefaultHttpClient();
 		BufferedReader br = null;
@@ -66,8 +66,7 @@ public class DeviceRegisteTask extends AsyncTask<Integer, Void, Boolean> {
 				{
 					buffer.append(line);
 				}
-				JSONObject json = new JSONObject(buffer.toString());
-				boolean result = json.getBoolean("result");
+				boolean result = Boolean.parseBoolean(buffer.toString());
 				if(result)
 				{
 					return true;
@@ -81,9 +80,7 @@ public class DeviceRegisteTask extends AsyncTask<Integer, Void, Boolean> {
 			flag = true;
 		} catch (IOException e) {
 			flag = true;
-		} catch (JSONException e) {
-			flag = true;
-		}
+		} 
 		finally
 		{
 			if(br != null)

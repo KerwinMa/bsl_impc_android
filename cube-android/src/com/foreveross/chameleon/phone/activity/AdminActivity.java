@@ -41,18 +41,19 @@ public class AdminActivity extends BaseActivity {
 					{
 						if (PadUtils.isPad(application)) {
 							Intent i = new Intent(AdminActivity.this, FacadeActivity.class);
-							i.putExtra("url", URL.PAD_LOGIN_URL);
+							i.putExtra("url", URL.PAD_REGISTER_URL);
 							i.putExtra("isPad", true);
 							startActivity(i);
 						} else {// 手机
 							Intent i = new Intent(AdminActivity.this, FacadeActivity.class);
-							i.putExtra("url", URL.PHONE_LOGIN_URL);
+							i.putExtra("url", URL.PHONE_REGISTER_URL);
 							i.putExtra("isPad", false);
 							startActivity(i);
 						}
-//						finish();
+						finish();
+						application.getActivityManager().popActivity(AdminActivity.this);
 					}
-					finish();
+//					finish();
 				}
 				
 			}.execute();

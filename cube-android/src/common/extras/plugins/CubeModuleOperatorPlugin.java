@@ -279,14 +279,8 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 				String type = args.getString(1);
 
 				// 效能监控点击模块保存数据
-
-				/*
-				 * <!--
-				 * Application.class.cast(cordova.getActivity().getApplication
-				 * ()).saveModulerRecord(module);
-				 * 
-				 * -->
-				 */
+				 Application.class.cast(cordova.getActivity().getApplication
+				 ()).saveModulerRecord(module);
 
 				if (type.equals("main")) {
 					gotoModule(module);
