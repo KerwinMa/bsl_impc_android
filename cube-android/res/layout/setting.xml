@@ -210,7 +210,7 @@
                     android:layout_marginRight="14dip"
                     android:background="@drawable/list_next" />
             </RelativeLayout  -->
-            
+
 
             <LinearLayout
                 android:id="@+id/module_setting_layout"

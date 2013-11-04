@@ -96,7 +96,11 @@ Hello Cordova
             name="android-package"
             value="common.extras.plugins.CubeAccountPlugin" />
     </feature>
-    
+    <feature name="DeviceRegister" >
+        <param
+            name="android-package"
+            value="common.extras.plugins.DeviceRegisterPlugin" />
+    </feature>
     <feature name="CubePackageName" >
         <param
             name="android-package"

@@ -30,10 +30,10 @@ public class FileCopeTool {
 	/**
 	 * 
 	 */
-	private static Context c;
+	private  Context c;
 
 	public FileCopeTool(Context c) {
-		FileCopeTool.c = c;
+		this.c = c;
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class FileCopeTool {
 	 * @param fileName
 	 * @return
 	 */
-	public static String getFromAssets(String fileName) {
+	public String getFromAssets(String fileName) {
 		String result = "";
 		try {
 			InputStream in = c.getResources().getAssets().open(fileName);

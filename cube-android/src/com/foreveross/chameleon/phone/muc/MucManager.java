@@ -58,7 +58,7 @@ import com.google.gson.Gson;
  */
 public class MucManager {
 	XMPPConnection conn;
-	private static Context context;
+	private Context context;
 
 	/** handler 用的标识 */
 	public static int MucInitMucRooms = 0x0000001;
@@ -72,9 +72,8 @@ public class MucManager {
 	private Application application;
 
 	public static MucManager getInstanse(Context ctx) {
-		context = ctx;
 		if (instanse == null) {
-			instanse = new MucManager(context);
+			instanse = new MucManager(ctx);
 		}
 		return instanse;
 	}

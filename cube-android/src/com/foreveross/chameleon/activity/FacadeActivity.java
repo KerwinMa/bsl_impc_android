@@ -247,7 +247,8 @@ public class FacadeActivity extends FragmentActivity implements
 						return;
 					}
 					String tempurl = "www/pad";
-					String temp = FileCopeTool.getFromAssets(tempurl
+					FileCopeTool tool = new FileCopeTool(context);
+					String temp = tool.getFromAssets(tempurl
 							+ "/theme/theme.json");
 					Gson gson = new Gson();
 					final List<SkinModel> retList = gson.fromJson(temp,
@@ -403,11 +404,11 @@ public class FacadeActivity extends FragmentActivity implements
 	 */
 	public void ininDialog() {
 		if (skinDialog == null) {
-			skinDialog = new Dialog(FacadeActivity.this, R.style.dialog);
+			skinDialog = new Dialog(FacadeActivity.this, R.style.skin_dialog);
 			Window w = skinDialog.getWindow();
 			WindowManager.LayoutParams lp = w.getAttributes();
-			lp.x = 100;
-			lp.y = 350;
+			lp.x = 1024;
+			lp.y = 1024;
 			skinDialog.setContentView(skinView);
 		}
 
@@ -445,6 +446,7 @@ public class FacadeActivity extends FragmentActivity implements
 
 			public void onAnimationEnd(Animation animation) {
 				autoDownloadlayout.clearAnimation();
+				if(autoDownloadlayout.isShown())
 				autoDownloadlayout.setVisibility(View.GONE);
 			}
 		});

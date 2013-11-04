@@ -57,6 +57,7 @@ public class LoadingActivity extends BaseActivity {
 						startActivity(new Intent(LoadingActivity.this,
 								AdminActivity.class));
 						finish();
+						application.getActivityManager().popActivity(LoadingActivity.this);
 					}
 				}
 			}

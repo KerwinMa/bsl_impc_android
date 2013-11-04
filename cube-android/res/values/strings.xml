@@ -2,6 +2,7 @@
 <resources>
 
 	<string name="hello">Hello World,cubeAndroidActivity!</string>
+	<!--string name="app_name">${app.finalName}</string-->
 	<string name="app_name">南航移动应用</string>
 	<string name="app_chameleon">南航移动应用</string>
 	<string name="packageName_cube">com.foreveross.cube.android</string>

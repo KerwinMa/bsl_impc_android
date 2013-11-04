@@ -43,6 +43,7 @@ public class NoticeModuleMessageStub extends ModuleMessage<NoticeModuleMessageSt
 	private String noticeId;
 	@DatabaseField
 	private String attachment;
+	
 	public NoticeModuleMessageStub() {
 
 	}

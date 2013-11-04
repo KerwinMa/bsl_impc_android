@@ -650,6 +650,7 @@ public class ChatRoomFragment extends Fragment {
 					FacadeActivity.class.cast(getAssocActivity()).popRight();
 				} else {
 					getAssocActivity().finish();
+					application.getActivityManager().pushActivity(getAssocActivity());
 				}
 
 				break;

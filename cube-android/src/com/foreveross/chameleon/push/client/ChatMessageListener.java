@@ -491,8 +491,11 @@ public class ChatMessageListener implements PacketListener {
 									convs.add(conversation);
 								}
 							}
-
+							else {
+								convs.add(conversation);
+							}
 						}
+						
 					} 
 					else {
 						ChatGroupModel chatGroupModel = IMModelManager.instance()
@@ -507,6 +510,8 @@ public class ChatMessageListener implements PacketListener {
 								if (cMessage == null){
 									convs.add(conversation);
 								}
+							} else {
+								convs.add(conversation);
 							}
 						}
 					}

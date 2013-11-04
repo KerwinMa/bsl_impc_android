@@ -20,7 +20,6 @@
 		<app.desPath>${desPath}</app.desPath>
 		<!--模板目录名 -->
 		<app.template>${appTemplate}</app.template>
-
 		<app.storePath>${storePath}</app.storePath>
 		<app.storepass>${storePass}</app.storepass>
 		<app.keyPass>${keyPass}</app.keyPass>
@@ -274,6 +273,7 @@
 									<directory>${app.template}res</directory>
 									<excludes>
 										<exclude>${app.template}res/raw/cube.properties</exclude>
+										<exclude>${app.template}res/values/strings.xml</exclude>
 									</excludes>
 								</resource>
 							</resources>
@@ -281,7 +281,7 @@
 					</execution>
 
 					<execution>
-						<id>process-from-template</id>
+						<id>process-from-template1</id>
 						<phase>initialize</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -295,6 +295,28 @@
 									<filtering>true</filtering>
 									<includes>
 										<include>cube.properties</include>
+									</includes>
+								</resource>
+							</resources>
+							<overwrite>true</overwrite>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>process-from-template2</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<outputDirectory>${app.desPath}res/values</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${app.template}res/values</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>strings.xml</include>
 									</includes>
 								</resource>
 							</resources>

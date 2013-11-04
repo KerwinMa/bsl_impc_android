@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -36,6 +35,8 @@ import android.widget.Toast;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
+import com.foreveross.chameleon.imagemanager.AsyncImageManager;
+import com.foreveross.chameleon.phone.chat.image.BitmapManager;
 import com.foreveross.chameleon.phone.chat.voice.VoicePlayer;
 import com.foreveross.chameleon.phone.chat.voice.VoicePlayer.CompletionListener;
 import com.foreveross.chameleon.push.client.XmppManager;
@@ -53,7 +54,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 	private Object object;
 	private UserModel friend;
 	private ChatGroupModel chatGroupModel;
-	
+
 	private boolean voiceDowning;
 
 	public ChatRoomAdapter(Context context, List<ConversationMessage> data,
@@ -61,16 +62,17 @@ public class ChatRoomAdapter extends BaseAdapter {
 		this.context = context;
 		this.data = data;
 		this.object = object;
-		if (object instanceof UserModel){
+		if (object instanceof UserModel) {
 			friend = (UserModel) object;
 		}
-		if (object instanceof ChatGroupModel){
+		if (object instanceof ChatGroupModel) {
 			chatGroupModel = (ChatGroupModel) object;
 		}
 		player = new VoicePlayer();
 		player.setListener(listener);
 		isPlay = false;
-		String userAccount = PreferencesUtil.getValue(context, "currentAccount");
+		String userAccount = PreferencesUtil
+				.getValue(context, "currentAccount");
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
-//		Log.e("getView_2", "" + System.currentTimeMillis());
+		// Log.e("getView_2", "" + System.currentTimeMillis());
 		if (null == convertView) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(
@@ -110,7 +112,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 
 			holder.myName = (TextView) convertView
 					.findViewById(R.id.chatroom_my_name);
-			
+
 			holder.friendLayout = (RelativeLayout) convertView
 					.findViewById(R.id.chatroom_friend_layout);
 			holder.friendIcon = (ImageView) convertView
@@ -154,11 +156,11 @@ public class ChatRoomAdapter extends BaseAdapter {
 			holder.friendVoice.setVisibility(View.VISIBLE);
 
 			holder.left_conversation_layout
-					.setOnClickListener(new VoiceOnClickListener(conversation
-							, "friend"));
+					.setOnClickListener(new VoiceOnClickListener(conversation,
+							"friend"));
 			holder.right_conversation_layout
-					.setOnClickListener(new VoiceOnClickListener(conversation
-							, "my"));
+					.setOnClickListener(new VoiceOnClickListener(conversation,
+							"my"));
 			holder.left_conversation_layout.setVisibility(View.VISIBLE);
 			holder.right_conversation_layout.setVisibility(View.VISIBLE);
 			holder.image_left_layout.setVisibility(View.GONE);
@@ -210,97 +212,127 @@ public class ChatRoomAdapter extends BaseAdapter {
 		}
 
 		if (conversation.getType().equals("image")) {
-			//个人聊天
-			if (friend != null){
+			// 个人聊天
+			if (friend != null) {
 				String myJid = XmppManager.getMeJid();
 				String chaterJid = conversation.getFromWho();
-				//如果发送者是自己
-				if(chaterJid.equals(myJid)){
+				// 如果发送者是自己
+				if (chaterJid.equals(myJid)) {
 					holder.myLayout.setVisibility(View.VISIBLE);
 					holder.friendLayout.setVisibility(View.GONE);
 					holder.image_right_layout.setVisibility(View.VISIBLE);
 					holder.image_left_layout.setVisibility(View.GONE);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.myTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.myTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.myTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					String myName = IMModelManager.instance().getMe().getName();
-					if (myName != null && myName.contains("@")){
+					if (myName != null && myName.contains("@")) {
 						String s1[] = myName.split("@");
 						myName = s1[0];
 					}
 					holder.myName.setText(myName);
-					holder.right_image.setOnClickListener(new OnClickListener() {
+					holder.right_image
+							.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							if (null == v.getTag()) {
+								@Override
+								public void onClick(View v) {
+									if (null == v.getTag()) {
 
-							} else {
-								String path = (String) v.getTag();
-								Intent detailIntent = new Intent();
-								detailIntent.putExtra("imagePath", path);
-								detailIntent.putExtra("showFlag", false);
-								detailIntent.setClass(context,
-										PicutureDetailActivity.class);
-								context.startActivity(detailIntent);
+									} else {
+										String path = (String) v.getTag();
+										Intent detailIntent = new Intent();
+										detailIntent
+												.putExtra("imagePath", path);
+										detailIntent
+												.putExtra("showFlag", false);
+										detailIntent.setClass(context,
+												PicutureDetailActivity.class);
+										context.startActivity(detailIntent);
 
-							}
-						}
-					});
-					
-//					holder.right_image.setImageDrawable(context.getResources().getDrawable(
-//							R.drawable.pic_bg_02));
+									}
+								}
+							});
+
+					// holder.right_image.setImageDrawable(context.getResources().getDrawable(
+					// R.drawable.pic_bg_02));
 					String tag = (String) holder.right_image.getTag();
-					if (tag == null){
-						new ImageTask(holder.right_image, null, conversation).execute(
-								conversation.getContent(), conversation.getPicId());
+
+					String path = conversation.getContent();
+					Bitmap bitmap = AsyncImageManager.getInstance()
+							.loadImgFromMemery(path);
+					if (bitmap != null) {
+						holder.right_image.setImageBitmap(bitmap);
+						holder.right_image.setTag(conversation.getContent());
 					} else {
-						if (!tag.equals(conversation.getContent())){
-							new ImageTask(holder.right_image, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+						if (tag == null) {
+							new ImageTask(holder.right_image, null,
+									conversation).execute(
+									conversation.getContent(),
+									conversation.getPicId());
+						} else {
+							if (!tag.equals(conversation.getContent())) {
+								new ImageTask(holder.right_image, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
+							}
 						}
 					}
 				}
-				//如果发送者不是自己
+				// 如果发送者不是自己
 				else {
 					holder.myLayout.setVisibility(View.GONE);
 					holder.friendLayout.setVisibility(View.VISIBLE);
 					holder.image_right_layout.setVisibility(View.GONE);
 					holder.image_left_layout.setVisibility(View.VISIBLE);
 					String friendName = null;
-					UserModel model = IMModelManager.instance().
-							getUserModel(chaterJid);
-					if (model == null){
+					UserModel model = IMModelManager.instance().getUserModel(
+							chaterJid);
+					if (model == null) {
 						friendName = conversation.getFromWho();
 					} else {
 						friendName = model.getName();
 					}
-					if (friendName == null || "".equals(friendName)){
+					if (friendName == null || "".equals(friendName)) {
 						friendName = conversation.getFromWho();
 					}
-					if (friendName != null && friendName.contains("@")){
+					if (friendName != null && friendName.contains("@")) {
 						String s1[] = friendName.split("@");
 						friendName = s1[0];
 					}
 					holder.friendName.setText(friendName);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.friendTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.friendTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.friendTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					// friend.setIcon(holder.friendIcon);
 					String tag = (String) holder.left_image.getTag();
-					if (tag == null){
-						new ImageTask(holder.left_image, null, conversation).execute(
-								conversation.getContent(), conversation.getPicId());
+
+					String path = conversation.getContent();
+					Bitmap bitmap = AsyncImageManager.getInstance()
+							.loadImgFromMemery(path);
+					if (bitmap != null) {
+						holder.left_image.setImageBitmap(bitmap);
+						holder.left_image.setTag(conversation.getContent());
 					} else {
-						if (!tag.equals(conversation.getContent())){
-							new ImageTask(holder.left_image, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+						if (tag == null) {
+							new ImageTask(holder.left_image, null, conversation)
+									.execute(conversation.getContent(),
+											conversation.getPicId());
+						} else {
+							if (!tag.equals(conversation.getContent())) {
+								new ImageTask(holder.left_image, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
+							}
 						}
 					}
 
@@ -323,60 +355,77 @@ public class ChatRoomAdapter extends BaseAdapter {
 						}
 					});
 				}
-				
+
 			}
-			//用户组聊天
-			else if (chatGroupModel != null){
+			// 用户组聊天
+			else if (chatGroupModel != null) {
 				String myJid = XmppManager.getMeJid();
 				String chaterJid = conversation.getFromWho();
-				if(chaterJid.equals(myJid)){
+				if (chaterJid.equals(myJid)) {
 					holder.myLayout.setVisibility(View.VISIBLE);
 					holder.friendLayout.setVisibility(View.GONE);
 					holder.image_right_layout.setVisibility(View.VISIBLE);
 					holder.image_left_layout.setVisibility(View.GONE);
 					String myName = IMModelManager.instance().getMe().getName();
-					if (myName != null && myName.contains("@")){
+					if (myName != null && myName.contains("@")) {
 						String s1[] = myName.split("@");
 						myName = s1[0];
 					}
 					holder.myName.setText(myName);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.myTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.myTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.myTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
-					holder.right_image.setOnClickListener(new OnClickListener() {
+					holder.right_image
+							.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							if (null == v.getTag()) {
+								@Override
+								public void onClick(View v) {
+									if (null == v.getTag()) {
 
-							} else {
-								String path = (String) v.getTag();
-								Intent detailIntent = new Intent();
-								detailIntent.putExtra("imagePath", path);
-								detailIntent.putExtra("showFlag", false);
-								detailIntent.setClass(context,
-										PicutureDetailActivity.class);
-								context.startActivity(detailIntent);
+									} else {
+										String path = (String) v.getTag();
+										Intent detailIntent = new Intent();
+										detailIntent
+												.putExtra("imagePath", path);
+										detailIntent
+												.putExtra("showFlag", false);
+										detailIntent.setClass(context,
+												PicutureDetailActivity.class);
+										context.startActivity(detailIntent);
 
-							}
-						}
-					});
-					
+									}
+								}
+							});
+
 					String tag = (String) holder.right_image.getTag();
-					if (tag == null){
-						new ImageTask(holder.right_image, null, conversation).execute(
-								conversation.getContent(), conversation.getPicId());
+
+					String path = conversation.getContent();
+					Bitmap bitmap = AsyncImageManager.getInstance()
+							.loadImgFromMemery(path);
+					if (bitmap != null) {
+						holder.right_image.setImageBitmap(bitmap);
+						holder.right_image.setTag(conversation.getContent());
 					} else {
-						if (!tag.equals(conversation.getContent())){
-							new ImageTask(holder.right_image, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+						if (tag == null) {
+							new ImageTask(holder.right_image, null,
+									conversation).execute(
+									conversation.getContent(),
+									conversation.getPicId());
+						} else {
+							if (!tag.equals(conversation.getContent())) {
+								new ImageTask(holder.right_image, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
+							}
 						}
 					}
 				}
-				//如果发送者不是自己
+				// 如果发送者不是自己
 				else {
 
 					holder.myLayout.setVisibility(View.GONE);
@@ -384,38 +433,52 @@ public class ChatRoomAdapter extends BaseAdapter {
 					holder.image_right_layout.setVisibility(View.GONE);
 					holder.image_left_layout.setVisibility(View.VISIBLE);
 					String friendName = null;
-					UserModel model = IMModelManager.instance().
-							getUserModel(chaterJid);
-					if (model == null){
+					UserModel model = IMModelManager.instance().getUserModel(
+							chaterJid);
+					if (model == null) {
 						friendName = conversation.getFromWho();
 					} else {
 						friendName = model.getName();
 					}
-					if (friendName == null || "".equals(friendName)){
+					if (friendName == null || "".equals(friendName)) {
 						friendName = conversation.getFromWho();
 					}
-					if (friendName != null && friendName.contains("@")){
+					if (friendName != null && friendName.contains("@")) {
 						String s1[] = friendName.split("@");
 						friendName = s1[0];
 					}
 					holder.friendName.setText(friendName);
 					// friend.setIcon(holder.friendIcon);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.friendTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.friendTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.friendTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					String tag = (String) holder.left_image.getTag();
-					if (tag == null){
-						new ImageTask(holder.left_image, null, conversation).execute(
-								conversation.getContent(), conversation.getPicId());
+
+					String path = conversation.getContent();
+					Bitmap bitmap = AsyncImageManager.getInstance()
+							.loadImgFromMemery(path);
+					if (bitmap != null) {
+						holder.left_image.setImageBitmap(bitmap);
+						holder.left_image.setTag(conversation.getContent());
 					} else {
-						if (!tag.equals(conversation.getContent())){
-							new ImageTask(holder.left_image, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+						if (tag == null) {
+							new ImageTask(holder.left_image, null, conversation)
+									.execute(conversation.getContent(),
+											conversation.getPicId());
+						} else {
+							if (!tag.equals(conversation.getContent())) {
+								new ImageTask(holder.left_image, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
+							}
 						}
 					}
+
 					holder.left_image.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -434,158 +497,190 @@ public class ChatRoomAdapter extends BaseAdapter {
 							}
 						}
 					});
-				
+
 				}
-				
+
 			}
 		} else {
-			//个人聊天
-			if (friend != null){
+			// 个人聊天
+			if (friend != null) {
 				String myJid = XmppManager.getMeJid();
 				String chaterJid = conversation.getFromWho();
-				if(chaterJid.equals(myJid)){
-					//如果发送者是自己
+				if (chaterJid.equals(myJid)) {
+					// 如果发送者是自己
 					holder.myLayout.setVisibility(View.VISIBLE);
 					holder.friendLayout.setVisibility(View.GONE);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.myTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.myTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.myTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					String myName = IMModelManager.instance().getMe().getName();
-					if (myName != null && myName.contains("@")){
+					if (myName != null && myName.contains("@")) {
 						String s1[] = myName.split("@");
 						myName = s1[0];
 					}
 					holder.myName.setText(myName);
-					if ("voice".equals(conversation.getType())){
-						String tag = (String) holder.right_conversation_layout.getTag();
-//						holder.right_conversation_layout.setVisibility(View.GONE);
-						if (tag == null){
-							new VoiceTask(holder.myLayout ,holder.right_conversation_layout, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+					if ("voice".equals(conversation.getType())) {
+						String tag = (String) holder.right_conversation_layout
+								.getTag();
+						// holder.right_conversation_layout.setVisibility(View.GONE);
+						if (tag == null) {
+							new VoiceTask(holder.myLayout,
+									holder.right_conversation_layout, null,
+									conversation).execute(
+									conversation.getContent(),
+									conversation.getPicId());
 						} else {
-							if (!tag.equals(conversation.getContent())){
-								new VoiceTask(holder.myLayout ,holder.right_conversation_layout, null, conversation).execute(
-										conversation.getContent(), conversation.getPicId());
+							if (!tag.equals(conversation.getContent())) {
+								new VoiceTask(holder.myLayout,
+										holder.right_conversation_layout, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
 							}
 						}
 					}
 				}
-				//如果发送者不是自己
+				// 如果发送者不是自己
 				else {
 					holder.myLayout.setVisibility(View.GONE);
 					holder.friendLayout.setVisibility(View.VISIBLE);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.friendTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.friendTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.friendTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					String friendName = null;
-					UserModel model = IMModelManager.instance().
-							getUserModel(chaterJid);
-					if (model == null){
+					UserModel model = IMModelManager.instance().getUserModel(
+							chaterJid);
+					if (model == null) {
 						friendName = conversation.getFromWho();
 					} else {
 						friendName = model.getName();
 					}
-					if (friendName == null || "".equals(friendName)){
+					if (friendName == null || "".equals(friendName)) {
 						friendName = conversation.getFromWho();
 					}
-					if (friendName != null && friendName.contains("@")){
+					if (friendName != null && friendName.contains("@")) {
 						String s1[] = friendName.split("@");
 						friendName = s1[0];
 					}
 					holder.friendName.setText(friendName);
-					if ("voice".equals(conversation.getType())){
-						String tag = (String) holder.left_conversation_layout.getTag();
-//						holder.left_conversation_layout.setVisibility(View.GONE);
-						if (tag == null){
-							new VoiceTask(holder.friendLayout ,holder.left_conversation_layout, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+					if ("voice".equals(conversation.getType())) {
+						String tag = (String) holder.left_conversation_layout
+								.getTag();
+						// holder.left_conversation_layout.setVisibility(View.GONE);
+						if (tag == null) {
+							new VoiceTask(holder.friendLayout,
+									holder.left_conversation_layout, null,
+									conversation).execute(
+									conversation.getContent(),
+									conversation.getPicId());
 						} else {
-							if (!tag.equals(conversation.getContent())){
-								new VoiceTask(holder.friendLayout ,holder.left_conversation_layout, null, conversation).execute(
-										conversation.getContent(), conversation.getPicId());
+							if (!tag.equals(conversation.getContent())) {
+								new VoiceTask(holder.friendLayout,
+										holder.left_conversation_layout, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
 							}
 						}
 					}
 				}
-				
+
 			}
-			//用户组聊天
-			else if (chatGroupModel != null){
+			// 用户组聊天
+			else if (chatGroupModel != null) {
 				String myJid = XmppManager.getMeJid();
 				String chaterJid = conversation.getFromWho();
-				if(chaterJid.equals(myJid)){
-					//如果发送者是自己
+				if (chaterJid.equals(myJid)) {
+					// 如果发送者是自己
 					holder.myLayout.setVisibility(View.VISIBLE);
 					holder.friendLayout.setVisibility(View.GONE);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.myTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.myTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.myTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					String myName = IMModelManager.instance().getMe().getName();
-					if (myName != null && myName.contains("@")){
+					if (myName != null && myName.contains("@")) {
 						String s1[] = myName.split("@");
 						myName = s1[0];
 					}
 					holder.myName.setText(myName);
-					if ("voice".equals(conversation.getType())){
-						String tag = (String) holder.right_conversation_layout.getTag();
-//						holder.right_conversation_layout.setVisibility(View.GONE);
-						if (tag == null){
-							new VoiceTask(holder.myLayout ,holder.right_conversation_layout, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+					if ("voice".equals(conversation.getType())) {
+						String tag = (String) holder.right_conversation_layout
+								.getTag();
+						// holder.right_conversation_layout.setVisibility(View.GONE);
+						if (tag == null) {
+							new VoiceTask(holder.myLayout,
+									holder.right_conversation_layout, null,
+									conversation).execute(
+									conversation.getContent(),
+									conversation.getPicId());
 						} else {
-							if (!tag.equals(conversation.getContent())){
-								new VoiceTask(holder.myLayout ,holder.right_conversation_layout, null, conversation).execute(
-										conversation.getContent(), conversation.getPicId());
+							if (!tag.equals(conversation.getContent())) {
+								new VoiceTask(holder.myLayout,
+										holder.right_conversation_layout, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
 							}
 						}
 					}
-					
+
 				}
-				//如果发送者不是自己
+				// 如果发送者不是自己
 				else {
 					holder.myLayout.setVisibility(View.GONE);
 					holder.friendLayout.setVisibility(View.VISIBLE);
-					if (conversation.getLocalTime() == 0){
+					if (conversation.getLocalTime() == 0) {
 						holder.friendTime.setText(TimeUnit.getStringDate());
 					} else {
-						holder.friendTime.setText(TimeUnit.LongToStr(conversation.getLocalTime(),
+						holder.friendTime.setText(TimeUnit.LongToStr(
+								conversation.getLocalTime(),
 								TimeUnit.LONG_FORMAT));
 					}
 					String friendName = null;
-					UserModel model = IMModelManager.instance().
-							getUserModel(chaterJid);
-					if (model == null){
+					UserModel model = IMModelManager.instance().getUserModel(
+							chaterJid);
+					if (model == null) {
 						friendName = conversation.getFromWho();
 					} else {
 						friendName = model.getName();
 					}
-					if (friendName == null || "".equals(friendName)){
+					if (friendName == null || "".equals(friendName)) {
 						friendName = conversation.getFromWho();
 					}
-					if (friendName != null && friendName.contains("@")){
+					if (friendName != null && friendName.contains("@")) {
 						String s1[] = friendName.split("@");
 						friendName = s1[0];
 					}
 					holder.friendName.setText(friendName);
-					if ("voice".equals(conversation.getType())){
-						String tag = (String) holder.left_conversation_layout.getTag();
-//						holder.left_conversation_layout.setVisibility(View.GONE);
-						if (tag == null){
-							new VoiceTask(holder.friendLayout ,holder.left_conversation_layout, null, conversation).execute(
-									conversation.getContent(), conversation.getPicId());
+					if ("voice".equals(conversation.getType())) {
+						String tag = (String) holder.left_conversation_layout
+								.getTag();
+						// holder.left_conversation_layout.setVisibility(View.GONE);
+						if (tag == null) {
+							new VoiceTask(holder.friendLayout,
+									holder.left_conversation_layout, null,
+									conversation).execute(
+									conversation.getContent(),
+									conversation.getPicId());
 						} else {
-							if (!tag.equals(conversation.getContent())){
-								new VoiceTask(holder.friendLayout ,holder.left_conversation_layout, null, conversation).execute(
-										conversation.getContent(), conversation.getPicId());
+							if (!tag.equals(conversation.getContent())) {
+								new VoiceTask(holder.friendLayout,
+										holder.left_conversation_layout, null,
+										conversation).execute(
+										conversation.getContent(),
+										conversation.getPicId());
 							}
 						}
 					}
@@ -658,18 +753,18 @@ public class ChatRoomAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View v) {
 			String tag = (String) v.getTag();
-			if (tag == null){
-				if (!voiceDowning){
-					new VoiceTask(null ,v, null, conversation).execute(
-							null, conversation.getPicId());
+			if (tag == null) {
+				if (!voiceDowning) {
+					new VoiceTask(null, v, null, conversation).execute(null,
+							conversation.getPicId());
 				} else {
 				}
 				return;
 			}
-			
+
 			if (!isPlay) {
 				String path = conversation.getContent();
-				if (path == null){
+				if (path == null) {
 					return;
 				}
 				if (null != mLastPlayIv && mAnim.isRunning()) {
@@ -688,7 +783,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 							.show();
 				} else {
 					boolean playable = player.playByPath(path);
-					if (!playable){
+					if (!playable) {
 						if (null != mLastPlayIv && mAnim.isRunning()) {
 							mAnim.stop();
 							mLastPlayIv
@@ -699,8 +794,9 @@ public class ChatRoomAdapter extends BaseAdapter {
 							fLastPlayIv
 									.setBackgroundResource(R.drawable.chat_record_f_3);
 						}
-						Toast.makeText(context, "音频文件不能播放，重新下载音频", Toast.LENGTH_SHORT).show();
-						new VoiceTask(null ,v, null, conversation).execute(
+						Toast.makeText(context, "音频文件不能播放，重新下载音频",
+								Toast.LENGTH_SHORT).show();
+						new VoiceTask(null, v, null, conversation).execute(
 								null, conversation.getPicId());
 						return;
 					}
@@ -804,17 +900,17 @@ public class ChatRoomAdapter extends BaseAdapter {
 			imageView.setImageDrawable(context.getResources().getDrawable(
 					R.drawable.pic_bg_02));
 		}
-		
+
+		@SuppressWarnings("resource")
 		@Override
 		protected Bitmap doInBackground(String... params) {
 			String path = params[0];
 			final String picId = params[1];
-			String dirPath = Environment
-					.getExternalStorageDirectory()
+			String dirPath = Environment.getExternalStorageDirectory()
 					+ "/CubeImageCache/";
 			Bitmap bitmap = null;
 			if (path == null || "".equals(path)) {
-				
+
 				String url = URL.getDownloadUrl(context, picId);
 				try {
 					FileOutputStream output = null;
@@ -825,39 +921,44 @@ public class ChatRoomAdapter extends BaseAdapter {
 						HttpURLConnection connect = (HttpURLConnection) imgURL
 								.openConnection();
 						int voiceSize = connect.getContentLength();
-						if (voiceSize == 0){
+						if (voiceSize == 0) {
 							return null;
 						}
 						is = connect.getInputStream();
-						
+
 						File file = new File(dirPath);
 						if (!file.exists()) {
 							file.mkdirs();
 						}
 						output = new FileOutputStream(dirPath + picId);
-						int ch = 0; 
-				        while((ch=is.read()) != -1){  
-				        	output.write(ch);  
-				        }  
+						int ch = 0;
+						while ((ch = is.read()) != -1) {
+							output.write(ch);
+						}
 						output.flush();
 
 						imageView.setTag(dirPath + picId);
 						conversation.setContent(dirPath + picId);
 						conversation.update();
-						Options opt = new BitmapFactory.Options();
-						opt.inSampleSize = 4; 
-						bitmap = BitmapFactory.decodeFile(dirPath + picId, opt);
-//						bitmap = dealwithImage(dirPath + picId);
+						// bitmap = dealwithImage(dirPath + picId);
+						BitmapFactory.Options opts = new BitmapFactory.Options();
+						opts.inSampleSize = 4;
+						FileInputStream fis = new FileInputStream(dirPath
+								+ picId);
+						bitmap = BitmapManager.instance().decodeFileDescriptor(
+								fis.getFD(), opts);
+						AsyncImageManager.getInstance().setImageCache(bitmap,
+								dirPath + picId);
 						return bitmap;
 					} catch (MalformedURLException e1) {
 						Log.e("URL_TAG", "url 出错");
 						return null;
 					} catch (IOException e) {
 						return null;
-					} finally{  
-		                  //关闭输入流等（略）  
-						if (output != null){
-							
+					} finally {
+						// 关闭输入流等（略）
+						if (output != null) {
+
 							try {
 								output.close();
 							} catch (IOException e) {
@@ -865,7 +966,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 								e.printStackTrace();
 							}
 						}
-						if (is != null){
+						if (is != null) {
 							try {
 								is.close();
 							} catch (IOException e) {
@@ -873,36 +974,44 @@ public class ChatRoomAdapter extends BaseAdapter {
 								e.printStackTrace();
 							}
 						}
-				    }  
+					}
 				} catch (Exception e1) {
 					Log.e("URL_TAG", "url 出错");
 					return null;
 				}
 
-
 			} else {
 				imageView.setTag(path);
 				try {
-					Options opt = new BitmapFactory.Options();
-					opt.inSampleSize = 4; 
-					bitmap = BitmapFactory.decodeFile(path , opt);
+					bitmap = AsyncImageManager.getInstance().loadImgFromMemery(
+							path);
+					if (bitmap == null) {
+						// bitmap = dealwithImage(path);
+						BitmapFactory.Options opts = new BitmapFactory.Options();
+						opts.inSampleSize = 4;
+						FileInputStream fis = new FileInputStream(path);
+						bitmap = BitmapManager.instance().decodeFileDescriptor(
+								fis.getFD(), opts);
+						AsyncImageManager.getInstance().setImageCache(bitmap,
+								path);
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return bitmap;
-				}
+			}
 		}
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			if (null != result){
+			if (null != result) {
 				imageView.setImageBitmap(result);
 			}
 		}
 
 	}
-	
+
 	class VoiceTask extends AsyncTask<String, Integer, Integer> {
 		// 刷新进度条
 		@Override
@@ -922,7 +1031,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 		}
 
 		private View voiceView;
-		
+
 		private RelativeLayout voiceLayout;
 
 		private ProgressBar progressBar;
@@ -934,8 +1043,8 @@ public class ChatRoomAdapter extends BaseAdapter {
 			this.progressBar = progressBar;
 		}
 
-		public VoiceTask(RelativeLayout voiceLayout , View voiceView, ProgressBar progressBar,
-				ConversationMessage conversation) {
+		public VoiceTask(RelativeLayout voiceLayout, View voiceView,
+				ProgressBar progressBar, ConversationMessage conversation) {
 			this.voiceView = voiceView;
 			this.progressBar = progressBar;
 			this.conversation = conversation;
@@ -944,14 +1053,14 @@ public class ChatRoomAdapter extends BaseAdapter {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (voiceLayout != null){
+			if (voiceLayout != null) {
 				voiceLayout.setVisibility(View.GONE);
 			}
-			if (voiceView != null){
+			if (voiceView != null) {
 				voiceView.setTag(null);
 			}
 		}
-		
+
 		@Override
 		protected Integer doInBackground(String... params) {
 			voiceDowning = true;
@@ -967,17 +1076,17 @@ public class ChatRoomAdapter extends BaseAdapter {
 					HttpURLConnection connect = (HttpURLConnection) imgURL
 							.openConnection();
 					int voiceSize = connect.getContentLength();
-					if (voiceSize == 0){
+					if (voiceSize == 0) {
 						return -1;
 					}
 					is = connect.getInputStream();
 					String voicePath = makeVoiceReceiveDir(conversation
 							.getChater());
 					output = new FileOutputStream(voicePath);
-					int ch = 0; 
-			        while((ch=is.read()) != -1){  
-			        	output.write(ch);  
-			        }  
+					int ch = 0;
+					while ((ch = is.read()) != -1) {
+						output.write(ch);
+					}
 					output.flush();
 
 					voiceView.setTag(voicePath + picId);
@@ -989,10 +1098,10 @@ public class ChatRoomAdapter extends BaseAdapter {
 					return -1;
 				} catch (IOException e) {
 					return -1;
-				} finally{  
-	                  //关闭输入流等（略）  
-					if (output != null){
-						
+				} finally {
+					// 关闭输入流等（略）
+					if (output != null) {
+
 						try {
 							output.close();
 						} catch (IOException e) {
@@ -1000,7 +1109,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 							e.printStackTrace();
 						}
 					}
-					if (is != null){
+					if (is != null) {
 						try {
 							is.close();
 						} catch (IOException e) {
@@ -1008,7 +1117,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 							e.printStackTrace();
 						}
 					}
-			    }  
+				}
 			} else {
 				voiceView.setTag(path);
 				return 1;
@@ -1017,19 +1126,19 @@ public class ChatRoomAdapter extends BaseAdapter {
 
 		@Override
 		protected void onPostExecute(Integer result) {
-			if (result != 1){
+			if (result != 1) {
 				voiceView.setTag(null);
 			}
 			voiceDowning = false;
-			if (result == 1){
-				if (voiceLayout != null){
+			if (result == 1) {
+				if (voiceLayout != null) {
 					voiceLayout.setVisibility(View.VISIBLE);
 				}
 			}
 		}
 
 	}
-	
+
 	/**
 	 * @return 创建并音频文件路径
 	 **/
@@ -1046,23 +1155,26 @@ public class ChatRoomAdapter extends BaseAdapter {
 		String voicePath = dir + "/" + chater + " " + datetime + ".aac";
 		return voicePath;
 	}
+
 	public Bitmap dealwithImage(String dirPath) throws FileNotFoundException {
 		File f = new File(dirPath);
-		Bitmap bitmap = null ;
+		Bitmap bitmap = null;
 		BitmapFactory.Options newOpts = null;
-		if(f.exists()) {
+		if (f.exists()) {
 			newOpts = new BitmapFactory.Options();
 			// 开始读入图片，此时把options.inJustDecodeBounds 设回true了
 			newOpts.inJustDecodeBounds = true;
-			newOpts.inPurgeable=true;
-			newOpts.inSampleSize =4;
+			newOpts.inPurgeable = true;
+			newOpts.inSampleSize = 4;
 			newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-			 bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);// 此时返回bm为空
-			 newOpts.inJustDecodeBounds = false;
-			 return BitmapFactory.decodeStream(new FileInputStream(f), null, newOpts);
+			bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null,
+					newOpts);// 此时返回bm为空
+			newOpts.inJustDecodeBounds = false;
+			return BitmapFactory.decodeStream(new FileInputStream(f), null,
+					newOpts);
 		}
 		return bitmap;
-		
+
 	}
 
 }

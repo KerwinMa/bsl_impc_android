@@ -19,9 +19,6 @@ public class MucAddFirendActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.muc_add_friend_activity);
-		Application application = Application.class.cast(MucAddFirendActivity.this
-				.getApplication());
-		application.getActivityManager().pushActivity(this);
 	}
 
 	/**

@@ -20,7 +20,8 @@ public class URL {
 	public static String PAD_LOGIN_URL = null;
 	public static String PHONE_MAIN_URL = null;
 	public static String PHONE_LOGIN_URL = null;
-	
+	public static String PHONE_REGISTER_URL = null;
+	public static String PAD_REGISTER_URL = null;
 	
 	public static String UPLOAD_URL = BASE_WEB + "csair-mam/attachment/clientUpload";
 	public static String SYNC = BASE_WS + "csair-extension/api/extendClients/android/";

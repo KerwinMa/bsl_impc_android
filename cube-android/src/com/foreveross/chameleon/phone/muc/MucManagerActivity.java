@@ -18,9 +18,7 @@ public class MucManagerActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mucmanager_activity_layout);
-		Application application = Application.class.cast(MucManagerActivity.this
-				.getApplication());
-		application.getActivityManager().pushActivity(this);
 	}
 
+	
 }

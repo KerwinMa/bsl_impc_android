@@ -172,16 +172,19 @@ public class CubeApplication implements Serializable {
 
 	public void loadApplication() {
 		// 拿到当前登陆的用户名
-		String username = Preferences.getCurrentUserName(Application.sharePref);
-
-		if (this.isInstalled(username)) {
+		String username = Preferences.getUserName(Application.sharePref);
+		String path = Environment.getExternalStorageDirectory().getPath();
+		if(!tool.isfileExist(path+"/" + context.getPackageName()+"/www", "com.csair.deviceregist"))
+		{
+			tool.CopyAssets("www/com.csair.deviceregist",path+"/" + context.getPackageName()+"/www/com.csair.deviceregist");
+		}
+		if (this.isUserExist(username)) {
 			// 运行目录读取
 			System.out.println("运行时目录读取");
-			String path = Environment.getExternalStorageDirectory().getPath();
+			
 			String results = tool.readerFile(
-					path + "/" + context.getPackageName(), "Cube.json");
+					path + "/" + context.getPackageName(), "Cube-"+username+".json");
 			CubeApplication app = buildApplication(results);
-
 			app.context = this.context;
 			// 同步预置模块
 			if (app.getBuild() != getVersionCode()) {
@@ -308,11 +311,11 @@ public class CubeApplication implements Serializable {
 	 */
 	public void install() throws IOException {
 		// 拿到当前登陆的用户名
-		String username = Preferences.getCurrentUserName(Application.sharePref);
+		String username = Preferences.getUserName(Application.sharePref);
 
-		if (isInstalled(username)) {
+		if (isUserExist(username)) {
 			tool.deleteFile(Environment.getExternalStorageDirectory().getPath()
-					+ "/" + context.getPackageName() + "/" + "Cube.json");
+					+ "/" + context.getPackageName() + "/" + "Cube-"+username+".json");
 			System.out.println("删除原有的Cube.json");
 		}
 		// 复制Assets文件夹中的Cube.json 文件到运行时目录。
@@ -324,6 +327,8 @@ public class CubeApplication implements Serializable {
 		tool.copyOneFileToSDCard("www/cordova.js",
 				Environment.getExternalStorageDirectory().getPath() + "/"
 						+ context.getPackageName() + "/www/", "cordova.js");
+        
+       
 		// new Thread(new Runnable() {
 		// @Override
 		// public void run() {
@@ -722,6 +727,8 @@ public class CubeApplication implements Serializable {
 		oldOne.getModules().addAll(installedMap.values());
 		oldOne.getModules().addAll(updatableMap.values());
 		oldOne.getModules().addAll(unstallMap.values());
+		
+		
 		// oldOne.getModules().add(oldHash.get("com.foss.voice"));
 		// oldOne.getModules().add(oldHash.get("com.foss.message.record"));
 		// oldOne.getModules().add(oldHash.get("com.foss.feedback"));
@@ -815,11 +822,12 @@ public class CubeApplication implements Serializable {
 
 	public void save(CubeApplication app) {
 
+		String userName = Preferences.getCurrentUserName(Application.sharePref);
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 		String json = gson.toJson(app.translate());
 		try {
-			tool.writeToJsonFile("Cube",
+			tool.writeToJsonFile("Cube-"+userName,
 					Environment.getExternalStorageDirectory().getPath() + "/"
 							+ context.getPackageName() + "/", json);
 		} catch (Exception e) {

@@ -65,6 +65,8 @@ import com.csair.impc.R;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.event.PresenceEvent;
+import com.foreveross.chameleon.imagemanager.AsyncImageManager;
+import com.foreveross.chameleon.imagemanager.LruImageCache;
 import com.foreveross.chameleon.phone.ActivityManager;
 import com.foreveross.chameleon.phone.modules.CubeApplication;
 import com.foreveross.chameleon.phone.modules.CubeModule;
@@ -124,7 +126,6 @@ public class Application extends android.app.Application implements
 	private final static Logger log = LoggerFactory
 			.getLogger(Application.class);
 	private HttpClient httpClient; // 采用apache网络连接组件
-	private View views;
 	/**
 	 * [作用描述]
 	 */
@@ -170,15 +171,19 @@ public class Application extends android.app.Application implements
 
 		CrashReport crashReport = new CrashReport();
 		crashReport.start(this);
+		
+		// 初始化图片管理器
+		final int memClass = ((android.app.ActivityManager) getSystemService(Context.ACTIVITY_SERVICE))
+				.getMemoryClass();
+		// Use 1/8th of the available memory for this memory cache.
+		final int cacheSize = 1024 * 1024 * memClass / 8;
+		AsyncImageManager.buildInstance(new LruImageCache(cacheSize));
 
 		// 效能监控启动定时器代码
 
-		/*
-		 * <!-- mHandler.removeCallbacks(mUpdateTimeTask);
-		 * mHandler.postDelayed(mUpdateTimeTask, 60000);
-		 * 
-		 * -->
-		 */
+		 mHandler.removeCallbacks(mUpdateTimeTask);
+		 mHandler.postDelayed(mUpdateTimeTask, 60000);
+		 
 
 	}
 
@@ -312,7 +317,6 @@ public class Application extends android.app.Application implements
 			} catch (Exception e) {
 				System.out.println("-----------------线程异常终止了：" + minutes + "分，"
 						+ seconds + "秒");
-				System.out.println(e);
 				return;
 			}
 			mHandler.postDelayed(this, 60000);
@@ -398,6 +402,7 @@ public class Application extends android.app.Application implements
 	 */
 	public void showTopWindow(Activity c) {
 		this.a = c;
+		View views = null;
 		if (PadUtils.isPad(this)) {
 			views = LayoutInflater.from(this).inflate(
 					R.layout.pad_splash_screen, null);
@@ -421,16 +426,16 @@ public class Application extends android.app.Application implements
 		} else {
 			params.height = screenHeight - getStatusHeight(c);
 		}
-
+		final View view = views;
 		// topWindow显示到最顶部
-		windowManager.addView(views, params);
+		windowManager.addView(view, params);
 
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(2400);
-					clearTopWindow(views);
+					clearTopWindow(view);
 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -678,11 +683,13 @@ public class Application extends android.app.Application implements
 		URL.PAD_LOGIN_URL = propertiesUtil.getString("PAD_LOGIN_URL", "");
 		URL.PHONE_MAIN_URL = propertiesUtil.getString("PHONE_MAIN_URL", "");
 		URL.PHONE_LOGIN_URL = propertiesUtil.getString("PHONE_LOGIN_URL", "");
-
+		URL.PHONE_REGISTER_URL = propertiesUtil.getString("PHONE_REGISTER_URL", "");
+		URL.PAD_REGISTER_URL = propertiesUtil.getString("PAD_REGISTER_URL", "");
 		URL.UPLOAD_URL = URL.BASE_WEB + "mam/attachment/clientUpload";
 		URL.SYNC = URL.BASE_WS + "csair-extension/api/extendClients/android/";
 		URL.UPLOAD = URL.BASE_WS + "csair-mam/api/mam/attachment/upload";
-		URL.LOGIN = URL.BASE_WS + "csair-extension/api/oalogin/validate";
+//		URL.LOGIN = URL.BASE_WS + "csair-extension/api/oalogin/validate";
+		URL.LOGIN = URL.BASE_WS + "csair-extension/api/accounts/login";
 		URL.UPDATE = URL.BASE_WS + "csair-mam/api/mam/clients/update/android";
 		URL.UPDATE_RECORD = URL.BASE_WS
 				+ "csair-mam/api/mam/clients/update/appcount/android/";

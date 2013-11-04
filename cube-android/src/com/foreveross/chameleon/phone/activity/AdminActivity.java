@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.csair.impc.R;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
+import com.foreveross.chameleon.device.DeviceRegisteTask;
 import com.foreveross.chameleon.phone.mdm.DeviceAdminSampleReceiver;
 import com.foreveross.chameleon.util.PadUtils;
 
@@ -26,9 +27,36 @@ public class AdminActivity extends BaseActivity {
 			{
 				mDPM.removeActiveAdmin(mDeviceAdminSample);
 			}
+			new DeviceRegisteTask(this.getApplicationContext()){
+
+				@Override
+				protected void onPostExecute(Boolean result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					if(result)
+					{
+						actionActivity();
+					}
+					else
+					{
+						if (PadUtils.isPad(application)) {
+							Intent i = new Intent(AdminActivity.this, FacadeActivity.class);
+							i.putExtra("url", URL.PAD_LOGIN_URL);
+							i.putExtra("isPad", true);
+							startActivity(i);
+						} else {// 手机
+							Intent i = new Intent(AdminActivity.this, FacadeActivity.class);
+							i.putExtra("url", URL.PHONE_LOGIN_URL);
+							i.putExtra("isPad", false);
+							startActivity(i);
+						}
+//						finish();
+					}
+					finish();
+				}
+				
+			}.execute();
 			
-			finish();
-			actionActivity();
 		}
 	}
 
@@ -66,12 +94,14 @@ public class AdminActivity extends BaseActivity {
 			startActivity(i);
 		}
 		finish();
+		application.getActivityManager().popActivity(AdminActivity.this);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE && resultCode != RESULT_CODE) {
 			finish();
+			application.getActivityManager().popActivity(AdminActivity.this);
 		} else {
 			actionActivity();
 		}

@@ -944,6 +944,8 @@ containing a value of this type.
         public static final int app_field_text=0x7f080013;
         public static final int app_field_video=0x7f080016;
         public static final int app_field_voice=0x7f080012;
+        /** string name="app_name">${app.finalName}</string
+         */
         public static final int app_name=0x7f080002;
         public static final int cancel=0x7f080021;
         public static final int chatfooter_presstorcd=0x7f080018;
@@ -1095,7 +1097,7 @@ containing a value of this type.
     
          */
         public static final int ChattingUIWordCount=0x7f09002b;
-        public static final int CropButton=0x7f090032;
+        public static final int CropButton=0x7f090033;
         public static final int MMButton=0x7f09002a;
         public static final int MMFooter=0x7f090027;
         public static final int MMToolbarButton=0x7f090029;
@@ -1143,6 +1145,9 @@ containing a value of this type.
         public static final int prent_widget_fwh=0x7f090026;
         public static final int server_voice_item_btn=0x7f090005;
         public static final int server_voice_item_text=0x7f090007;
+        /**  背景阴影 
+         */
+        public static final int skin_dialog=0x7f090032;
         /**  文本Header样式 
          */
         public static final int textHeader=0x7f090013;

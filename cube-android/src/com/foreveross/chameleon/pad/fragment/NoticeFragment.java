@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.csair.impc.R;
+import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.event.EventBus;
@@ -49,6 +50,7 @@ import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessage;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Pool;
+import com.foreveross.chameleon.util.Preferences;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -428,9 +430,10 @@ public class NoticeFragment extends Fragment {
 				noticeModules.clear();
 				List<NoticeModuleMessage> queryData = new ArrayList<NoticeModuleMessage>();
 				try {
+					String userName = Preferences.getUserName(Application.sharePref);
 					queryData.addAll(StaticReference.defMf
 							.queryBuilder(NoticeModuleMessage.class)
-							.orderBy("sendTime", false).query());
+							.orderBy("sendTime", false).where().eq("userName", userName).query());
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

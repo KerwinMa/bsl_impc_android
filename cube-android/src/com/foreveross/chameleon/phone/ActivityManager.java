@@ -9,7 +9,7 @@ import android.app.Activity;
 public class ActivityManager { 
 	private static Stack<DroidGap> webStack  = new Stack<DroidGap>(); 
 
-    private static Stack<Activity> activityStack  = new Stack<Activity>(); ; 
+    private Stack<Activity> activityStack  = new Stack<Activity>(); ; 
     private static ActivityManager instance; 
     private ActivityManager() { 
     } 

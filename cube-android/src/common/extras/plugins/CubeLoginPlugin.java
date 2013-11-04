@@ -240,6 +240,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							Preferences.savePrivileges(jb.getString("privileges"), Application.sharePref);
 							
 							markLogined();
+							//从本地读取文件cube.json
+							application.getCubeApplication().loadApplication();
 							cordova.getActivity().startActivity(successIntent);
 							application.setLoginType(TmpConstants.LOGIN_ONLINE);
 							StaticReference.userMC = ModelCreator.build(

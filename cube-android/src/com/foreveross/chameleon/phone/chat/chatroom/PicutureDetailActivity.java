@@ -110,9 +110,6 @@ public class PicutureDetailActivity extends Activity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat_pic_detail);
-		Application application = Application.class.cast(PicutureDetailActivity.this
-				.getApplication());
-		application.getActivityManager().pushActivity(this);
 		canSend = false;
 		cropImage = (ImageView) findViewById(R.id.cropImage);
 		back_btn = (Button) findViewById(R.id.back_btn);

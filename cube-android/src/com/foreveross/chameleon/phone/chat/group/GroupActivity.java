@@ -18,9 +18,6 @@ public class GroupActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.group_activity_layout);
-		Application application = Application.class.cast(GroupActivity.this
-				.getApplication());
-		application.getActivityManager().pushActivity(this);
 	}
 
 }

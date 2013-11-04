@@ -183,6 +183,8 @@ public class ModuleOperationService extends Service {
 										return;
 									} else if (result.size() == 0) {
 										Log.v("Depands", "没有依赖模块下载");
+										Intent intent = new Intent(BroadcastConstans.CANCEELDIOLOG);
+										sendBroadcast(intent);
 									} else {
 										for (CubeModule m : result) {
 											int type = m.getModuleType();
@@ -596,6 +598,8 @@ public class ModuleOperationService extends Service {
 										return;
 									} else if (result.size() == 0) {
 										Log.v("Depands", "没有依赖模块下载");
+										Intent intent = new Intent(BroadcastConstans.CANCEELDIOLOG);
+										sendBroadcast(intent);
 									} else {
 										for (CubeModule m : result) {
 											int type = m.getModuleType();

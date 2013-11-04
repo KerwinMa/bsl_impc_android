@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
+import com.foreveross.chameleon.device.DeviceRegisteTask;
+import com.foreveross.chameleon.phone.modules.CubeApplication;
 import com.foreveross.chameleon.phone.modules.CubeModelItemView;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
@@ -36,6 +38,7 @@ public class SettingsActivity extends BaseActivity {
 	private RelativeLayout setting_about;
 	private RelativeLayout setting_update;
 	private RelativeLayout setting_pushsetting;
+	private RelativeLayout setting_btn_register;
 	private Button logOff;
 	private LinearLayout module_setting_layout;
 
@@ -73,11 +76,25 @@ public class SettingsActivity extends BaseActivity {
 		}
 		// Set<CubeModule> modules =
 		// CubeApplication.getInstance(this).getModules();
+		FileCopeTool fileTool = new FileCopeTool(this);
+		//将模块添加到application中如果存在就不添加了
+		String results = fileTool.getFromAssets("Cube.json");
+		CubeApplication app = application.getCubeApplication().buildApplication(results);
+		List<CubeModule> tmpList = new ArrayList<CubeModule>();
+		for (CubeModule cubeModule : moduleList) {
+			for (CubeModule cube : app.getModules()) {
+				if(!cubeModule.getIdentifier().equals(cube.getIdentifier()))
+				{
+					tmpList.add(cube);
+				}
+			}
+		}
+		moduleList.addAll(tmpList);
 		Iterator<CubeModule> its = moduleList.iterator();
 		List<CubeModule> modules = new ArrayList<CubeModule>();
 		String path = Environment.getExternalStorageDirectory().getPath() + "/"
 				+ getPackageName();
-		FileCopeTool fileTool = new FileCopeTool(this);
+		
 		while (its.hasNext()) {
 			CubeModule cubeModule = its.next();
 			String url = path + "/www/" + cubeModule.getIdentifier();
