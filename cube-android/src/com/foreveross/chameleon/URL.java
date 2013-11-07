@@ -35,7 +35,7 @@ public class URL {
 	public static  String FEEDBACK_URL = PUSH_BASE_URL + "receipts";
 	//下载后更新服务端计数
 	public static String UPDATE_RECORD = BASE_WS+ "csair-mam/api/mam/clients/update/appcount/android/";
-		
+	public static String GEOPOSITION_URL=BASE_WS + "csair-mam/api/mam/device/position/add";
 
 
 

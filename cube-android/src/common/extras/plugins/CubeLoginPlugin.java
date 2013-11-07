@@ -1,23 +1,15 @@
 package common.extras.plugins;
 
-import java.util.List;
-
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
@@ -29,11 +21,27 @@ import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.CheckNetworkUtil;
-import com.foreveross.chameleon.util.DeviceInfoUtil;
-import com.foreveross.chameleon.util.HttpUtil;
-import com.foreveross.chameleon.util.PadUtils;
-import com.foreveross.chameleon.util.Preferences;
+import com.foreveross.chameleon.util.*;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * <BR>
@@ -248,6 +256,84 @@ public class CubeLoginPlugin extends CordovaPlugin {
 									application, username);
 							StaticReference.userMf = ModelFinder.build(
 									application, username);
+                            if(!GeolocationUtil.isOpenGPSSettings(application))
+                            {
+                                Intent GPSIntent = new Intent();
+                                GPSIntent.setClassName("com.android.settings",
+                                        "com.android.settings.widget.SettingsAppWidgetProvider");
+                                GPSIntent.addCategory("android.intent.category.ALTERNATIVE");
+                                GPSIntent.setData(Uri.parse("custom:3"));
+                                try {
+                                    PendingIntent.getBroadcast(application, 0, GPSIntent, 0).send();
+                                } catch (PendingIntent.CanceledException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else
+                            {
+                                GeolocationUtil.isGPSON = true;
+                            }
+                            new AsyncTask<String,Void,Void>()
+                            {
+                                @Override
+                                protected Void doInBackground(String... strings) {
+                                    Location location = GeolocationUtil.getNewLocation(application);
+                                    if(location == null)
+                                    {
+                                        //发送通知
+                                        Intent intent = new Intent("com.foss.geoReload");
+                                        cordova.getActivity().sendBroadcast(intent);
+                                        return null;
+                                    }
+                                    double longitude = location.getLongitude();
+                                    double latitude = location.getLatitude();
+                                    String sessionKey = strings[0];
+                                    String deviceId = DeviceInfoUtil.getDeviceId(application);
+                                    JSONObject json = new JSONObject();
+                                    try {
+                                        json.put("deviceId",deviceId);
+                                        JSONArray tmpArray = new JSONArray();
+                                        tmpArray.put(0,longitude);
+                                        tmpArray.put(1,latitude);
+//                                        double[] arrays = new double[]{longitude,latitude};
+                                        json.put("position",tmpArray);
+                                        HttpPost post = new HttpPost(URL.GEOPOSITION_URL+"?sessionKey="+sessionKey);
+                                        post.addHeader("Accept", "application/json");
+                                        post.addHeader("Content-Type", "application/json");
+                                        post.setEntity(new StringEntity(json.toString(),"utf-8"));
+                                        HttpClient client = new DefaultHttpClient();
+                                        HttpResponse response = client.execute(post);
+                                        if(response.getStatusLine().getStatusCode() == 200)
+                                        {
+                                            Log.v("GEO_SUCCESS_TAG",json.toString());
+                                        }
+                                        else
+                                        {
+                                            BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                                            String line="";
+                                            StringBuffer stringBuffer = new StringBuffer();
+                                            while((line= br.readLine())!= null)
+                                            {
+                                                stringBuffer.append(line);
+                                            }
+                                            Log.e("GEO_FAILD_PARAMS_TAG",json.toString());
+                                            Log.e("GEO_URL",URL.GEOPOSITION_URL+"?sessionKey="+sessionKey);
+                                            Log.e("GEO_FAILD_TAG",stringBuffer.toString());
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    } catch (ClientProtocolException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    return null;
+                                }
+                            }.execute(sessionKey);
+
 
 							new AsyncTask<Void, Void, Void>() {
 

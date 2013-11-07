@@ -122,6 +122,25 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 								Dialog dialog = builder.create();
 								dialog.show();
 							}
+							else
+							{
+								AlertDialog.Builder builder = new AlertDialog.Builder(
+										context);
+								builder.setTitle("提示");
+								builder.setMessage("设备注册失败");
+								builder.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												dialog.dismiss();
+												redirect2Main(application);
+											}
+										});
+								Dialog dialog = builder.create();
+								dialog.show();
+							}
 							
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -129,7 +148,22 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 					}
 					else
 					{
-						callback.error("");
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								context);
+						builder.setTitle("提示");
+						builder.setMessage("设备注册失败");
+						builder.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(
+											DialogInterface dialog,
+											int which) {
+										dialog.dismiss();
+										redirect2Main(application);
+									}
+								});
+						Dialog dialog = builder.create();
+						dialog.show();
 					}
 				}
 				

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.foreveross.chameleon.util.*;
 import org.acra.CrashReport;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -97,10 +98,6 @@ import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.ViewModuleRecord;
-import com.foreveross.chameleon.util.DeviceInfoUtil;
-import com.foreveross.chameleon.util.PadUtils;
-import com.foreveross.chameleon.util.Preferences;
-import com.foreveross.chameleon.util.PushUtil;
 import com.google.gson.Gson;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.squareup.otto.Subscribe;
@@ -666,6 +663,8 @@ public class Application extends android.app.Application implements
 		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).register(this);
 		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).register(
 				mdmSubsrcriber = new MdmSubsrcriber(this));
+        //开启定位
+        new GeoManager(this);
 
 	}
 
@@ -677,7 +676,7 @@ public class Application extends android.app.Application implements
 		URL.BASE_WEB = propertiesUtil.getString("BASE_WEB", "");
 		URL.MUC_BASE = propertiesUtil.getString("MUC_BASE", "");
 		URL.BASE_WS = propertiesUtil.getString("BASE_WS", "");
-
+        URL.GEOPOSITION_URL=URL.BASE_WS + "csair-mam/api/mam/device/position/add";
 		// 请在cube.properties中配置
 		URL.PAD_MAIN_URL = propertiesUtil.getString("PAD_MAIN_URL", "");
 		URL.PAD_LOGIN_URL = propertiesUtil.getString("PAD_LOGIN_URL", "");
@@ -1358,6 +1357,7 @@ public class Application extends android.app.Application implements
 				.getSex(Application.sharePref) : "";
 		String phone = Preferences.getPhone(Application.sharePref);
 		// 去掉了标签的userName，phone
+        values.add(new BasicNameValuePair("alias",username));
 		values.add(new BasicNameValuePair("tags", "{privileges=" + mytag
 				+ "sex=" + sex + "}"));
 

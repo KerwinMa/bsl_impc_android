@@ -99,17 +99,8 @@ public class SettingsActivity extends BaseActivity {
 			CubeModule cubeModule = its.next();
 			String url = path + "/www/" + cubeModule.getIdentifier();
 			if (fileTool.isfileExist(url, "settings.html")) {
-				if (modules.isEmpty()) {
-					modules.add(cubeModule);
-				} else {
-					for (CubeModule cubeM : modules) {
-						if (!cubeM.getIdentifier().equals(
-								cubeModule.getIdentifier())) {
-							modules.add(cubeModule);
-						}
-
-					}
-				}
+				if(!isExistModule(cubeModule, modules))
+				modules.add(cubeModule);
 			}
 		}
 		if (modules.size() > 0) {
@@ -218,4 +209,19 @@ public class SettingsActivity extends BaseActivity {
 		}
 
 	};
+	
+	private boolean isExistModule(CubeModule module,List<CubeModule> list)
+	{
+		if(list.isEmpty())
+		{
+			return false;
+		}
+		for (CubeModule cubeModule : list) {
+			if(cubeModule.getIdentifier().equals(module.getIdentifier()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

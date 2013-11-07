@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.location.LocationListener;
+import android.os.Bundle;
+import android.os.Looper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -26,6 +29,7 @@ import android.util.Log;
 
 public class GeolocationUtil {
 
+    public  static boolean isGPSON = false;
 	/**
 	 * 是否开启gps定位
 	 * @param context
@@ -49,9 +53,8 @@ public class GeolocationUtil {
 	public static Location getLocation(Context context)
     {
         // 获取位置管理服务
-        LocationManager locationManager;
         String serviceName = Context.LOCATION_SERVICE;
-        locationManager = (LocationManager) context.getSystemService(serviceName);
+        final LocationManager locationManager = (LocationManager) context.getSystemService(serviceName);
         // 查找到服务信息
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
@@ -59,7 +62,6 @@ public class GeolocationUtil {
         criteria.setBearingRequired(false);
         criteria.setCostAllowed(true);
         criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-
         String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
         Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
         return location;
@@ -150,7 +152,7 @@ public class GeolocationUtil {
             holder.put("home_mobile_network_code", info.mobileNetworkCode);  
             holder.put("request_address", true);  
             holder.put("radio_type", info.radio_type);  
-            if ("460".equals(info.mobileCountryCode)) {  
+            if (460 == info.mobileCountryCode) {
                 holder.put("address_language", "zh_CN");  
             } else {  
                 holder.put("address_language", "en_US");  
