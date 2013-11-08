@@ -6,11 +6,23 @@
     android:clickable="true"
     android:orientation="vertical" >
 
+   <CheckBox
+        android:id="@+id/invite_checkbox"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:background="@drawable/checkbox_add_friend_selector"
+        android:button="@null"
+        android:clickable="false" />
+    
+    
     <ImageView
         android:id="@+id/item_search_icon"
-        android:layout_width="25dip"
-        android:layout_height="25dip"
-        android:layout_alignParentLeft="true"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_toRightOf="@id/invite_checkbox"
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="10dip"
@@ -31,17 +43,5 @@
         android:textColor="#ff1b63ad"
         android:textSize="17sp"
         android:textStyle="bold" />
-
-    <CheckBox
-        android:id="@+id/invite_checkbox"
-        android:layout_width="20dip"
-        android:layout_height="20dip"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="20dip"
-        android:background="@drawable/checkbox_selector"
-        android:button="@null"
-        android:clickable="false" />
 
 </RelativeLayout>

@@ -37,16 +37,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                
-                android:ellipsize="end"
-                android:text="titletitletitletitletitletiffffffffffffffffffftletitle"
                 android:layout_marginLeft="10dip"
-                android:textColor="#212121"
-                android:textSize="16sp"
-                android:textStyle="bold" 
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/date"
-                />
+                android:ellipsize="end"
+                android:text="titletitletitletitletitletiffffffffffffffffffftletitle"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/date"
@@ -74,53 +72,33 @@
                     android:id="@+id/content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:maxWidth="255dip"
-                    android:layout_alignParentLeft="true"
                     android:text="dddddddddddddddasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd"
-                     android:textColor="#000000"
-                	android:textSize="17sp" />
-                <TextView
-		            android:id="@+id/msg_readStatus"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_alignParentRight="true"
-		            android:layout_alignParentTop="true"
-		            android:layout_marginRight="1dip"
-		            android:clickable="false"
-		            android:gravity="right"
-		            android:text="未读"
-		            android:textColor="#FF0000" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/attachmentsView"
-                android:layout_width="match_parent"
-                android:layout_height="35dip" >
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
 
                 <TextView
-                    android:id="@+id/isread"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dip"
-                    android:text="xxsss"
-                    android:textColor="@color/font_grey"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/attment"
+                    android:id="@+id/msg_readStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dip"
-                    android:autoLink="all"
-                    android:textStyle="bold|italic"
-                    android:text="打开附件"
-                    android:textColor="@color/font_grey"
-                    android:textSize="12sp" />
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="1dip"
+                    android:clickable="false"
+                    android:gravity="right"
+                    android:text="未读"
+                    android:textColor="#FF0000" />
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/attachmentsView"
+                android:layout_width="fill_parent"
+                android:layout_height="35sp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip" >
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

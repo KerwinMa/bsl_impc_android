@@ -1,212 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/all_activity_bg_xml"
-    android:orientation="vertical" >
-	
-    
-    <LinearLayout
-        android:id="@+id/chatroom_layout_bottom"
-        android:layout_alignParentBottom="true"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="@drawable/all_activity_bg_xml"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/sendLinearLayout"
+            android:id="@+id/chatroom_layout_bottom"
             android:layout_width="fill_parent"
-            android:layout_height="45dip"
-            android:background="@drawable/send_back"
-            android:minHeight="45dip"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/chat_plus_btn"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dip"
-                android:background="@drawable/plus_icon"
-                android:gravity="center" />
-
-            <Button
-                android:id="@+id/chat_btn_change"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dip"
-                android:background="@drawable/xmpp_voice"
-                android:gravity="center" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:gravity="right|center_vertical"
-                android:orientation="vertical" >
-
-                <RelativeLayout
-                    android:id="@+id/chat_layout_keyboard"
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="45dip"
+                >
+	
+                <LinearLayout 
+                    android:id="@+id/chat_net_exception"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/send_back"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    >
+                    <TextView 
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:text="网络异常"
+	                    android:textColor="@color/font_black"
+	                    android:textSize="25sp"
+	                    android:gravity="center"
+                        />
+                    
+                </LinearLayout>
+                
+                
+                <RelativeLayout
+                    android:id="@+id/chat_send_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/send_back"
+                    android:orientation="horizontal" 
+                    >
+
+                    <Button
+                        android:id="@+id/chat_change_btn"
+                        android:layout_width="40dip"
+                        android:layout_height="40dip"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="2dip"
+                        android:background="@drawable/inputtext_button_selector"
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/chat_btn_sendcontent"
                         android:layout_width="50dip"
                         android:layout_height="30dip"
                         android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginRight="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="2dip"
                         android:background="@drawable/chat_send_button_bg"
                         android:textColor="@color/font_black" />
+
+                    <Button
+                        android:id="@+id/chat_plus_btn"
+                        android:layout_width="40dip"
+                        android:layout_height="40dip"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_toLeftOf="@id/chat_btn_sendcontent"
+                        android:background="@drawable/plus_button_selector"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/chat_emotion_btn"
+                        android:layout_width="40dip"
+                        android:layout_height="40dip"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_toLeftOf="@id/chat_plus_btn"
+                        android:background="@drawable/emotion_button_selector"
+                        android:gravity="center" />
 
                     <EditText
                         android:id="@+id/chat_content_et"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginLeft="9dip"
-                        android:layout_marginTop="5dip"
-                        android:layout_toLeftOf="@id/chat_btn_sendcontent"
+                        android:layout_marginBottom="2dip"
+                        android:layout_marginTop="2dip"
+                        android:layout_toLeftOf="@id/chat_emotion_btn"
+                        android:layout_toRightOf="@id/chat_change_btn"
                         android:background="@drawable/editext_backgroud"
                         android:paddingLeft="4dip"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/chat_layout_voice"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" >
+                        android:textSize="20sp"
+                        android:visibility="gone" />
 
                     <Button
-                        android:id="@+id/chat_btn_sendvoice"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dip"
+                        android:id="@+id/chat_voice"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dip"
-                        android:layout_marginRight="10dip"
-                        android:background="@drawable/chatroom_voice_clickbg"
-                        android:text="按着说话"
-                        android:textColor="@color/font_black"
-                        android:textSize="15dip"
-                        android:textStyle="bold" />
+                        android:layout_marginBottom="2dip"
+                        android:layout_marginTop="2dip"
+                        android:layout_toLeftOf="@id/chat_emotion_btn"
+                        android:layout_toRightOf="@id/chat_change_btn"
+                        android:background="@drawable/chat_textview_bg"
+                        android:gravity="center"
+                        android:paddingLeft="4dip"
+                        android:text="按住说话"
+                        android:textSize="20sp" />
                 </RelativeLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/local_module_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="80dip"
-            android:background="@drawable/all_activity_bg_xml"
-            android:visibility="gone" >
-
-            <GridView
-                android:id="@+id/grideView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:columnWidth="75dip"
-                android:numColumns="4" >
-            </GridView>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/local_expression_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="120dip"
-            android:background="@drawable/all_activity_bg_xml"
-            android:visibility="gone" >
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpagerLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
-
-            <LinearLayout
-                android:id="@+id/viewGroup"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="5dip"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal" />
-        </RelativeLayout>
-    </LinearLayout>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <com.foreveross.chameleon.phone.view.ChatroomLayout
-        android:id="@+id/chatroom_layout_content"
-        android:layout_above="@id/chatroom_layout_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <include
-            android:focusable="true"
-            android:id="@+id/relativeLayout1_ref"
-            android:layout_width="fill_parent"
-            android:layout_height="50dip"
-            layout="@layout/cube_titlebar" />
-
-        <RelativeLayout
-            android:id="@+id/chat_room_flowview"
-            android:layout_width="fill_parent"
-            android:layout_height="30dip"
-            android:background="#ffffff" >
-
-            <TextView
-                android:layout_width="350dip"
-                android:layout_height="20dip"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="20dip"
-                android:layout_marginRight="40dip"
-                android:scrollbars="horizontal"
-                android:singleLine="true"
-                android:text="你正处于离线状态，请检网络或打开连接"
-                android:textColor="@color/font_black" />
-
-            <ImageView
-                android:layout_width="15dip"
-                android:layout_height="15dip"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dip"
-                android:src="@drawable/list_next"
-                android:text="正在下载：" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            </FrameLayout>
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:id="@+id/local_expression_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="120dip"
+                android:background="@drawable/all_activity_bg_xml"
+                android:visibility="gone" >
 
-                <ListView
-                    android:id="@+id/chat_history_lv"
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpagerLayout"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@null"
-                    android:cacheColorHint="#00000000"
-                    android:divider="@null"
-                    android:listSelector="@drawable/list_null_selector"
-                    android:scrollbars="vertical"
-                    android:transcriptMode="normal" />
+                    android:layout_height="fill_parent" />
+
+                <LinearLayout
+                    android:id="@+id/viewGroup"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dip"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" />
             </RelativeLayout>
         </LinearLayout>
-    </com.foreveross.chameleon.phone.view.ChatroomLayout>
 
-</RelativeLayout>
+        <com.foreveross.chameleon.phone.view.ChatroomLayout
+            android:id="@+id/chatroom_layout_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/chatroom_layout_bottom"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/relativeLayout1_ref"
+                android:layout_width="fill_parent"
+                android:layout_height="50dip"
+                layout="@layout/cube_titlebar"
+                android:focusable="true" />
+
+            <RelativeLayout
+                android:id="@+id/chat_room_flowview"
+                android:layout_width="fill_parent"
+                android:layout_height="30dip"
+                android:background="#ffffff" >
+
+                <TextView
+                    android:layout_width="350dip"
+                    android:layout_height="20dip"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dip"
+                    android:layout_marginRight="40dip"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    android:text="你正处于离线状态，请检网络或打开连接"
+                    android:textColor="@color/font_black" />
+
+                <ImageView
+                    android:layout_width="15dip"
+                    android:layout_height="15dip"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dip"
+                    android:src="@drawable/list_next"
+                    android:text="正在下载：" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <ListView
+                        android:id="@+id/chat_history_lv"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@null"
+                        android:cacheColorHint="#00000000"
+                        android:divider="@null"
+                        android:listSelector="@drawable/list_null_selector"
+                        android:scrollbars="vertical"
+                        android:transcriptMode="normal" />
+                </RelativeLayout>
+            </LinearLayout>
+        </com.foreveross.chameleon.phone.view.ChatroomLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/chat_popwindows"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/chat_pop"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/chat_pop_choise"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/chat_pop_light"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="15dip"
+            android:paddingTop="15dip" >
+
+            <Button
+                android:id="@+id/chat_takepicture"
+                android:layout_width="300dip"
+                android:layout_height="50dip"
+                android:layout_margin="5dip"
+                android:background="@drawable/chat_pop_red_bnt"
+                android:text="拍照"
+                android:textColor="@color/White"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/chat_opengallery"
+                android:layout_width="300dip"
+                android:layout_height="50dip"
+                android:layout_margin="5dip"
+                android:background="@drawable/chat_pop_white_bnt"
+                android:text="从手机相片图库中选取"
+                android:textColor="@color/Black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/chat_cancle"
+                android:layout_width="300dip"
+                android:layout_height="50dip"
+                android:layout_margin="5dip"
+                android:background="@drawable/chat_pop_black_bnt"
+                android:text="取消"
+                android:textColor="@color/White"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/chat_pop_transparent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/chat_pop_choise"
+            android:background="@android:color/transparent"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>

@@ -25,6 +25,8 @@
 	<color name="darkgrey">#ff404040</color><!-- 黑灰色 -->
 	<color name="toasterro">#ff9fd524</color>
 	<color name="lightgrey">#ff888888</color><!-- 亮灰色 -->
+	<color name="groupgrey">#c4c4c4</color><!-- 亮灰色 -->
+	<color name="searchblack">#585858</color><!-- 亮灰色 -->
 	<color name="semitransparent">#80000000</color>
 	<color name="lightransparent">#a0000000</color>
 	<color name="transparent">#00000000</color>
@@ -35,4 +37,18 @@
 	<color name="gray_list_cell">#f6f6f6</color>
 	<color name="font_black">#212121</color>
 	<color name="font_grey">#969696</color>
+	
+	<color name="canvas">#404040</color>
+    <color name="toolbar">#C0000000</color>
+    <color name="page_indicator">#C0202020</color>
+    <color name="busy_indicator">#C0202020</color>
+    <color name="button_normal">#00000000</color>
+    <color name="button_pressed">#FF2572AC</color>
+    <color name="text_normal">#FFFFFF</color>
+    <color name="text_pressed">#FFFFFF</color>
+    <color name="text_border_normal">#000000</color>
+    <color name="text_border_pressed">#2572AC</color>
+    <color name="text_border_focused">#000000</color>
+    <color name="seek_thumb">#2572AC</color>
+    <color name="seek_progress">#FFFFFF</color>
 </resources>
