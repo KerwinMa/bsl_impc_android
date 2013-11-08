@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.csair.impc.R;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.store.model.UserStatus;
 import com.foreveross.chameleon.util.PushUtil;
 
 public class SearchFriendAdapter extends BaseAdapter {
@@ -52,6 +53,10 @@ public class SearchFriendAdapter extends BaseAdapter {
 		}
 		UserModel friend=data.get(position);
 		holder.name.setText(friend.getName());
+		
+		if (getHeadIcon(friend) != -1) {
+			holder.icon.setImageResource(getHeadIcon(friend));
+		}
 //		friend.setIcon(holder.icon);
 //	    holder.icon.setImageBitmap(PushUtil.drawPushCount(context,holder.icon,friend.getIsRead()));
 		return convertView;
@@ -60,5 +65,45 @@ public class SearchFriendAdapter extends BaseAdapter {
 	class ViewHolder {
 		TextView name;
 		ImageView icon;
+	}
+	
+	public int getHeadIcon(UserModel userModel) {
+		String sex = userModel.getSex();
+		String status = userModel.getStatus();
+		if (sex == null || status == null) {
+			return -1;
+		}
+		if ("female".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_female_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			}
+		} else if ("male".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_male_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			}
+		} else {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			}
+		}
+		return -1;
 	}
 }

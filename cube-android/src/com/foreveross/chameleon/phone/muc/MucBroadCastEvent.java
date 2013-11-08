@@ -20,4 +20,6 @@ public class MucBroadCastEvent {
 	
 	public static final String PUSH_MUC_ADDFRIEND_SUCCESS = "PUSH_MUC_ADDFRIEND_SUCCESS";
 	public static final String PUSH_MUC_ADDFRIEND_FAIL = "PUSH_MUC_ADDFRIEND_FAIL";
+	
+	public static final String PUSH_MUC_ADDFRIEND_SHOWLIST = "PUSH_MUC_ADDFRIEND_SHOWLIST";
 }

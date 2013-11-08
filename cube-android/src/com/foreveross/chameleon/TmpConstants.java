@@ -32,6 +32,9 @@ public class TmpConstants {
 
 	// 所有服务器语音文件的存储位置
 	public static final String RECORDER_RECEIVE_PATH = ROOT + "/VoiceReceive";
+	
+	// 所有服务器附件文件的存储位置
+	public static final String ATTACHMENT_PATH = ROOT + "/attachment";
 	public static int LOGIN_ONLINE = 0x0001;
 	public static int LOGIN_OUTLINE = 0x0002;
 

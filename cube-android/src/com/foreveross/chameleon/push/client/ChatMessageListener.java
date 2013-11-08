@@ -170,6 +170,9 @@ public class ChatMessageListener implements PacketListener {
 			
 			if (SessionModel.SESSION_ROOM.equals(message.getFromType())){
 				sessionModel.setFromType(SessionModel.SESSION_ROOM);
+				ChatGroupModel chatGroupModel = IMModelManager.instance()
+						.getChatRoomContainer().getStuff(centry.getKey());
+				sessionModel.setRoomName(chatGroupModel.getGroupName());
 			} else {
 				sessionModel.setFromType(SessionModel.SESSION_SINGLE);
 			}

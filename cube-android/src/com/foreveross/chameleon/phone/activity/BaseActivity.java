@@ -130,6 +130,7 @@ public class BaseActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		application.getActivityManager().popActivity(this);;
 		unregisterReceiver(broadcastReceiver);
 		cancelDialog();
 	}

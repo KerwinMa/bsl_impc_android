@@ -21,6 +21,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.foreveross.chameleon.Application;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -68,7 +70,7 @@ import android.view.Window;
  */
 public class FragmentActivity extends Activity {
     private static final String TAG = "FragmentActivity";
-    
+    protected Application application;
     private static final String FRAGMENTS_TAG = "android:support:fragments";
     
     // This is the SDK API version of Honeycomb (3.0).
@@ -200,6 +202,8 @@ public class FragmentActivity extends Activity {
             mFragments.restoreAllState(p, nc != null ? nc.fragments : null);
         }
         mFragments.dispatchCreate();
+        application = Application.class.cast(getApplication());
+        application.getActivityManager().pushActivity(this);
     }
 
     /**
@@ -310,7 +314,7 @@ public class FragmentActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        application.getActivityManager().popActivity(this);;
         doReallyStop(false);
 
         mFragments.dispatchDestroy();

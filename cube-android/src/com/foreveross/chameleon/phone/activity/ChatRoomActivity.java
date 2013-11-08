@@ -20,18 +20,6 @@ public class ChatRoomActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat_activity_layout);
-		Application application = Application.class.cast(ChatRoomActivity.this
-				.getApplication());
-		application.getActivityManager().pushActivity(this);
 	}
 	
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Application application = Application.class.cast(ChatRoomActivity.this
-				.getApplication());
-		application.getActivityManager().popActivity(this);
-	}
-
 }

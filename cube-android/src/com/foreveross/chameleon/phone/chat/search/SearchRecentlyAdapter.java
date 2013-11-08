@@ -15,6 +15,7 @@ import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.store.model.UserStatus;
 
 public class SearchRecentlyAdapter extends BaseAdapter {
 	private Context context;
@@ -61,11 +62,15 @@ public class SearchRecentlyAdapter extends BaseAdapter {
 					IMModelManager.instance().getChatRoomContainer().getStuff(chatter);
 			if (chatGroupModel != null){
 				name = chatGroupModel.getGroupName();
+				holder.icon.setImageResource(R.drawable.ico_02);
 			}
 		} else {
 			UserModel userModel = IMModelManager.instance().getUserModel(chatter);
 			if (userModel != null){
 				name = userModel.getName();
+			}
+			if (getHeadIcon(userModel) != -1) {
+				holder.icon.setImageResource(getHeadIcon(userModel));
 			}
 		}
 		holder.name.setText(name);
@@ -83,4 +88,45 @@ public class SearchRecentlyAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 		super.notifyDataSetChanged();
 	}
+	
+	public int getHeadIcon(UserModel userModel) {
+		String sex = userModel.getSex();
+		String status = userModel.getStatus();
+		if (sex == null || status == null) {
+			return -1;
+		}
+		if ("female".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_female_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			}
+		} else if ("male".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_male_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			}
+		} else {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			}
+		}
+		return -1;
+	}
+	
 }

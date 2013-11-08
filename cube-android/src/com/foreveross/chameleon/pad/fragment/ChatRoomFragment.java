@@ -79,7 +79,6 @@ import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.phone.activity.Player;
 import com.foreveross.chameleon.phone.activity.PushSettingActivity;
 import com.foreveross.chameleon.phone.chat.chatroom.ChatRoomAdapter;
-import com.foreveross.chameleon.phone.chat.chatroom.GridVeiwListAdapter;
 import com.foreveross.chameleon.phone.chat.chatroom.LocalModule;
 import com.foreveross.chameleon.phone.chat.chatroom.MyPagerAdapter;
 import com.foreveross.chameleon.phone.chat.chatroom.PicutureDetailActivity;
@@ -121,13 +120,14 @@ public class ChatRoomFragment extends Fragment {
 
 	private Button titlebar_left;
 	private Button titlebar_right;
-	private ImageView collect_friend;
+	private Button collect_friend;
 	private TextView titlebar_content;
 	private ListView listview;
 	private EditText edittext;
 	private Button postButton;
-	private Button changeButton;
-	private Button voiceButton;
+	private Button chat_change_btn;
+	private Button chat_emotion_btn;
+	private Button chat_voice;
 	/** 加号--表情、照相按钮切换 */
 	private Button chat_plus_btn;
 	/** 语音键盘切换按钮状态 */
@@ -139,6 +139,8 @@ public class ChatRoomFragment extends Fragment {
 	private RelativeLayout layout_keyboard;
 	private ProgressDialog progressDialog;
 	private RelativeLayout flowview;
+	private RelativeLayout chat_send_layout;
+	private LinearLayout chat_net_exception;
 	private Dialog dialog;
 	public static UserModel userModel = null;
 	private ChatRoomAdapter adapter;
@@ -157,6 +159,10 @@ public class ChatRoomFragment extends Fragment {
 	private RosterManager rosterManager;
 	/** 面板，点击面板，键盘表情框关闭 */
 	private ChatroomLayout chatroom_layout_content;
+	
+	private RelativeLayout chat_popwindows;
+	
+	private LinearLayout chat_pop_transparent;
 	/**  ------------------------------------------ 表情部分  ------------------------------------- */
 	/** 点击加号后出现的框框 */
 	private LinearLayout local_module_layout;
@@ -171,6 +177,10 @@ public class ChatRoomFragment extends Fragment {
 	private ViewGroup emotionViewGroup;
 	private List<LocalModule> modulelList = new ArrayList<LocalModule>();
 	private GridView grideView;
+	
+	private Button chat_opengallery;
+	private Button chat_takepicture;
+	private Button chat_cancle;
 	/** -------------------第三方裁剪图片包 --------------------------------------*/
 	public static final String TEMP_PHOTO_FILE_NAME = "temp_photo.jpg";// 拍照缓存图片
 
@@ -185,6 +195,8 @@ public class ChatRoomFragment extends Fragment {
 	private ChatGroupModel chatGroupModel;
 	
 	private long start = 0;
+	
+	private boolean voiceStatus;
 	/**
 	 * [一句话功能简述]<BR>
 	 * [功能详细描述]
@@ -285,6 +297,7 @@ public class ChatRoomFragment extends Fragment {
 	}
 
 	private void initValues(View view) {
+		voiceStatus = false;
 		if (userModel != null){
 			userModel = null;
 		}
@@ -305,12 +318,23 @@ public class ChatRoomFragment extends Fragment {
 		Preferences.saveChatJid("", Application.sharePref);
 		Intent i = getAssocActivity().getIntent();
 		String chat = i.getStringExtra("chat");
+		chat_popwindows = (RelativeLayout) view.findViewById(R.id.chat_popwindows);
+		chat_opengallery = (Button) view.findViewById(R.id.chat_opengallery);
+		chat_opengallery.setOnClickListener(mClickListener);
+		chat_takepicture = (Button) view.findViewById(R.id.chat_takepicture);
+		chat_takepicture.setOnClickListener(mClickListener);
+		chat_cancle = (Button) view.findViewById(R.id.chat_cancle);
+		chat_cancle.setOnClickListener(mClickListener);
+		chat_pop_transparent = (LinearLayout) view.findViewById(R.id.chat_pop_transparent);
+		chat_pop_transparent.setOnClickListener(mClickListener);
 		titlebar_right = (Button) view.findViewById(R.id.title_barright);
 		titlebar_right.setText("管理");
 		titlebar_right.setOnClickListener(mClickListener);
-		changeButton = (Button) view.findViewById(R.id.chat_btn_change);
-		changeButton.setOnClickListener(mClickListener);
-		collect_friend = (ImageView) view.findViewById(R.id.chatroom_collect_friend_icon);
+		chat_change_btn = (Button) view.findViewById(R.id.chat_change_btn);
+		chat_change_btn.setOnClickListener(mClickListener);
+		chat_emotion_btn = (Button) view.findViewById(R.id.chat_emotion_btn);
+		chat_emotion_btn.setOnClickListener(mClickListener);
+		collect_friend = (Button) view.findViewById(R.id.chatroom_collect_friend_icon);
 		collect_friend.setOnClickListener(mClickListener);
 		if ("room".equals(chat)) {
 //			changeButton.setVisibility(View.GONE);
@@ -338,10 +362,10 @@ public class ChatRoomFragment extends Fragment {
 			userModel = IMModelManager.instance().getUserModel(jid);
 			if (userModel != null) {
 				if (userModel.isFavor()){
-					collect_friend.setBackgroundResource(R.drawable.collected_on);
+					collect_friend.setText("取消关注");
 
 				} else {
-					collect_friend.setBackgroundResource(R.drawable.collected_off);
+					collect_friend.setText("关注");
 				}
 				CubeModule module = CubeModuleManager.getInstance()
 						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
@@ -355,7 +379,8 @@ public class ChatRoomFragment extends Fragment {
 		
 		flowview = (RelativeLayout) view.findViewById(R.id.chat_room_flowview);
 		flowview.setOnClickListener(mClickListener);
-
+		chat_net_exception = (LinearLayout) view.findViewById(R.id.chat_net_exception);
+		chat_send_layout = (RelativeLayout) view.findViewById(R.id.chat_send_layout);
 		if (application.getNotificationService() != null){
 			currentAccount = Preferences.getUserName(Application.sharePref) + "@"
 					+ application.getNotificationService().getXmppServiceName();
@@ -385,9 +410,10 @@ public class ChatRoomFragment extends Fragment {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (local_module_layout.isShown()) {
+/*				if (local_module_layout.isShown()) {
 					local_module_layout.setVisibility(View.GONE);
-				}
+				}*/
+				chat_change_btn.setBackgroundResource(R.drawable.voice_button_selector);
 				local_ex_layout.setVisibility(View.GONE);
 				return false;
 			}
@@ -397,13 +423,15 @@ public class ChatRoomFragment extends Fragment {
 		postButton.setOnClickListener(mClickListener);
 		chat_plus_btn = (Button) view.findViewById(R.id.chat_plus_btn);
 		chat_plus_btn.setOnClickListener(mClickListener);
-		voiceButton = (Button) view.findViewById(R.id.chat_btn_sendvoice);
-		voiceButton.setOnTouchListener(new OnTouchListener() {
+		chat_voice = (Button) view.findViewById(R.id.chat_voice);
+		chat_voice.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (application.getNotificationService() != null 
 						&& !application.getNotificationService().isOnline()) {
 					flowview.setVisibility(View.VISIBLE);
+					chat_net_exception.setVisibility(View.VISIBLE);
+					chat_send_layout.setVisibility(View.GONE);
 					return true;
 				}
 
@@ -418,8 +446,8 @@ public class ChatRoomFragment extends Fragment {
 					if (chatGroupModel != null){
 						longimplement(chatGroupModel.getGroupName());
 					}
-					voiceButton
-							.setBackgroundResource(R.drawable.chatroom_voice_button_click);
+//					voiceButton
+//							.setBackgroundResource(R.drawable.chatroom_voice_button_click);
 
 					isStart.set(true);
 					Thread ampThread = new Thread(ampTask);
@@ -435,8 +463,8 @@ public class ChatRoomFragment extends Fragment {
 					}
 					mHandler.sendEmptyMessage(RECORD_END);
 					isStart.set(false);
-					voiceButton
-							.setBackgroundResource(R.drawable.chatroom_voice_button);
+//					voiceButton
+//							.setBackgroundResource(R.drawable.chatroom_voice_button);
 					// 此处触发停止事件
 					if (mr != null) {
 						// 停止录音
@@ -509,8 +537,8 @@ public class ChatRoomFragment extends Fragment {
 			}
 		});
 
-		layout_voice = (RelativeLayout) view.findViewById(R.id.chat_layout_voice);
-		layout_keyboard = (RelativeLayout) view.findViewById(R.id.chat_layout_keyboard);
+//		layout_voice = (RelativeLayout) view.findViewById(R.id.chat_layout_voice);
+//		layout_keyboard = (RelativeLayout) view.findViewById(R.id.chat_layout_keyboard);
 
 		if (userModel != null){
 			adapter = new ChatRoomAdapter(getAssocActivity(), conversations, userModel);
@@ -548,12 +576,17 @@ public class ChatRoomFragment extends Fragment {
 				getAssocActivity().getApplication()).getNotificationService();
 		if (notificationService != null && notificationService.isOnline()) {
 			flowview.setVisibility(View.GONE);
+			chat_net_exception.setVisibility(View.GONE);
+			chat_send_layout.setVisibility(View.VISIBLE);
 		} else {
 			flowview.setVisibility(View.VISIBLE);
+			chat_net_exception.setVisibility(View.VISIBLE);
+			chat_send_layout.setVisibility(View.GONE);
+			
 		}
 
 		/** ----------------------- 表情部分 ----------------------- */
-		local_module_layout = (LinearLayout) view.findViewById(R.id.local_module_layout);
+//		local_module_layout = (LinearLayout) view.findViewById(R.id.local_module_layout);
 		local_ex_layout = (RelativeLayout) view.findViewById(R.id.local_expression_layout);
 		viewPager = (ViewPager) view.findViewById(R.id.viewpagerLayout);
 		emotionViewGroup = (ViewGroup) view.findViewById(R.id.viewGroup);
@@ -577,7 +610,7 @@ public class ChatRoomFragment extends Fragment {
 		localPic.setIcon(getResources().getDrawable(R.drawable.local_pic_big));
 		localPic.setSortNum(0);
 		modulelList.add(localPic);
-		grideView = (GridView) view.findViewById(R.id.grideView);
+/*		grideView = (GridView) view.findViewById(R.id.grideView);
 		grideView.setAdapter(new GridVeiwListAdapter(this.getAssocActivity(),modulelList));
 		grideView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -608,7 +641,7 @@ public class ChatRoomFragment extends Fragment {
 
 				}
 			}
-		});
+		});*/
 		String path = Environment.getExternalStorageDirectory()+ "/CubeImageCache/sendFiles/";
 		File dir = new File(path);
 		if (!dir.exists()) {
@@ -658,6 +691,8 @@ public class ChatRoomFragment extends Fragment {
 				if (application.getNotificationService() != null &&
 				!application.getNotificationService().isOnline()) {
 					flowview.setVisibility(View.VISIBLE);
+					chat_net_exception.setVisibility(View.VISIBLE);
+					chat_send_layout.setVisibility(View.GONE);
 					return;
 				}
 				String content = edittext.getText().toString();
@@ -676,8 +711,23 @@ public class ChatRoomFragment extends Fragment {
 					sendMessage(newConversation);
 				}
 				break;
-			case R.id.chat_btn_change:
-				if (changeButtonStatus == CHANGE_KEYBOARD) {
+			case R.id.chat_change_btn:
+				if (local_ex_layout.getVisibility() == View.VISIBLE){
+					local_ex_layout.setVisibility(View.GONE);
+				}
+				closeKeyboard();
+				if (voiceStatus){
+					chat_change_btn.setBackgroundResource(R.drawable.inputtext_button_selector);
+					voiceStatus = false;
+					chat_voice.setVisibility(View.VISIBLE);
+					edittext.setVisibility(View.GONE);
+				} else {
+					chat_change_btn.setBackgroundResource(R.drawable.voice_button_selector);
+					voiceStatus = true;
+					chat_voice.setVisibility(View.GONE);
+					edittext.setVisibility(View.VISIBLE);
+				}
+/*				if (changeButtonStatus == CHANGE_KEYBOARD) {
 					// changeButton.setText("键盘");
 					changeButton.setBackgroundResource(R.drawable.xmpp_text);
 					changeButtonStatus = CHANGE_VOICE;
@@ -702,7 +752,22 @@ public class ChatRoomFragment extends Fragment {
 					changeButtonStatus = CHANGE_KEYBOARD;
 					layout_voice.setVisibility(View.GONE);
 					layout_keyboard.setVisibility(View.VISIBLE);
+				}*/
+				break;
+			case R.id.chat_emotion_btn:
+//				if (!voiceStatus){
+//					break;
+//				}
+				chat_change_btn.setBackgroundResource(R.drawable.voice_button_selector);
+				voiceStatus = true;
+				chat_voice.setVisibility(View.GONE);
+				edittext.setVisibility(View.VISIBLE);
+				if (local_ex_layout.getVisibility() == View.VISIBLE){
+					local_ex_layout.setVisibility(View.GONE);
+				} else {
+					local_ex_layout.setVisibility(View.VISIBLE);
 				}
+				closeKeyboard();
 				break;
 //			case R.id.chatroom_layout_content:
 //				closeOtherWindow();
@@ -713,32 +778,31 @@ public class ChatRoomFragment extends Fragment {
 				startActivity(i);
 				break;
 			case R.id.chat_plus_btn:
-				if (changeButtonStatus == CHANGE_VOICE) {
-					
-					changeButton.setBackgroundResource(R.drawable.xmpp_voice);
-					changeButtonStatus = CHANGE_KEYBOARD;
-					layout_voice.setVisibility(View.GONE);
-					layout_keyboard.setVisibility(View.VISIBLE);
-				}
-				
-				// 当EidtText无焦点（focusable=false）时阻止输入法弹出
-				edittext.clearFocus();
-//				InputMethodManager imm = (InputMethodManager) getAssocActivity()
-//						.getSystemService(Context.INPUT_METHOD_SERVICE);
-//				imm.hideSoftInputFromWindow(edittext.getWindowToken(), 0);
-				closeKeyboard();
-				// 切换到选择表情窗口
-				if (local_module_layout.isShown()) {
-					local_module_layout.setVisibility(View.GONE);
-				} else {
-					local_module_layout.setVisibility(View.VISIBLE);
-					hideFaceView();
-				}
+				chat_popwindows.setVisibility(View.VISIBLE);
+				closeOtherWindow();
 				break;
+			case R.id.chat_takepicture:
+				chat_popwindows.setVisibility(View.GONE);
+				takePicture();
+				break;
+			case R.id.chat_opengallery:
+				chat_popwindows.setVisibility(View.GONE);
+				openGallery();
+				break;
+
+			case R.id.chat_cancle:
+				chat_popwindows.setVisibility(View.GONE);
+				break;
+				
+		    case R.id.chat_pop_transparent:
+		    	chat_popwindows.setVisibility(View.GONE);
+		    	break;
 			case R.id.title_barright:
 				if (application.getNotificationService() != null && 
 						!application.getNotificationService().isOnline()) {
 					flowview.setVisibility(View.VISIBLE);
+					chat_net_exception.setVisibility(View.VISIBLE);
+					chat_send_layout.setVisibility(View.GONE);
 					return;
 				}
 				if (PadUtils.isPad(getAssocActivity())) {
@@ -762,6 +826,8 @@ public class ChatRoomFragment extends Fragment {
 				if (application.getNotificationService() != null && 
 						!application.getNotificationService().isOnline()) {
 					flowview.setVisibility(View.VISIBLE);
+					chat_net_exception.setVisibility(View.VISIBLE);
+					chat_send_layout.setVisibility(View.GONE);
 					return;
 				}
 				Application application = Application.class.cast(getAssocActivity()
@@ -776,9 +842,11 @@ public class ChatRoomFragment extends Fragment {
 
 						if (result != null) {
 							if (userModel.isFavor()){
+								collect_friend.setText("取消关注");
 								Toast.makeText(getAssocActivity(), 
 										"收藏成功", Toast.LENGTH_SHORT).show();
 							} else {
+								collect_friend.setText("关注");
 								Toast.makeText(getAssocActivity(), 
 										"删除收藏成功", Toast.LENGTH_SHORT).show();
 							}
@@ -789,7 +857,6 @@ public class ChatRoomFragment extends Fragment {
 				if (userModel.isFavor()){
 					userModel.setFavor(false);
 					userModel.update();
-					collect_friend.setBackgroundResource(R.drawable.collected_off);
 					String url = URL.CHATDELETE
 							+ "/"
 							+ Preferences.getUserName(Application.sharePref)
@@ -803,7 +870,6 @@ public class ChatRoomFragment extends Fragment {
 				} else {
 					userModel.setFavor(true);
 					userModel.update();
-					collect_friend.setBackgroundResource(R.drawable.collected_on);
 					String url = URL.CHATSAVE;
 					StringBuilder sb = new StringBuilder();
 					Log.e("添加删除好友", userModel.getName());
@@ -903,6 +969,7 @@ public class ChatRoomFragment extends Fragment {
 			SessionModel sessionModel = IMModelManager.instance().getSessionContainer().getSessionModel(conversation.getChater(), true);
 			if (roomId != null && !"".equals(roomId)){
 				sessionModel.setFromType(SessionModel.SESSION_ROOM);
+				sessionModel.setRoomName(chatGroupModel.getGroupName());
 			} else {
 				sessionModel.setFromType(SessionModel.SESSION_SINGLE);
 			}
@@ -932,6 +999,8 @@ public class ChatRoomFragment extends Fragment {
 			Toast.makeText(getAssocActivity(), "连接服务器失败", Toast.LENGTH_SHORT)
 					.show();
 			flowview.setVisibility(View.VISIBLE);
+			chat_net_exception.setVisibility(View.VISIBLE);
+			chat_send_layout.setVisibility(View.GONE);
 		}
 
 	}
@@ -1093,8 +1162,12 @@ public class ChatRoomFragment extends Fragment {
 		String status = connectStatusChnageEvent.getStatus();
 		if (ConnectStatusChangeEvent.CONN_STATUS_ONLINE.equals(status)) {
 			flowview.setVisibility(View.GONE);
+			chat_net_exception.setVisibility(View.GONE);
+			chat_send_layout.setVisibility(View.VISIBLE);
 		} else {
 			flowview.setVisibility(View.VISIBLE);
+			chat_net_exception.setVisibility(View.VISIBLE);
+			chat_send_layout.setVisibility(View.GONE);
 		}
 	}
 
@@ -1263,9 +1336,9 @@ public class ChatRoomFragment extends Fragment {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			hideFaceView();
-			if (local_module_layout.isShown()) {
+/*			if (local_module_layout.isShown()) {
 				local_module_layout.setVisibility(View.GONE);
-			}
+			}*/
 		}
 	};
 	/** 拍照部分 */
@@ -1354,6 +1427,8 @@ public class ChatRoomFragment extends Fragment {
 						!application.getNotificationService().isOnline()) {
 					Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "网络连接出现错误", Toast.LENGTH_SHORT).show();
 					flowview.setVisibility(View.VISIBLE);
+					chat_net_exception.setVisibility(View.VISIBLE);
+					chat_send_layout.setVisibility(View.GONE);
 					return;
 				}
 				// ====================直接显示
@@ -1467,6 +1542,7 @@ public class ChatRoomFragment extends Fragment {
 				FacadeActivity.class.cast(getAssocActivity()).popRight();
 			} else {
 				getAssocActivity().finish();
+				application.getActivityManager().popActivity(getAssocActivity());
 			}
 			Log.i("test", "mucBroadCastEvent" + mucBroadCastEvent);
 		}
@@ -1488,7 +1564,7 @@ public class ChatRoomFragment extends Fragment {
 		closeKeyboard();
 		// 切换到选择表情窗口
 //		if (local_module_layout.isShown()) {
-			local_module_layout.setVisibility(View.GONE);
+//			local_module_layout.setVisibility(View.GONE);
 //		}
 		local_ex_layout.setVisibility(View.GONE);
 	}

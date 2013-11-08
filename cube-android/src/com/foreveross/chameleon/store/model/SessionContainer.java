@@ -90,8 +90,15 @@ public class SessionContainer extends
 				}
 			}
 			if (fromWhich != null){
-				if (fromWhich.contains(prefix) || jid.contains(prefix)) {
+				if (fromWhich.contains(prefix)) {
 					filteredList.add(sessionModel);
+					continue;
+				}
+			}
+			if (jid != null){
+				if (jid.contains(prefix)){
+					filteredList.add(sessionModel);
+					continue;
 				}
 			}
 		}

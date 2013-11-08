@@ -73,39 +73,16 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 		if (null == convertView) {
 			holder = new ChildHolder();
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.item_group_child, parent, false);
+					R.layout.item_allfriend_child, parent, false);
 			holder.headIv = (ImageView) convertView
 					.findViewById(R.id.item_group_head_iv);
 			holder.nameTv = (TextView) convertView
 					.findViewById(R.id.item_group_friend_name_tv);
-			holder.conversationTv = (TextView) convertView
-					.findViewById(R.id.item_group_lastconversation_content);
-			holder.conversationTimeTv = (TextView) convertView
-					.findViewById(R.id.item_group_lastconversation_time);
 			convertView.setTag(holder);
 		} else {
 			holder = (ChildHolder) convertView.getTag();
 		}
 		UserModel friend = getChild(groupPosition, childPosition);
-		ConversationMessage conversation = friend.findLastMessage();
-		if (conversation != null) {
-			if (conversation.getType().equals("voice")) {
-				holder.conversationTv.setText("[声音]");
-			} else if (conversation.getType().equals("image")) {
-				holder.conversationTv.setText("[图片]");
-			} else {
-				holder.conversationTv.setText(conversation.getContent());
-			}
-			if (conversation.getLocalTime() == 0) {
-				holder.conversationTimeTv.setText(TimeUnit.getStringDate());
-			} else {
-				holder.conversationTimeTv.setText(LongToStr(conversation
-						.getLocalTime()));
-			}
-		} else {
-			holder.conversationTv.setText("");
-			holder.conversationTimeTv.setText("");
-		}
 		
 		if (getHeadIcon(friend) != -1){
 			holder.headIv.setImageResource(getHeadIcon(friend));
@@ -126,9 +103,6 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 	class ChildHolder {
 		ImageView headIv;
 		TextView nameTv;
-		TextView conversationTv;
-		TextView conversationTimeTv;
-		ImageView collectedBox;
 	}
 
 	@Override
@@ -159,7 +133,7 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 		GroupViewHolder holder;
 		if (null == convertView) {
 			holder = new GroupViewHolder();
-			convertView = LinearLayout.inflate(context, R.layout.item_group,
+			convertView = LinearLayout.inflate(context, R.layout.item_allfriend_group,
 					null);
 			holder.groupLayout = (RelativeLayout) convertView
 					.findViewById(R.id.item_group_layout);
@@ -176,13 +150,13 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 			holder = (GroupViewHolder) convertView.getTag();
 		}
 
-		if (groupPosition % 2 == 0) {
+		/*if (groupPosition % 2 == 0) {
 			// 双数，显示白色背景
 			convertView.setBackgroundColor(Color.parseColor("#F7F7F7"));
 		} else {
 			// 单数，显示灰色背景
 			convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-		}
+		}*/
 		FriendGroupModel groupItemData = groupData.get(groupPosition);
 		holder.groupNameTv.setText(groupItemData.getGroupName());
 		if (isExpanded) {
@@ -368,83 +342,6 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 			}
 			layout.addView(v);
 		}
-	}
-
-	private void setListener(final ChildHolder holder, final int groupposition,
-			final int position) {
-		holder.collectedBox.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				final UserModel friend = groupData.get(groupposition).getList()
-						.get(position);
-				Application application = Application.class.cast(context
-						.getApplicationContext());
-				HttpRequestAsynTask collectedFriendTask = new HttpRequestAsynTask(
-						context) {
-
-					@Override
-					protected void doPostExecute(String result) {
-						Log.e("collectedFriendTask", result);
-						super.doPostExecute(result);
-
-						if (result != null) {
-
-						}
-					}
-
-				};
-
-				if (friend.isFavor()) {
-					holder.collectedBox
-							.setBackgroundResource(R.drawable.collected_off);
-					friend.setFavor(false);
-					friend.update();
-					// 刷新好友的列表状态
-					IMModelManager.instance().getFavorContainer()
-							.notifyContentChange();
-
-					String url = URL.CHATDELETE
-							+ "/"
-							+ Preferences.getUserName(Application.sharePref)
-							+ "@"
-							+ application.getChatManager().getConnection()
-									.getServiceName() + "/" + friend.getJid()
-							+ URL.getSessionKeyappKey();
-					collectedFriendTask.execute(url, "",
-							HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
-				} else {
-					holder.collectedBox
-							.setBackgroundResource(R.drawable.collected_on);
-					friend.setFavor(true);
-					friend.update();
-					// 刷新好友的列表状态
-					IMModelManager.instance().getFavorContainer()
-							.notifyContentChange();
-
-					String url = URL.CHATSAVE;
-					StringBuilder sb = new StringBuilder();
-					Log.e("添加删除好友", friend.getName());
-					sb = sb.append("Form:jid=")
-							.append(friend.getJid())
-							.append(";username=")
-							.append(friend.getName())
-							.append(";sex=")
-							.append(friend.getSex())
-							.append(";status=")
-							.append(friend.getStatus())
-							.append(";userId=")
-							.append(Preferences
-									.getUserName(Application.sharePref)
-									+ "@"
-									+ application.getChatManager()
-											.getConnection().getServiceName())
-							.append(";sessionKey=").append(URL.getSessionKey())
-							.append(";appKey=").append(URL.getAppKey());;
-					collectedFriendTask.execute(url, sb.toString().trim(),
-							HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_POST);
-				}
-			}
-		});
 	}
 
 	public static String LongToStr(long m) {

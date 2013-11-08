@@ -4,42 +4,46 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.jivesoftware.smack.packet.Presence;
-
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
+import com.foreveross.chameleon.URL;
+import com.foreveross.chameleon.pad.fragment.MucAddFirendFragment;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
-import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.UserModel;
 import com.foreveross.chameleon.store.model.UserStatus;
+import com.foreveross.chameleon.util.HttpUtil;
+import com.foreveross.chameleon.util.Preferences;
 import com.foreveross.chameleon.util.PushUtil;
-import com.foreveross.chameleon.util.TimeUnit;
-import com.foreveross.chameleon.util.imageTool.CubeImageTools;
 
 public class CollectedAdapter extends BaseAdapter implements Filterable {
 
 	private Context context;
 	private List<UserModel> userData;
 	private Filter filter;
+	public boolean showCollectDelete;
 
-	public CollectedAdapter(Context context, List<UserModel> userData,
-			Filter filter) {
+	public CollectedAdapter(Context context, boolean showCollectDelete,
+			List<UserModel> userData, Filter filter) {
 		this.context = context;
+		this.showCollectDelete = showCollectDelete;
 		this.userData = userData;
 		this.filter = filter;
 
@@ -70,15 +74,13 @@ public class CollectedAdapter extends BaseAdapter implements Filterable {
 		if (null == convertView) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.item_group_child, null, false);
+					R.layout.item_collect, null, false);
 			holder.headIv = (ImageView) convertView
 					.findViewById(R.id.item_group_head_iv);
+			holder.deleteIv = (ImageView) convertView
+					.findViewById(R.id.item_group_delete);
 			holder.nameTv = (TextView) convertView
 					.findViewById(R.id.item_group_friend_name_tv);
-			holder.conversationTv = (TextView) convertView
-					.findViewById(R.id.item_group_lastconversation_content);
-			holder.conversationTimeTv = (TextView) convertView
-					.findViewById(R.id.item_group_lastconversation_time);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -86,93 +88,101 @@ public class CollectedAdapter extends BaseAdapter implements Filterable {
 
 		UserModel friend = userData.get(position);
 
-		ConversationMessage conversation = friend.getLastMessage();
-		if (conversation != null) {
-			if (conversation.getType().equals("voice")) {
-				holder.conversationTv.setText("[声音]");
-			} else if (conversation.getType().equals("image")) {
-				holder.conversationTv.setText("[图片]");
-			} else {
-				holder.conversationTv.setText(conversation.getContent());
-			}
-			if (conversation.getLocalTime() == 0){
-				holder.conversationTimeTv.setText(TimeUnit.getStringDate());
-			} else {
-				holder.conversationTimeTv.setText(LongToStr(conversation.getLocalTime()));
-			}
+		if (showCollectDelete) {
+			holder.deleteIv.setVisibility(View.VISIBLE);
+			holder.deleteIv
+					.setOnClickListener(new DeleteOnClickListener(friend));
 		} else {
-			holder.conversationTv.setText("");
-			holder.conversationTimeTv.setText("");
+			holder.deleteIv.setVisibility(View.GONE);
 		}
 
 		holder.nameTv.setText(friend.getName());
-		
-		if (getHeadIcon(friend) != -1){
+
+		if (getHeadIcon(friend) != -1) {
 			holder.headIv.setImageResource(getHeadIcon(friend));
 		}
 		holder.headIv.setImageBitmap(PushUtil.drawPushCount(context,
 				holder.headIv, friend.getUnreadMessageCount()));
-//		holder.collectedBox.setFocusable(false); // checkbox优先级高，设置保证OnItemClickListener正常或者可以在checkBox外面包上一层
-//		setListener(holder, position);
+		// holder.collectedBox.setFocusable(false); //
+		// checkbox优先级高，设置保证OnItemClickListener正常或者可以在checkBox外面包上一层
+		// setListener(holder, position);
 		return convertView;
 	}
 
 	class ViewHolder {
 		ImageView headIv;
 		TextView nameTv;
-		TextView conversationTv;
-		TextView conversationTimeTv;
 		ImageView collectedBox;
 		boolean isCheck = true;
+		ImageView deleteIv;
 	}
 
-	private void setListener(final ViewHolder holder, final int position) {
-		holder.collectedBox.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-				final UserModel friend = userData.get(position);
-				userData.remove(friend);
-				friend.setFavor(false);
-				CollectedAdapter.this.notifyDataSetChanged();
-				//刷新好友的列表状态
-				IMModelManager.instance().getFriendContainer().notifyContentChange();
-				/*
-				// TODO Auto-generated method stub
+	class DeleteOnClickListener implements OnClickListener {
+		String who;
+		UserModel userModel;
 
-				final UserModel friend = userData.get(position);
-				Application application = Application.class.cast(context
-						.getApplicationContext());
-				HttpRequestAsynTask collectedFriendTask = new HttpRequestAsynTask(
-						context) {
+		public DeleteOnClickListener(UserModel userModel) {
+			this.userModel = userModel;
+		}
 
-					@Override
-					protected void doPostExecute(String result) {
-						Log.e("collectedFriendTask", result);
-						super.doPostExecute(result);
+		@Override
+		public void onClick(View v) {
 
-						if (result != null) {
+			// 提示是否删除好友
+			new AlertDialog.Builder(context)
+					.setTitle("是否删除收藏好友")
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
 
-						}
-						userData.remove(friend.getJid());
-						CollectedAdapter.this.notifyDataSetChanged();
-						//刷新好友的列表状态
-						IMModelManager.instance().getFriendContainer().notifyContentChange();
-					}
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									Application application = Application.class
+											.cast(context
+													.getApplicationContext());
+									HttpRequestAsynTask collectedFriendTask = new HttpRequestAsynTask(
+											context) {
 
-				};
-				String url = URL.CHATDELETE
-						+ "/"
-						+ Preferences.getUserName(Application.sharePref)
-						+ "@"
-						+ application.getChatManager().getConnection()
-								.getServiceName() + "/" + friend.getJid();
-				collectedFriendTask.execute(url, "", HttpUtil.UTF8_ENCODING,
-						HttpUtil.HTTP_GET);
+										@Override
+										protected void doPostExecute(
+												String result) {
+											Log.e("collectedFriendTask", result);
+											super.doPostExecute(result);
 
-			*/}
-		});
-	}
+											if (result != null) {
+												notifyDataSetChanged();
+												Toast.makeText(context,
+														"删除收藏成功",
+														Toast.LENGTH_SHORT)
+														.show();
+											}
+										}
+									};
+									if (userModel.isFavor()) {
+										userModel.setFavor(false);
+										userModel.update();
+										String url = URL.CHATDELETE
+												+ "/"
+												+ Preferences
+														.getUserName(Application.sharePref)
+												+ "@"
+												+ application.getChatManager()
+														.getConnection()
+														.getServiceName() + "/"
+												+ userModel.getJid()
+												+ URL.getSessionKeyappKey();
+										collectedFriendTask.execute(url, "",
+												HttpUtil.UTF8_ENCODING,
+												HttpUtil.HTTP_GET);
+										IMModelManager.instance()
+												.getFavorContainer()
+												.notifyContentChange();
+									}
+
+								}
+							}).setNegativeButton("取消", null).show();
+		};
+	};
 
 	@Override
 	public Filter getFilter() {
@@ -183,7 +193,7 @@ public class CollectedAdapter extends BaseAdapter implements Filterable {
 	public int getHeadIcon(UserModel userModel) {
 		String sex = userModel.getSex();
 		String status = userModel.getStatus();
-		if (sex == null || status == null){
+		if (sex == null || status == null) {
 			return -1;
 		}
 		if ("female".equals(sex)) {
@@ -219,7 +229,7 @@ public class CollectedAdapter extends BaseAdapter implements Filterable {
 		}
 		return -1;
 	}
-	
+
 	public static String LongToStr(long m) {
 		String dateString = null;
 		SimpleDateFormat formatter = new SimpleDateFormat();
@@ -230,4 +240,13 @@ public class CollectedAdapter extends BaseAdapter implements Filterable {
 		}
 		return dateString;
 	}
+
+	public boolean isShowCollectDelete() {
+		return showCollectDelete;
+	}
+
+	public void setShowCollectDelete(boolean showCollectDelete) {
+		this.showCollectDelete = showCollectDelete;
+	}
+
 }

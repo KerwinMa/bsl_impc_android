@@ -274,8 +274,7 @@ public class MucManagerFragment extends Fragment{
 						MucManager.getInstanse(getAssocActivity()).sendMucMessage(conversation);
 						IMModelManager.instance().getChatRoomContainer().free(getAssocActivity(),chatGroupModel.getRoomJid());
 						Toast.makeText(getAssocActivity(), "解散群组成功", Toast.LENGTH_SHORT).show();
-						IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
-						StaticReference.defMf.deleteById(chatGroupModel.getRoomJid(), SessionModel.class);
+//						IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
 					}else{
 						//个人主动离开房间
 						String fromWho = XmppManager.getMeJid();
@@ -287,8 +286,7 @@ public class MucManagerFragment extends Fragment{
 //						chatGroupModel.leave(getAssocActivity());
 						IMModelManager.instance().getChatRoomContainer().leave(getAssocActivity(),chatGroupModel.getRoomJid());
 						Toast.makeText(getAssocActivity(), "退出群组成功", Toast.LENGTH_SHORT).show();
-						IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
-						StaticReference.defMf.deleteById(chatGroupModel.getRoomJid(), SessionModel.class);
+//						IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
 					}
 					if (getAssocActivity() instanceof FacadeActivity) {
 						FacadeActivity.class.cast(getAssocActivity()).popRight();

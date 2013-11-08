@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.csair.impc.R;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.store.model.UserStatus;
 
 
 public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
@@ -27,6 +28,8 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 	List<UserModel> userData;
 	Map<String, UserModel> selectFriends;
 	private Filter filter;
+	private IChoisedEventListener mListener;
+	
 	public MucAddFriendAdapter(Context context, List<UserModel> userData,Map<String, UserModel> selectFriends , Filter filter) {
 		this.context = context;
 		this.userData = userData;
@@ -75,9 +78,12 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 			public void onClick(View v) {
 				if(selectFriends.containsKey(friend.getJid())){
 					selectFriends.remove(friend.getJid());
+					mListener.onRemoveChoisedEvent(friend);
 				}else{
 					selectFriends.put(friend.getJid(), friend);
+					mListener.onAddChoisedEvent(friend);
 				}
+				
 				MucAddFriendAdapter.this.notifyDataSetChanged();
 			}
 			
@@ -105,6 +111,8 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 			holder.checkBox.setChecked(false);
 		}
 		holder.name.setText(friend.getName());
+		int id = getHeadIcon(friend);
+		holder.icon.setImageResource(id);
 //		friend.setIcon(holder.icon);
 //	    holder.icon.setImageBitmap(PushUtil.drawPushCount(context,holder.icon,friend.getIsRead()));
 		return convertView;
@@ -123,5 +131,59 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 		return filter;
 	}
 	
+	public void setmListener(IChoisedEventListener mListener) {
+		this.mListener = mListener;
+	}
+
+	public interface IChoisedEventListener {
+		/**
+		 * 发生了事件回调
+		 * 
+		 */
+		public void onAddChoisedEvent(UserModel model);
+		
+		public void onRemoveChoisedEvent(UserModel model);
+
+	}
 	
+	
+	public int getHeadIcon(UserModel userModel) {
+		String sex = userModel.getSex();
+		String status = userModel.getStatus();
+		if (sex == null || status == null){
+			return -1;
+		}
+		if ("female".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_female_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			}
+		} else if ("male".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_male_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			}
+		} else {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			}
+		}
+		return -1;
+	}
 }

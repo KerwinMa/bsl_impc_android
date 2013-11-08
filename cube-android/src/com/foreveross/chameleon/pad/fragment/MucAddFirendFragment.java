@@ -30,7 +30,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,9 +47,13 @@ import com.foreveross.chameleon.phone.muc.MucAddFriendAdapter;
 import com.foreveross.chameleon.phone.muc.MucBroadCastEvent;
 import com.foreveross.chameleon.push.client.XmppManager;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
+import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
+import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
+import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.store.model.UserStatus;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -58,7 +64,7 @@ import com.squareup.otto.ThreadEnforcer;
  * @author 冯伟立
  * @version [CubeAndroid, 2013-9-17]
  */
-public class MucAddFirendFragment extends Fragment {
+public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapter.IChoisedEventListener{
 	private MucAddFriendAdapter adapter;
 	private Button titlebar_left;
 	private Button titlebar_right;
@@ -79,6 +85,12 @@ public class MucAddFirendFragment extends Fragment {
 	private Button searchBtn;
 	
 	private ProgressDialog progressDialog;  
+	
+	private LinearLayout mContentLayout;
+	
+	HashMap<UserModel, RelativeLayout> hashMap;
+	
+	private Button add_friend_btn;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -132,12 +144,18 @@ public class MucAddFirendFragment extends Fragment {
 		if (chatGroupModel == null) {
 			throw new IllegalStateException("不可能为空,传入的roomJid有错吗?");
 		}
-
+		add_friend_btn = (Button) view.findViewById(R.id.add_friend_btn);
+//		add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_disable);
+//		add_friend_btn.setClickable(false);
+		add_friend_btn.setOnClickListener(clickListener);
+		hashMap = new HashMap<UserModel, RelativeLayout>();
+		mContentLayout = (LinearLayout) view.findViewById(R.id.add_layout);
 		titlebar_left = (Button) view.findViewById(R.id.title_barleft);
 		titlebar_left.setOnClickListener(clickListener);
 		titlebar_right = (Button) view.findViewById(R.id.title_barright);
-		titlebar_right.setOnClickListener(clickListener);
-		titlebar_right.setText("邀请");
+/*		titlebar_right.setOnClickListener(clickListener);
+		titlebar_right.setText("邀请");*/
+		titlebar_right.setVisibility(View.GONE);
 		selectFriends = new HashMap<String, UserModel>();
 		titlebar_content = (TextView) view.findViewById(R.id.title_barcontent);
 		titlebar_content.setText("邀请成员");
@@ -211,8 +229,11 @@ public class MucAddFirendFragment extends Fragment {
 				adapter.notifyDataSetChanged();
 				commonMode();
 				app_search_edt.setText("");
+				addUsrModelItem(user);
 			}
 		});
+		
+		
 		
 		adapter = new MucAddFriendAdapter(this.getAssocActivity(), invitors,
 				selectFriends , new Filter() {
@@ -251,6 +272,7 @@ public class MucAddFirendFragment extends Fragment {
 					};
 				});
 		listView.setAdapter(adapter);
+		adapter.setmListener(this);
 	}
 
 	/**
@@ -308,7 +330,7 @@ public class MucAddFirendFragment extends Fragment {
 			case R.id.app_search_close_chat:
 				app_search_edt.setText("");
 				break;
-			case R.id.title_barright: {
+			case R.id.add_friend_btn: {
 				if (selectFriends.size() == 0){
 					Toast.makeText(MucAddFirendFragment.this.getAssocActivity(),
 							"请选择需要添加的成员", Toast.LENGTH_SHORT).show();
@@ -381,6 +403,26 @@ public class MucAddFirendFragment extends Fragment {
 				chatGroupModel.addStuff(userModel);
 			}
 			progressDialog.dismiss();
+			// 发送一条创建房间成功的消息
+			// 加入历史记录
+			String roomId = chatGroupModel.getGroupCode();
+			SessionModel sessionModel = IMModelManager.instance().getSessionContainer().getSessionModel(roomId, true);
+			sessionModel.setRoomName(chatGroupModel.getGroupName());
+			sessionModel.setFromType(SessionModel.SESSION_ROOM);
+			sessionModel.setFromWhich(XmppManager.getMeJid());
+			sessionModel.setToWhich(roomId);
+			sessionModel.setChatter(roomId);
+			sessionModel.setSendTime(System.currentTimeMillis());
+			String content = "创建群组" + chatGroupModel.getGroupName();
+			sessionModel.setLastContent(content);
+			StaticReference.userMf.createOrUpdate(sessionModel);
+			
+			ConversationMessage conversation = createConversation(
+					content, XmppManager.getMeJid(), roomId, "text");
+			StaticReference.userMf.createOrUpdate(conversation);
+			// 跳转到历史记录界面
+			EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST)
+			.post(MucBroadCastEvent.PUSH_MUC_ADDFRIEND_SHOWLIST);
 			if (getAssocActivity() instanceof FacadeActivity) {
 				FacadeActivity.class.cast(getAssocActivity()).popRight();
 			} else {
@@ -420,6 +462,105 @@ public class MucAddFirendFragment extends Fragment {
 		super.onDestroyView();
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
 				ThreadEnforcer.MAIN).unregister(this);
+	}
+	
+	
+	/**
+	 * 构建一个会话对象
+	 **/
+	private ConversationMessage createConversation(String content,
+			String fromWho, String toWho, String type) {
+		ConversationMessage conversation = new ConversationMessage();
+		conversation.setContent(content);
+		conversation.setFromWho(fromWho);
+		conversation.setToWho(toWho);
+		conversation.setUser(fromWho);
+		conversation.setChater(toWho);
+		conversation.setLocalTime(System.currentTimeMillis());
+		conversation.setType(type);
+		return conversation;
+	}
+	
+	private void addUsrModelItem(final UserModel userModel) {
+		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(getAssocActivity())
+				.inflate(R.layout.new_friend_item, null);
+		int id = getHeadIcon(userModel);
+		ImageView new_friend_icon = (ImageView) layout.findViewById(R.id.new_friend_icon);
+		new_friend_icon.setImageResource(id);
+		mContentLayout.addView(layout, 0);
+		hashMap.put(userModel, layout);
+		if (selectFriends.size() > 0 ){
+//			add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_normal);
+//			add_friend_btn.setClickable(true);
+			add_friend_btn.setText("确定(" + selectFriends.size() + ")");
+		} else {
+//			add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_disable);
+//			add_friend_btn.setClickable(false);
+			add_friend_btn.setText("确定(0)");
+		}
+	}
+	
+	public int getHeadIcon(UserModel userModel) {
+		String sex = userModel.getSex();
+		String status = userModel.getStatus();
+		if (sex == null || status == null){
+			return -1;
+		}
+		if ("female".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_female_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_female_online;
+			}
+		} else if ("male".equals(sex)) {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_male_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_male_online;
+			}
+		} else {
+			if (UserStatus.USER_STATE_AWAY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_BUSY.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			} else if (UserStatus.USER_STATE_OFFLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_outline;
+			} else if (UserStatus.USER_STATE_ONLINE.equals(status)) {
+				return R.drawable.chatroom_unknow_online;
+			}
+		}
+		return -1;
+	}
+
+
+	@Override
+	public void onAddChoisedEvent(UserModel model) {
+		// TODO Auto-generated method stub
+		addUsrModelItem(model);
+	}
+
+	@Override
+	public void onRemoveChoisedEvent(UserModel model) {
+		// TODO Auto-generated method stub
+		RelativeLayout layout = hashMap.get(model);
+		mContentLayout.removeView(layout);
+		if (selectFriends.size() > 0 ){
+//			add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_normal);
+//			add_friend_btn.setClickable(true);
+			add_friend_btn.setText("确定(" + selectFriends.size() + ")");
+		} else {
+//			add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_disable);
+			add_friend_btn.setText("确定(0)");
+//			add_friend_btn.setClickable(false);
+		}
 	}
 	
 }

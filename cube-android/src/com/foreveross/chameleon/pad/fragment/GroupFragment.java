@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.jivesoftware.smack.XMPPConnection;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -26,9 +28,8 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -107,11 +108,26 @@ public class GroupFragment extends Fragment {
 	// private ProgressDialog dialog;
 	private Application application;
 	// 选择历史记录，分组好友，收藏好友，群组
-	private RadioGroup radioTab;
+	private LinearLayout linearLayoutTab;
 
+	private LinearLayout friend_recently;
+	private TextView friend_recently_text; 
+	private ImageView friend_recently_line;
+	private LinearLayout friend_all;
+	private TextView friend_all_text; 
+	private ImageView friend_all_line;
+	private LinearLayout friend_collect;
+	private TextView friend_collect_text; 
+	private ImageView friend_collect_line;
 	private int currentTab;
 	
+	private RelativeLayout searchbar;
+	
 	private PropertiesUtil propertiesUtil = null;
+	
+	public boolean showCollectDelete;
+	
+	public boolean showHistoryDelete;
 
 //	private List<MucRoomModel> rooms = null;
 
@@ -190,7 +206,8 @@ public class GroupFragment extends Fragment {
 	}
 
 	public void initCommonValues(View view) {
-
+		showCollectDelete = false;
+		showHistoryDelete = false;
 		// dialog = ProgressDialog(getAssocActivity(), "", "数据查询中");
 		// dialog.setCancelable(true);
 		titlebar_left = (Button) view.findViewById(R.id.title_barleft);
@@ -210,65 +227,25 @@ public class GroupFragment extends Fragment {
 		} else {
 			flowview.setVisibility(View.VISIBLE);
 		}
-		radioTab = (RadioGroup) view.findViewById(R.id.choice_group);
-
-		radioTab.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			int bufferCheckID = -1;
-
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				
-				NotificationService notificationService = Application.class.cast(
-						getAssocActivity().getApplication()).getNotificationService();
-				if (notificationService != null && !notificationService.isOnline()) {
-					flowview.setVisibility(View.VISIBLE);
-				}
-				if (group.getCheckedRadioButtonId() == checkedId) {
-					Log.e("onCheckedChanged", "checkedId相等" + checkedId);
-				} else {
-					Log.e("onCheckedChanged", "checkedId部相等");
-				}
-				if (bufferCheckID != checkedId) {
-					bufferCheckID = checkedId;
-				} else {
-					return;
-				}
-				if (checkedId == R.id.friend_recently) {
-					currentTab = 1;
-					titlebar_content.setText("历史会话");
-					recently_listview.setVisibility(View.VISIBLE);
-					group_exlistview.setVisibility(View.GONE);
-					collect_listview.setVisibility(View.GONE);
-					room_listview.setVisibility(View.GONE);
-					titlebar_right.setVisibility(View.GONE);
-
-				} else if (checkedId == R.id.friend_all) {
-					currentTab = 2;
-					titlebar_content.setText("所有好友");
-					recently_listview.setVisibility(View.GONE);
-					group_exlistview.setVisibility(View.VISIBLE);
-					collect_listview.setVisibility(View.GONE);
-					room_listview.setVisibility(View.GONE);
-					titlebar_right.setVisibility(View.GONE);
-				} else if (checkedId == R.id.friend_collect) {
-					currentTab = 3;
-					titlebar_content.setText("收藏的好友");
-					recently_listview.setVisibility(View.GONE);
-					group_exlistview.setVisibility(View.GONE);
-					collect_listview.setVisibility(View.VISIBLE);
-					room_listview.setVisibility(View.GONE);
-					titlebar_right.setVisibility(View.GONE);
-				} else if (checkedId == R.id.friend_room) {
-					titlebar_content.setText("群组");
-					recently_listview.setVisibility(View.GONE);
-					group_exlistview.setVisibility(View.GONE);
-					collect_listview.setVisibility(View.GONE);
-					room_listview.setVisibility(View.VISIBLE);
-					titlebar_right.setVisibility(View.VISIBLE);
-				}
-			}
-		});
-
+		
+		searchbar = (RelativeLayout) view.findViewById(R.id.searchbar);
+		linearLayoutTab = (LinearLayout) view.findViewById(R.id.choice_group);
+		
+		friend_recently = (LinearLayout) view.findViewById(R.id.friend_recently);
+		friend_recently.setOnClickListener(clickListener);
+		friend_recently_text = (TextView) view.findViewById(R.id.friend_recently_text);
+		friend_recently_line = (ImageView) view.findViewById(R.id.friend_recently_line);
+		
+		friend_all = (LinearLayout) view.findViewById(R.id.friend_all);
+		friend_all.setOnClickListener(clickListener);
+		friend_all_text = (TextView) view.findViewById(R.id.friend_all_text);
+		friend_all_line = (ImageView) view.findViewById(R.id.friend_all_line);
+		
+		friend_collect = (LinearLayout) view.findViewById(R.id.friend_collect);
+		friend_collect.setOnClickListener(clickListener);
+		friend_collect_text = (TextView) view.findViewById(R.id.friend_collect_text);
+		friend_collect_line = (ImageView) view.findViewById(R.id.friend_collect_line);
+		
 		recently_listview = (ListView) view
 				.findViewById(R.id.chat_recently_listview);
 		recently_listview.setOnItemClickListener(new OnItemClickListener() {
@@ -349,7 +326,7 @@ public class GroupFragment extends Fragment {
 			}
 		});
 
-		recentlyAdapter = new HistoryAdapter(getAssocActivity(),
+		recentlyAdapter = new HistoryAdapter(getAssocActivity(),showHistoryDelete ,
 				sessionContainer.getList(), new Filter() {
 
 					@Override
@@ -524,7 +501,7 @@ public class GroupFragment extends Fragment {
 			}
 		});
 
-		collectAdapter = new CollectedAdapter(getAssocActivity(),
+		collectAdapter = new CollectedAdapter(getAssocActivity(), showCollectDelete , 
 				favorContainer.getList(), new Filter() {
 
 					@Override
@@ -680,6 +657,8 @@ public class GroupFragment extends Fragment {
 		group_exlistview.setVisibility(View.GONE);
 		collect_listview.setVisibility(View.GONE);
 		room_listview.setVisibility(View.GONE);
+		titlebar_right.setVisibility(View.VISIBLE);
+		titlebar_right.setText("编辑");
 	}
 
 	public void initSearchValues(View view) {
@@ -732,6 +711,8 @@ public class GroupFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
+				commonMode();
+				app_search_edt.setText("");
 				NotificationService notificationService = Application.class.cast(
 						getAssocActivity().getApplication()).getNotificationService();
 				if (notificationService != null && !notificationService.isOnline()) {
@@ -776,7 +757,8 @@ public class GroupFragment extends Fragment {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View view,
 							int position, long id) {
-						
+						commonMode();
+						app_search_edt.setText("");
 						NotificationService notificationService = Application.class.cast(
 								getAssocActivity().getApplication()).getNotificationService();
 						if (notificationService != null && !notificationService.isOnline()) {
@@ -931,25 +913,145 @@ public class GroupFragment extends Fragment {
 				getAssocActivity().startActivity(i);
 				break;
 			case R.id.title_barright:
-				XMPPConnection conn = application.getChatManager().getConnection();
-				if (conn != null && conn.isConnected()) {
-					if (PadUtils.isPad(getAssocActivity())) {
-						String addfirend = propertiesUtil.getString("addfirend", "");
-						Intent intent = new Intent();
-						intent.putExtra("direction", 2);
-						intent.putExtra("type", "fragment");
-						intent.putExtra("inviteType", "create");
-						intent.putExtra("value", addfirend);
-						intent.setClass(getAssocActivity(), FacadeActivity.class);
-						getAssocActivity().startActivity(intent);
-					} else {
-						Intent intent = new Intent();
-						intent.putExtra("inviteType", "create");
-						intent.setClass(getAssocActivity(), MucAddFirendActivity.class);
-						getAssocActivity().startActivity(intent);
+				if (currentTab == 2){
+					XMPPConnection conn = application.getChatManager().getConnection();
+					if (conn != null && conn.isConnected()) {
+						if (PadUtils.isPad(getAssocActivity())) {
+							String addfirend = propertiesUtil.getString("addfirend", "");
+							Intent intent = new Intent();
+							intent.putExtra("direction", 2);
+							intent.putExtra("type", "fragment");
+							intent.putExtra("inviteType", "create");
+							intent.putExtra("value", addfirend);
+							intent.setClass(getAssocActivity(), FacadeActivity.class);
+							getAssocActivity().startActivity(intent);
+						} else {
+							Intent intent = new Intent();
+							intent.putExtra("inviteType", "create");
+							intent.setClass(getAssocActivity(), MucAddFirendActivity.class);
+							getAssocActivity().startActivity(intent);
+						}
 					}
 				}
+				if (currentTab == 3){
+					if (showCollectDelete){
+						collectAdapter.setShowCollectDelete(false);
+						showCollectDelete = false;
+						titlebar_right.setText("编辑");
+					} else {
+						collectAdapter.setShowCollectDelete(true);
+						showCollectDelete = true;
+						titlebar_right.setText("取消");
+					}
+					collectAdapter.notifyDataSetChanged();
+				}
+				if (currentTab == 1){
+					if (showHistoryDelete){
+						recentlyAdapter.setShowHistoryDelete(false);
+						showHistoryDelete = false;
+						titlebar_right.setText("编辑");
+					} else {
+						recentlyAdapter.setShowHistoryDelete(true);
+						showHistoryDelete = true;
+						titlebar_right.setText("取消");
+					}
+					recentlyAdapter.notifyDataSetChanged();
+				}
 				break;
+				
+			case R.id.friend_recently:
+				searchbar.setVisibility(View.VISIBLE);
+				if (currentTab != 1){
+					app_search_edt.setText("");
+					closeKeyboard();
+				}
+				if (!app_search_edt.getText().toString().equals("") ){
+					break;
+				}
+				friend_recently_text.setTextColor(getResources().getColor(R.color.black));
+				friend_recently_line.setBackgroundResource(R.drawable.tab_line_light);
+				friend_all_text.setTextColor(getResources().getColor(R.color.lightgrey));
+				friend_all_line.setBackground(null);
+				friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
+				friend_collect_line.setBackground(null);
+				currentTab = 1;
+				titlebar_content.setText("最近聊天");
+				recently_listview.setVisibility(View.VISIBLE);
+				group_exlistview.setVisibility(View.GONE);
+				collect_listview.setVisibility(View.GONE);
+				room_listview.setVisibility(View.GONE);
+				titlebar_right.setVisibility(View.VISIBLE);
+				titlebar_right.setText("编辑");
+				collectAdapter.setShowCollectDelete(false);
+				showCollectDelete = false;
+				collectAdapter.notifyDataSetChanged();
+				recentlyAdapter.setShowHistoryDelete(false);
+				showHistoryDelete = false;
+				recentlyAdapter.notifyDataSetChanged();
+				break;
+			case R.id.friend_all:
+				searchbar.setVisibility(View.VISIBLE);
+				if (currentTab != 2){
+					app_search_edt.setText("");
+					closeKeyboard();
+				}
+				if (!app_search_edt.getText().toString().equals("") ){
+					break;
+				}
+				friend_recently_text.setTextColor(getResources().getColor(R.color.lightgrey));
+				friend_recently_line.setBackground(null);
+				friend_all_text.setTextColor(getResources().getColor(R.color.black));
+				friend_all_line.setBackgroundResource(R.drawable.tab_line_light);
+				friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
+				friend_collect_line.setBackground(null);
+
+				currentTab = 2;
+				titlebar_content.setText("好友列表");
+				recently_listview.setVisibility(View.GONE);
+				group_exlistview.setVisibility(View.VISIBLE);
+				collect_listview.setVisibility(View.GONE);
+				room_listview.setVisibility(View.GONE);
+				titlebar_right.setVisibility(View.VISIBLE);
+				titlebar_right.setText("群聊");
+				collectAdapter.setShowCollectDelete(false);
+				showCollectDelete = false;
+				collectAdapter.notifyDataSetChanged();
+				
+				recentlyAdapter.setShowHistoryDelete(false);
+				showHistoryDelete = false;
+				recentlyAdapter.notifyDataSetChanged();
+				break;
+			case R.id.friend_collect:
+				searchbar.setVisibility(View.GONE);
+				if (currentTab != 3){
+					app_search_edt.setText("");
+					closeKeyboard();
+				}
+				if (!app_search_edt.getText().toString().equals("") ){
+					break;
+				}
+				friend_recently_text.setTextColor(getResources().getColor(R.color.lightgrey));
+				friend_recently_line.setBackground(null);
+				friend_all_text.setTextColor(getResources().getColor(R.color.lightgrey));
+				friend_all_line.setBackground(null);
+				friend_collect_text.setTextColor(getResources().getColor(R.color.black));
+				friend_collect_line.setBackgroundResource(R.drawable.tab_line_light);
+
+				currentTab = 3;
+				titlebar_content.setText("好友收藏");
+				recently_listview.setVisibility(View.GONE);
+				group_exlistview.setVisibility(View.GONE);
+				collect_listview.setVisibility(View.VISIBLE);
+				room_listview.setVisibility(View.GONE);
+				titlebar_right.setVisibility(View.VISIBLE);
+				titlebar_right.setText("编辑");
+				collectAdapter.setShowCollectDelete(false);
+				showCollectDelete = false;
+				collectAdapter.notifyDataSetChanged();
+				recentlyAdapter.setShowHistoryDelete(false);
+				showHistoryDelete = false;
+				recentlyAdapter.notifyDataSetChanged();
+				break;		
 			}
 		}
 	};
@@ -996,6 +1098,18 @@ public class GroupFragment extends Fragment {
 		application.getUIHandler().post(new Runnable() {
 			@Override
 			public void run() {
+				
+				collectAdapter.setShowCollectDelete(false);
+				showCollectDelete = false;
+				recentlyAdapter.setShowHistoryDelete(false);
+				showHistoryDelete = false;
+				if (currentTab == 2){
+					titlebar_right.setText("群聊");
+				} else {
+					titlebar_right.setText("编辑");
+				}
+				
+				
 				if (groupAdapter != null){
 					groupAdapter.notifyDataSetChanged();
 				}
@@ -1091,6 +1205,23 @@ public class GroupFragment extends Fragment {
 				}}
 			});
 		}
+		
+		if (MucBroadCastEvent.PUSH_MUC_ADDFRIEND_SHOWLIST.equals(mucBroadCastEvent)) {
+			friend_recently_text.setTextColor(getResources().getColor(R.color.black));
+			friend_recently_line.setBackgroundResource(R.drawable.tab_line_light);
+			friend_all_text.setTextColor(getResources().getColor(R.color.lightgrey));
+			friend_all_line.setBackground(null);
+			friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
+			friend_collect_line.setBackground(null);
+			currentTab = 1;
+			titlebar_content.setText("最近聊天");
+			recently_listview.setVisibility(View.VISIBLE);
+			group_exlistview.setVisibility(View.GONE);
+			collect_listview.setVisibility(View.GONE);
+			room_listview.setVisibility(View.GONE);
+			titlebar_right.setVisibility(View.VISIBLE);
+			titlebar_right.setText("编辑");
+		}
 	}
 	
 	@Subscribe
@@ -1099,5 +1230,10 @@ public class GroupFragment extends Fragment {
 		String roomJid = map.get("roomJid");
 		if (MucBroadCastEvent.PUSH_MUC_KICKED.equals(muckill)){
 		}
+	}
+	
+	public void closeKeyboard(){
+		InputMethodManager imm2 = (InputMethodManager) getAssocActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm2.hideSoftInputFromWindow(app_search_edt.getWindowToken(), 0);
 	}
 }

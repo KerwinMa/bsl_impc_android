@@ -76,6 +76,12 @@ public class SessionModel extends BaseModel<SessionModel, String> implements
 	@DatabaseField
 	private long sendTime;
 
+	/**
+	 * [最新消息条数]
+	 */
+	@DatabaseField
+	private String roomName;
+	
 	public String getFromType() {
 		return fromType;
 	}
@@ -166,5 +172,13 @@ public class SessionModel extends BaseModel<SessionModel, String> implements
 
 	public void descreaseCountBy(int count) {
 		unreadMessageCount = unreadMessageCount - count;
+	}
+
+	public String getRoomName() {
+		return roomName;
+	}
+
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
 }
