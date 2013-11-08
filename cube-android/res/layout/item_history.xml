@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:orientation="horizontal"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip" 
+        android:background="@drawable/list_item_bg_selector">
+
+        <ImageView
+            android:id="@+id/item_history_delete"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/btn_remove" />
+        
+        <ImageView
+            android:id="@+id/item_group_head_iv"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dip"
+            android:layout_marginLeft="5dip"
+            android:layout_marginTop="5dip"
+            android:layout_toRightOf="@id/item_history_delete"
+            android:src="@drawable/chatroom_unknow_outline" />
+        <!-- 信息展示列 -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dip"
+            android:layout_toRightOf="@id/item_group_head_iv"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dip" >
+
+                <TextView
+                    android:id="@+id/item_group_friend_name_tv"
+                    android:layout_width="90dip"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="@color/font_black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/item_group_lastconversation_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="2012-2-10 20:23" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_group_lastconversation_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dip"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text=""
+                android:textColor="#ff1b63ad"
+                android:textSize="14sp" >
+            </TextView>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

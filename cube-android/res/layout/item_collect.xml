@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:orientation="horizontal" 
+        android:background="@drawable/list_item_bg_selector"
+        android:paddingLeft="10dip"
+    	android:paddingRight="10dip" >
+
+        <ImageView
+            android:id="@+id/item_group_delete"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center"
+            android:src="@drawable/btn_remove" />
+
+        <ImageView
+            android:id="@+id/item_group_head_iv"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dip"
+            android:src="@drawable/chatroom_unknow_outline" />
+        <!-- 信息展示列 -->
+
+        <TextView
+            android:id="@+id/item_group_friend_name_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dip"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/font_black"
+            android:textSize="20sp" >
+        </TextView>
+    </LinearLayout>
+
+</LinearLayout>
