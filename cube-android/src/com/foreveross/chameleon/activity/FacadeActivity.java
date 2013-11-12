@@ -3,12 +3,14 @@ package com.foreveross.chameleon.activity;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.cordova.CallbackContext;
 import org.apache.cordova.Config;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -58,9 +60,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.BroadcastConstans;
-import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.event.EventBus;
@@ -77,19 +79,25 @@ import com.foreveross.chameleon.pad.fragment.PageStartListener;
 import com.foreveross.chameleon.pad.fragment.ParentDroidFragment;
 import com.foreveross.chameleon.pad.fragment.ViewCreateCallBack;
 import com.foreveross.chameleon.pad.modle.SkinModel;
-import com.foreveross.chameleon.phone.modules.CountChangeListener;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
 import com.foreveross.chameleon.phone.modules.task.ThreadPlatformUtils;
 import com.foreveross.chameleon.phone.muc.MucManagerFragment;
+import com.foreveross.chameleon.store.core.ModelCreator;
+import com.foreveross.chameleon.store.core.ModelFinder;
+import com.foreveross.chameleon.store.core.StaticReference;
+import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.update.AutoCheckUpdateListener;
 import com.foreveross.chameleon.update.CheckUpdateTask;
 import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Pool;
+import com.foreveross.chameleon.util.Preferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
+
+import common.extras.plugins.CubeLoginPlugin;
 
 public class FacadeActivity extends FragmentActivity implements
 		CordovaInterface {
@@ -135,6 +143,8 @@ public class FacadeActivity extends FragmentActivity implements
 	private RelativeLayout autoDownloadlayout;
 
 	private View views;
+
+	public final static int SYSTEMDIALOG = 300;
 
 	/*
 	 * (non-Javadoc)
@@ -182,17 +192,20 @@ public class FacadeActivity extends FragmentActivity implements
 					Intent i = new Intent(BroadcastConstans.KEYBOARDSHOW);
 					i.putExtra("show", false);
 					FacadeActivity.this.sendBroadcast(i);
-					
+
 					/*
-					findViewById(R.id.bottom_layout)
-							.setVisibility(View.VISIBLE);
-				*/} else {
+					 * findViewById(R.id.bottom_layout)
+					 * .setVisibility(View.VISIBLE);
+					 */} else {
 					Intent i = new Intent(BroadcastConstans.KEYBOARDSHOW);
 					i.putExtra("show", true);
 					FacadeActivity.this.sendBroadcast(i);/*
-					findViewById(R.id.bottom_layout).setVisibility(View.GONE);
-					
-				*/}
+														 * findViewById(R.id.
+														 * bottom_layout
+														 * ).setVisibility
+														 * (View.GONE);
+														 */
+				}
 			}
 				break;
 			default:
@@ -383,14 +396,16 @@ public class FacadeActivity extends FragmentActivity implements
 							+ (ThreadPlatformUtils.getAutodownLoadallcount() - ThreadPlatformUtils
 									.getAutodownLoadTaskCout()) + "/"
 							+ ThreadPlatformUtils.getAutodownLoadallcount());
-				}else if(intent.getAction().equals(BroadcastConstans.KEYBOARDSHOW)) {
-					Boolean b  = intent.getBooleanExtra("show", false);
+				} else if (intent.getAction().equals(
+						BroadcastConstans.KEYBOARDSHOW)) {
+					Boolean b = intent.getBooleanExtra("show", false);
 					sentKeyboardShow(b);
-				} 
-				//处理管理页面的返回问题
-				else if(intent.getAction().equals(BroadcastConstans.JumpToCubeManager)){
-					if(url!=null){
-						url=url+"#manager";
+				}
+				// 处理管理页面的返回问题
+				else if (intent.getAction().equals(
+						BroadcastConstans.JumpToCubeManager)) {
+					if (url != null) {
+						url = url + "#manager";
 					}
 				}
 
@@ -446,8 +461,8 @@ public class FacadeActivity extends FragmentActivity implements
 
 			public void onAnimationEnd(Animation animation) {
 				autoDownloadlayout.clearAnimation();
-				if(autoDownloadlayout.isShown())
-				autoDownloadlayout.setVisibility(View.GONE);
+				if (autoDownloadlayout.isShown())
+					autoDownloadlayout.setVisibility(View.GONE);
 			}
 		});
 		autoDownloadlayout.startAnimation(animationSet);// 调用开始动画
@@ -529,12 +544,13 @@ public class FacadeActivity extends FragmentActivity implements
 		application = Application.class.cast(FacadeActivity.this
 				.getApplication());
 		sendChatNotification = application.getShouldSendChatNotification();
-		;
+		Preferences.saveSytemId("", Application.sharePref);
 		sendMessageNotification = application
 				.getShouldSendMessageNotification();
 		sendNoticeNotification = application.getShouldSendNoticeNotification();
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MESSAGE_COUNT)
 				.register(this);
+		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).register(this);
 		url = getIntent().getStringExtra("url");
 		isPad = getIntent().getBooleanExtra("isPad", false);
 		if (isPad) {
@@ -585,13 +601,10 @@ public class FacadeActivity extends FragmentActivity implements
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				
-				finishOp(url,
-						TmpConstants.VIEW_MESSAGE_COUNT_PRESENCE);
-				finishOp(url,
-						TmpConstants.VIEW_ANNOUNCE_COUNT_PRESENCE);
-				finishOp(url,
-						TmpConstants.VIEW_CHAT_COUNT_PRESENCE);
+
+				finishOp(url, TmpConstants.VIEW_MESSAGE_COUNT_PRESENCE);
+				finishOp(url, TmpConstants.VIEW_ANNOUNCE_COUNT_PRESENCE);
+				finishOp(url, TmpConstants.VIEW_CHAT_COUNT_PRESENCE);
 
 				if (url.contains(URL.PAD_MAIN_URL)
 						|| url.contains(URL.PHONE_MAIN_URL)) {
@@ -701,7 +714,7 @@ public class FacadeActivity extends FragmentActivity implements
 		ResizeLayout layout = (ResizeLayout) findViewById(R.id.layouts);
 		layout.setOnResizeListener(new ResizeLayout.OnResizeListener() {
 			public void OnResize(int w, int h, int oldw, int oldh) {
-				if (PadUtils.isPad(FacadeActivity.this)){
+				if (PadUtils.isPad(FacadeActivity.this)) {
 					int change = BIGGER;
 					if (h < oldh) {
 						change = SMALLER;
@@ -715,8 +728,7 @@ public class FacadeActivity extends FragmentActivity implements
 		});
 	}
 
-	public void finishOp(String url, 
-			String countView) {
+	public void finishOp(String url, String countView) {
 		if (url.contains(URL.PAD_MAIN_URL) || url.contains(URL.PHONE_MAIN_URL)) {
 			EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).post(
 					new PresenceEvent(countView, true));
@@ -834,6 +846,7 @@ public class FacadeActivity extends FragmentActivity implements
 	public void changeSkin(String name) {
 		parentFragment.sendJavascript("changeTheme('" + name + "')");
 	}
+
 	public void sentKeyboardShow(Boolean b) {
 		parentFragment.sendJavascript("isKeyboardShow('" + b + "')");
 	}
@@ -896,7 +909,7 @@ public class FacadeActivity extends FragmentActivity implements
 				&& !(fragment instanceof MucAddFirendFragment) && !(fragment instanceof MucManagerFragment))) {
 			popRight();
 		} else {
-			
+
 			pending = true;
 		}
 
@@ -1212,23 +1225,22 @@ public class FacadeActivity extends FragmentActivity implements
 										FacadeActivity.this.finish();
 									}
 								}).create();
-				
-				
-				if(!PadUtils.isPad(this)){
-					if(this.url.endsWith("phone/index.html")){
+
+				if (!PadUtils.isPad(this)) {
+					if (this.url.endsWith("phone/index.html")) {
 						dialog.show();
 						return true;
-					}else if(this.url.endsWith("#manager")){
+					} else if (this.url.endsWith("#manager")) {
 						parentFragment.sendJavascript("backToMain()");
-						int index = url.indexOf("#manager") ;
-						url = url.substring(0,index);
+						int index = url.indexOf("#manager");
+						url = url.substring(0, index);
 						return true;
-					}else if(this.url.endsWith("phone/login.html")) {
+					} else if (this.url.endsWith("phone/login.html")) {
 						dialog.show();
 						return true;
 					}
 				}
-				
+
 				else {
 					dialog.show();
 					return true;
@@ -1269,12 +1281,34 @@ public class FacadeActivity extends FragmentActivity implements
 				messageCountChangeEvent.isDisplayBadge());
 	}
 
+	@Subscribe
+	public void onMuliSystem(HashMap<String, Object> b) {
+		SystemInfoModel model = (SystemInfoModel) b.get("systemmodel");
+		model.setCurr(true);
+		String userName = (String) b.get("username");
+		String passWord = (String) b.get("password");
+		boolean isremember = (Boolean) b.get("isremember");
+		// 保存当前的系统ID
+
+		if (StaticReference.userMf == null) {
+			StaticReference.userMC = ModelCreator.build(application, userName);
+			StaticReference.userMf = ModelFinder.build(application, userName);
+		}
+		StaticReference.userMf.createOrUpdate(model);
+		Preferences.saveSytemId(model.getSystemId(), Application.sharePref);
+		if (activityResultCallback instanceof CubeLoginPlugin) {
+			CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
+			plugin.processLogined(isremember, userName, passWord,
+					plugin.getCallback());
+		}
+
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(broadcastReceiver);
-		EventBus.getEventBus(TmpConstants.EVENTBUS_MESSAGE_COUNT).unregister(
-				this);
+		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).unregister(this);
 		for (SoftReference<Bitmap> softReference : bitmapRefList) {
 			if (softReference.get() != null && softReference.get() != null
 					&& !softReference.get().isRecycled()) {
@@ -1314,35 +1348,35 @@ public class FacadeActivity extends FragmentActivity implements
 				// extraMessage = builder.toString();
 				extraMessage = "有模块正在下载或更新中，退出可能导致操作失败";
 			}
-//			Dialog dialog = new AlertDialog.Builder(this)
-//					.setTitle("提示")
-//					.setMessage(extraMessage + " 确定退出?")
-//					.setNegativeButton("取消",
-//							new DialogInterface.OnClickListener() {
-//								@Override
-//								public void onClick(DialogInterface dialog,
-//										int which) {
-//									dialog.dismiss();
-//								}
-//							})
-//					.setPositiveButton("确定",
-//							new DialogInterface.OnClickListener() {
-//
-//								@Override
-//								public void onClick(DialogInterface dialog,
-//										int which) {
-//									try {
-//										dialog.dismiss();
-//										 finish();
-//										Application.class.cast(FacadeActivity.this).exitApp();
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//										Log.e("exit", "退出应用异常");
-//									}
-//								}
-//							}).create();
-//				dialog.show();
-//			return true;
+			// Dialog dialog = new AlertDialog.Builder(this)
+			// .setTitle("提示")
+			// .setMessage(extraMessage + " 确定退出?")
+			// .setNegativeButton("取消",
+			// new DialogInterface.OnClickListener() {
+			// @Override
+			// public void onClick(DialogInterface dialog,
+			// int which) {
+			// dialog.dismiss();
+			// }
+			// })
+			// .setPositiveButton("确定",
+			// new DialogInterface.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(DialogInterface dialog,
+			// int which) {
+			// try {
+			// dialog.dismiss();
+			// finish();
+			// Application.class.cast(FacadeActivity.this).exitApp();
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// Log.e("exit", "退出应用异常");
+			// }
+			// }
+			// }).create();
+			// dialog.show();
+			// return true;
 		}
 		return false;
 	};
@@ -1402,5 +1436,36 @@ public class FacadeActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
 		Log.i("test", "test");
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode != android.app.Activity.RESULT_OK) {
+			return;
+		}
+		switch (requestCode) {
+		case SYSTEMDIALOG:
+			if (getIntent() != null && getIntent().getExtras() != null) {
+				Bundle b = getIntent().getExtras();
+				SystemInfoModel model = (SystemInfoModel) b
+						.getSerializable("systemmodel");
+				model.setCurr(true);
+				String userName = b.getString("userName");
+				String passWord = b.getString("passWord");
+				boolean isremember = b.getBoolean("isremember");
+				// 保存当前的系统ID
+				StaticReference.userMf.createOrUpdate(model);
+				Preferences.saveSytemId(model.getSystemId(),
+						Application.sharePref);
+				if (activityResultCallback instanceof CubeLoginPlugin) {
+					CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
+					plugin.processLogined(isremember, userName, passWord,
+							plugin.getCallback());
+				}
+			}
+			break;
+		}
+
 	}
 }

@@ -26,7 +26,7 @@ public class URL {
 	public static String UPLOAD_URL = BASE_WEB + "csair-mam/attachment/clientUpload";
 	public static String SYNC = BASE_WS + "csair-extension/api/extendClients/android/";
 	public static String UPLOAD = BASE_WS + "csair-mam/api/mam/attachment/upload";
-	public static String LOGIN = BASE_WS+ "csair-extension/api/accounts/login";
+	public static String LOGIN = BASE_WS+ "csair-extension/api/csairauth/login";
 	public static String UPDATE = BASE_WS+ "csair-mam/api/mam/clients/update/android";
 	public static String SNAPSHOT = BASE_WS + "csair-mam/api/mam/clients/widget/";
 	public static  String PUSH_BASE_URL = BASE_WS + "csair-push/api/";

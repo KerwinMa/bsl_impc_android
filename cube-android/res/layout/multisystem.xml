@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/all_activity_bg_xml"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dip"
+        android:layout_marginLeft="30dip"
+        android:layout_marginRight="30dip"
+        android:layout_marginBottom="30dip"
+        android:text="你好！欢迎使用南航统一移动应用，请选择需要登录的系统"
+        android:textColor="@color/font_black"
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/multisystem_listview"
+        android:layout_width="300dip"
+        android:layout_height="200dip"
+        android:paddingLeft="30dip"
+        android:paddingRight="30dip"
+        android:layout_gravity="center"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#FFE6E6E6"
+        android:dividerHeight="0.66dp"
+        android:listSelector="#00000000"
+        android:scrollingCache="false" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical" 
+        android:paddingTop="20dip"
+        >
+
+        <Button
+            android:id="@+id/multi_cancle"
+            android:layout_width="100dip"
+            android:layout_height="50dip"
+            android:text="取消" />
+    </LinearLayout>
+
+</LinearLayout>

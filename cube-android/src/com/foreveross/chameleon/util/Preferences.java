@@ -44,6 +44,9 @@ public class Preferences
     /** 用户标签 */
     public static final String PRIVILEGES = "privileges";
     
+    /** 系统ID */
+    public static final String SYSTEMID = "systemid";
+    
     
     /** 用户昵称 */
     public static final String EXPERT_DATE = "expertDate";
@@ -308,5 +311,15 @@ public class Preferences
    }
     
     
+    /* 记住当前系统ID* */
+    public static void saveSytemId(String systemId, SharedPreferences preference)
+    {
+        Editor editor = preference.edit();
+        editor.putString(SYSTEMID, systemId);
+        editor.commit();
+    }
     
+    public static String getSystemId(SharedPreferences preference) {
+   	 return preference.getString(SYSTEMID, "");
+   }
 }

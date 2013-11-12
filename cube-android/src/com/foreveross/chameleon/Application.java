@@ -688,7 +688,7 @@ public class Application extends android.app.Application implements
 		URL.SYNC = URL.BASE_WS + "csair-extension/api/extendClients/android/";
 		URL.UPLOAD = URL.BASE_WS + "csair-mam/api/mam/attachment/upload";
 //		URL.LOGIN = URL.BASE_WS + "csair-extension/api/oalogin/validate";
-		URL.LOGIN = URL.BASE_WS + "csair-extension/api/accounts/login";
+		URL.LOGIN = URL.BASE_WS + "csair-extension/api/csairauth/login";
 		URL.UPDATE = URL.BASE_WS + "csair-mam/api/mam/clients/update/android";
 		URL.UPDATE_RECORD = URL.BASE_WS
 				+ "csair-mam/api/mam/clients/update/appcount/android/";

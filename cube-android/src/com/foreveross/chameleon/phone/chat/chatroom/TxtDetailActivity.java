@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.csair.impc.R;
+import com.foreveross.chameleon.phone.chat.image.CropImage;
 
 public class TxtDetailActivity extends Activity implements OnClickListener {
 
@@ -30,8 +32,10 @@ public class TxtDetailActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.chat_txt_detail);
 		txt_detail = (TextView) findViewById(R.id.txt_detail);
 		txtPath = getIntent().getStringExtra("txtPath");
-		String txt = convertCodeAndGetText(txtPath);
-		txt_detail.setText(txt);
+		if (txtPath != null){
+			String txt = convertCodeAndGetText(txtPath);
+			txt_detail.setText(txt);
+		}
 		back_btn = (Button) findViewById(R.id.back_btn);
 		back_btn.setOnClickListener(this);
 	}
