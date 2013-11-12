@@ -52,7 +52,17 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 	@DatabaseField
 	protected boolean hasRead = false;
 	@DatabaseField
-	private String userName;
+	protected String moduleUrl ;
+	
+	
+
+	public String getModuleUrl() {
+		return moduleUrl;
+	}
+
+	public void setModuleUrl(String moduleUrl) {
+		this.moduleUrl = moduleUrl;
+	}
 
 	public boolean isHasRead() {
 		return hasRead;
@@ -64,7 +74,17 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 
 	protected boolean editable = false;
 	protected boolean selected = false;
+	
 
+	public AbstractMessage(long sendTime, String messsageId, String title,
+			String content,String moduleUrl) {
+		super();
+		this.sendTime = sendTime;
+		this.messsageId = messsageId;
+		this.title = title;
+		this.content = content;
+		this.moduleUrl = moduleUrl;
+	}
 	public AbstractMessage(long sendTime, String messsageId, String title,
 			String content) {
 		super();
@@ -140,14 +160,6 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 
 	public void setGroupBelong(String groupBelong) {
 		this.groupBelong = groupBelong;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public void read() {

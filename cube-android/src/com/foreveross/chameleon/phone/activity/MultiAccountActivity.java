@@ -31,6 +31,7 @@ public class MultiAccountActivity extends Activity implements OnClickListener {
 			.cast(this.getApplicationContext())
 			.logOff();
 		}
+		finish();
 	}
 
 	@Override

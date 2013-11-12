@@ -31,6 +31,7 @@ import com.foreveross.chameleon.push.client.Notifier;
 import com.foreveross.chameleon.push.cubeparser.PushContentParser;
 import com.foreveross.chameleon.push.cubeparser.type.AbstractMessage;
 import com.foreveross.chameleon.push.cubeparser.type.ChanmeleonMessage;
+import com.foreveross.chameleon.push.cubeparser.type.CommonModuleMessage;
 import com.foreveross.chameleon.push.cubeparser.type.MDMMessage;
 import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessage;
 import com.foreveross.chameleon.push.mina.library.protocol.PushProtocol.MessageContent;
@@ -188,8 +189,7 @@ public class OriginalParser {
 		}
 	}
 
-	public void sendNoticeNotification(
-			final PatchNoticeModelEvent patchNoticeModelEvent) {
+	public void sendNoticeNotification(final PatchNoticeModelEvent patchNoticeModelEvent) {
 		final Intent intent = new Intent();
 		intent.setClass(application, FacadeActivity.class);
 		if (PadUtils.isPad(application)) {
@@ -241,18 +241,14 @@ public class OriginalParser {
 		// EventBus.getEventBus(TmpConstants.EVENTBUS_MESSAGE_CONTENT,
 		// ThreadEnforcer.MAIN).post(pathMessageModelEvent);
 		// }
-		MessageFragmentModel.instance().addMessages(
-				new ArrayList<AbstractMessage<?>>(pathMessageModelEvent
-						.getPacked()));
-		if (!pathMessageModelEvent.lastIsNotice()
-				&& application.shouldSendMessageNotification()) {
+		MessageFragmentModel.instance().addMessages(new ArrayList<AbstractMessage<?>>(pathMessageModelEvent.getPacked()));
+		if (!pathMessageModelEvent.lastIsNotice()&& application.shouldSendMessageNotification()) {
 			sendMessageNotification(pathMessageModelEvent);
 		}
 
 	}
 
-	private void sendMessageNotification(
-			final PatchMessageModelEvent patchMessageModelEvent) {
+	private void sendMessageNotification(final PatchMessageModelEvent patchMessageModelEvent) {
 		final Intent intent = new Intent();
 		intent.setClass(application, FacadeActivity.class);
 		if (PadUtils.isPad(application)) {
@@ -298,7 +294,7 @@ public class OriginalParser {
 	public void onOriginalMessage(final MessageContent messageContent) {
 		Log.i("mina messageContent", messageContent.toString());
 		synchronized (OriginalParser.this) {
-			buffer.addAll(PushContentParser.parseRemoteModel(messageContent));
+			buffer.addAll(PushContentParser.parseRemoteModel(messageContent,context));
 		}
 	}
 

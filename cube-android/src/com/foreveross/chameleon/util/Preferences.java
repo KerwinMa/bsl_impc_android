@@ -22,6 +22,8 @@ public class Preferences
     /** 存储于SP文件中的用户名PASSWORD值 */
     public static final String PASSWORD = "password";
     
+    public static final String SESSIONID ="sessionId";
+    
     public static final String PASSWORD_BAK = "passwordbak";
     
     public static final String ISREMEMBER = "isremember";
@@ -55,6 +57,16 @@ public class Preferences
         editor.putBoolean(FIRST_TIME, fristTime);
         editor.commit();
     }
+    public static void saveSessionID(Long sessionid,SharedPreferences preference) {
+    	Editor editor = preference.edit();
+        editor.putLong(SESSIONID, sessionid);
+        editor.commit();
+    }
+    public static Long getSessionID(SharedPreferences preference) {
+    	return preference.getLong(SESSIONID, 0);
+    }
+    
+    
     public static void saveAppMainView(Boolean isView,SharedPreferences preference) {
     	Editor editor = preference.edit();
         editor.putBoolean(APPMAINVIEW, isView);

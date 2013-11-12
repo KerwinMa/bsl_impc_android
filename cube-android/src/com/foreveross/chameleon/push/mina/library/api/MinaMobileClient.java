@@ -27,6 +27,7 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.csair.impc.R;
+import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
 import com.foreveross.chameleon.event.EventBus;
@@ -44,6 +45,7 @@ import com.foreveross.chameleon.push.mina.library.util.NetworkUtil;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.push.mina.library.util.RSACoder;
 import com.foreveross.chameleon.push.mina.library.util.SessionHelper;
+import com.foreveross.chameleon.util.Preferences;
 import com.foreveross.chameleon.util.SharedPreferencesUtil;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -419,6 +421,8 @@ public class MinaMobileClient extends IoHandlerAdapter implements Runnable {
 								sessionIdAware.sessionIdCreated(
 										auth_Rsp.getSessionId(),
 										MinaMobileClient.this);
+								//Application.token =auth_Rsp.getSessionId();
+								Preferences.saveSessionID(auth_Rsp.getSessionId(), Application.sharePref);
 							}
 
 							log.debug("mina connect result is "

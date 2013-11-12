@@ -25,8 +25,13 @@ public class CommonModuleMessage extends ModuleMessage<CommonModuleMessage> {
 	 * @param content
 	 */
 	public CommonModuleMessage(long sendTime, String messsageId, String title,
+			String content,String moduleUrl) {
+		super(sendTime, messsageId, title, content,moduleUrl);
+	}
+	public CommonModuleMessage(long sendTime, String messsageId, String title,
 			String content) {
 		super(sendTime, messsageId, title, content);
 	}
+
 
 }

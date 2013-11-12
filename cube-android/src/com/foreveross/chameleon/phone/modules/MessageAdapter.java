@@ -129,8 +129,7 @@ public class MessageAdapter extends BaseExpandableListAdapter {
 		if (identifier.equals(TmpConstants.ANNOUCE_RECORD_IDENTIFIER)) {
 			return true;
 		}
-		return CubeModuleManager.getInstance().getCubeModuleByIdentifier(
-				identifier) != null;
+		return CubeModuleManager.getInstance().getCubeModuleByIdentifier(identifier) != null;
 	}
 
 	@Override

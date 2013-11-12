@@ -274,7 +274,7 @@ public class NoticeListAdapter extends BaseAdapter {
 	}
 
 	public ArrayList<AttachmentModel> parseJson(String attachment) {
-		attachment = "[{fileId:T1hyJTByVT1RCvBVdK,fileName:steps.txt,fileSize:0} , {fileId:T1gtxTByZT1RCvBVdK,fileName:ormlite.pdf,fileSize:480} , {fileId:T1TRxTByZT1RCvBVdK,fileName:120.png,fileSize:22}]";
+//		attachment = "[{fileId:T1hyJTByVT1RCvBVdK,fileName:steps.txt,fileSize:0} , {fileId:T1gtxTByZT1RCvBVdK,fileName:ormlite.pdf,fileSize:480} , {fileId:T1TRxTByZT1RCvBVdK,fileName:120.png,fileSize:22}]";
 		ArrayList<AttachmentModel> attachmentModels = new ArrayList<AttachmentModel>();
 		try {
 			JSONArray jay = new JSONArray(attachment);
@@ -283,7 +283,7 @@ public class NoticeListAdapter extends BaseAdapter {
 				JSONObject jb = (JSONObject) jay.get(i);
 				String fileId = (String) jb.get("fileId");
 				String fileName = (String) jb.get("fileName");
-				int fileSize = (Integer) jb.get("fileSize");
+				String fileSize = (String) jb.get("fileSize");
 				String filePath = null;
 				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")) {
 					attachmentModel.setType("png");
@@ -306,7 +306,7 @@ public class NoticeListAdapter extends BaseAdapter {
 				}
 				attachmentModel.setFileId(fileId);
 				attachmentModel.setFileName(fileName);
-				attachmentModel.setFileSize(fileSize + "");
+				attachmentModel.setFileSize(fileSize);
 				attachmentModels.add(attachmentModel);
 			}
 		} catch (JSONException e) {
