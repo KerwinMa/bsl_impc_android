@@ -12,11 +12,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.cordova.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.push.cubeparser.type.AbstractMessage;
 import com.foreveross.chameleon.push.cubeparser.type.CommonModuleMessage;
@@ -24,8 +22,6 @@ import com.foreveross.chameleon.push.cubeparser.type.ModuleMessage;
 import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessageStub;
 import com.foreveross.chameleon.push.cubeparser.type.SystemMessage;
 import com.foreveross.chameleon.store.core.StaticReference;
-import com.foreveross.chameleon.util.Preferences;
-import com.j256.ormlite.stmt.Where;
 
 /**
  * [消息界面 模型-聚合根]<BR>
@@ -79,20 +75,17 @@ public class MessageFragmentModel {
 	public synchronized void init() {
 		msgSortMap.clear();
 		cacheList.clear();
-		String userName = Preferences.getUserName(Application.sharePref);
 		List<AbstractMessage<?>> queryResult = new ArrayList<AbstractMessage<?>>();
 		try {
 			queryResult.addAll(StaticReference.defMf
-					.queryBuilder(SystemMessage.class).orderBy("sendTime", true).where().eq("userName", userName).
-					query());
+					.queryBuilder(SystemMessage.class)
+					.orderBy("sendTime", true).query());
 			queryResult.addAll(StaticReference.defMf
 					.queryBuilder(CommonModuleMessage.class)
-					.orderBy("sendTime", true).where().eq("userName", userName).
-					query());
+					.orderBy("sendTime", true).query());
 			queryResult.addAll(StaticReference.defMf
 					.queryBuilder(NoticeModuleMessageStub.class)
-					.orderBy("sendTime", true).where().eq("userName", userName).
-					query());
+					.orderBy("sendTime", true).query());
 		} catch (SQLException e) {
 			log.error("query  chanmeleonMessage error!", e);
 		}

@@ -13,7 +13,9 @@ import com.foreveross.chameleon.store.model.AutoDownloadRecord;
 import com.foreveross.chameleon.store.model.AutoShowViewRecord;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.MessageModule;
+import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SessionModel;
+import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.store.model.UserModel;
 import com.foreveross.chameleon.store.model.ViewModuleRecord;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -43,6 +45,8 @@ public class OrmliteDatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, ViewModuleRecord.class);
 			TableUtils.createTable(connectionSource, AutoDownloadRecord.class);
 			TableUtils.createTable(connectionSource, AutoShowViewRecord.class);
+			TableUtils.createTable(connectionSource, MultiUserInfoModel.class);
+			TableUtils.createTable(connectionSource, SystemInfoModel.class);
 		} catch (Exception e) {
 			Log.e(OrmliteDatabaseHelper.class.getName(),"Can't create database", e);
 			throw new RuntimeException(e);
@@ -68,6 +72,8 @@ public class OrmliteDatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, ViewModuleRecord.class, true);
 			TableUtils.dropTable(connectionSource, AutoDownloadRecord.class, true);
 			TableUtils.dropTable(connectionSource, AutoShowViewRecord.class, true);
+			TableUtils.dropTable(connectionSource, MultiUserInfoModel.class, true);
+			TableUtils.dropTable(connectionSource, SystemInfoModel.class, true);
 			onCreate(db, connectionSource);
 		} catch (Exception e) {
 			Log.e(OrmliteDatabaseHelper.class.getName(),

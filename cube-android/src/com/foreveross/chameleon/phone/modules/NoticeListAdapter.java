@@ -274,7 +274,7 @@ public class NoticeListAdapter extends BaseAdapter {
 	}
 
 	public ArrayList<AttachmentModel> parseJson(String attachment) {
-		attachment = "[{fileId:T1hyJTByVT1RCvBVdK,fileName:steps.txt,fileSize:0} , {fileId:T1gtxTByZT1RCvBVdK,fileName:ormlite.pdf,fileSize:480} , {fileId:T1TRxTByZT1RCvBVdK,fileName:120.png,fileSize:22}]";
+//		attachment = "[{fileId:T1hyJTByVT1RCvBVdK,fileName:steps.txt,fileSize:0} , {fileId:T1gtxTByZT1RCvBVdK,fileName:ormlite.pdf,fileSize:480} , {fileId:T1TRxTByZT1RCvBVdK,fileName:120.png,fileSize:22}]";
 		ArrayList<AttachmentModel> attachmentModels = new ArrayList<AttachmentModel>();
 		try {
 			JSONArray jay = new JSONArray(attachment);
@@ -283,7 +283,7 @@ public class NoticeListAdapter extends BaseAdapter {
 				JSONObject jb = (JSONObject) jay.get(i);
 				String fileId = (String) jb.get("fileId");
 				String fileName = (String) jb.get("fileName");
-				int fileSize = (Integer) jb.get("fileSize");
+				String fileSize = (String) jb.get("fileSize");
 				String filePath = null;
 				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")) {
 					attachmentModel.setType("png");
@@ -306,7 +306,7 @@ public class NoticeListAdapter extends BaseAdapter {
 				}
 				attachmentModel.setFileId(fileId);
 				attachmentModel.setFileName(fileName);
-				attachmentModel.setFileSize(fileSize + "");
+				attachmentModel.setFileSize(fileSize);
 				attachmentModels.add(attachmentModel);
 			}
 		} catch (JSONException e) {
@@ -329,7 +329,8 @@ public class NoticeListAdapter extends BaseAdapter {
 		public void onClick(View v) {
 			Dialog dialog = new AlertDialog.Builder(context)
 					.setTitle(
-							"文件名称：" + attachmentModel.getFileName() + "    文件大小"
+							"文件名称：" + attachmentModel.getFileName()
+									+ "    文件大小"
 									+ attachmentModel.getFileSize() + "B")
 					.setPositiveButton("打开",
 							new DialogInterface.OnClickListener() {
@@ -421,6 +422,7 @@ public class NoticeListAdapter extends BaseAdapter {
 			InputStream is = null;
 			FileOutputStream output = null;
 			String attachmentPath = null;
+			String fileName = null;
 			try {
 				String dir = Environment.getExternalStorageDirectory()
 						.getPath() + "/" + TmpConstants.ATTACHMENT_PATH;
@@ -430,14 +432,22 @@ public class NoticeListAdapter extends BaseAdapter {
 				}
 				String type = attachmentModel.getType();
 				if ("png".equals(type)) {
+					fileName = dir + "/" + attachmentModel.getFileId() + ".png";
 					attachmentPath = dir + "/" + attachmentModel.getFileId()
-							+ ".png";
+							+ "temp" + ".png";
 				} else if ("pdf".equals(type)) {
+					fileName = dir + "/" + attachmentModel.getFileId() + ".pdf";
 					attachmentPath = dir + "/" + attachmentModel.getFileId()
-							+ ".pdf";
+							+ "temp" + ".pdf";
 				} else if ("txt".equals(type)) {
+					fileName = dir + "/" + attachmentModel.getFileId() + ".txt";
 					attachmentPath = dir + "/" + attachmentModel.getFileId()
-							+ ".txt";
+							+ "temp" + ".txt";
+				}
+				File attachmentFile = new File(attachmentPath);
+				// 如果文件存在则删除文件
+				if (attachmentFile.exists()) {
+					attachmentFile.delete();
 				}
 				String url = URL.getDownloadUrl(context,
 						attachmentModel.getFileId());
@@ -448,7 +458,6 @@ public class NoticeListAdapter extends BaseAdapter {
 				if (attachSize == 0) {
 					return null;
 				}
-
 				is = connect.getInputStream();
 				output = new FileOutputStream(attachmentPath);
 				int ch = 0;
@@ -456,7 +465,15 @@ public class NoticeListAdapter extends BaseAdapter {
 					output.write(ch);
 				}
 				output.flush();
-				return attachmentPath;
+				File file1 = new File(attachmentPath);
+				File file2 = new File(fileName);
+				// 将下载的TEMP文件 重命名为新文件名
+				boolean flag = file1.renameTo(file2);
+				if (flag){
+					return fileName;
+				} else {
+					return null;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -487,31 +504,6 @@ public class NoticeListAdapter extends BaseAdapter {
 			if (result != null) {
 				attachmentModel.setFilePath(result);
 				progressBar.setVisibility(View.GONE);
-			}
-			else {
-				String attachmentPath = null;
-				String dir = Environment.getExternalStorageDirectory()
-						.getPath() + "/" + TmpConstants.ATTACHMENT_PATH;
-				File attachmentDir = new File(dir);
-				if (!attachmentDir.exists()) {
-					attachmentDir.mkdirs();
-				}
-				String type = attachmentModel.getType();
-				if ("png".equals(type)) {
-					attachmentPath = dir + "/" + attachmentModel.getFileId()
-							+ ".png";
-				} else if ("pdf".equals(type)) {
-					attachmentPath = dir + "/" + attachmentModel.getFileId()
-							+ ".pdf";
-				} else if ("txt".equals(type)) {
-					attachmentPath = dir + "/" + attachmentModel.getFileId()
-							+ ".txt";
-				}
-				File file = new File(attachmentPath);
-				if (file.exists()) {
-					file.delete();
-				}
-				
 			}
 		}
 

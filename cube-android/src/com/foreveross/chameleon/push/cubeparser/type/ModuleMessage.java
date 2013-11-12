@@ -46,6 +46,10 @@ public abstract class ModuleMessage<T> extends AbstractMessage<T> {
 	}
 
 	public ModuleMessage(long sendTime, String messsageId, String title,
+			String content,String moduleUrl) {
+		super(sendTime, messsageId, title, content, moduleUrl);
+	}
+	public ModuleMessage(long sendTime, String messsageId, String title,
 			String content) {
 		super(sendTime, messsageId, title, content);
 	}

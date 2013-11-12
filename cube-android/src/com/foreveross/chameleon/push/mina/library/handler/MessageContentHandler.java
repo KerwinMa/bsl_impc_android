@@ -71,7 +71,7 @@ public class MessageContentHandler extends
 		
 		
 		try {
-			doFeedback(t);
+			//doFeedback(t);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,44 +91,44 @@ public class MessageContentHandler extends
 		return null;
 	}
 
-	public void doFeedback(final MessageContent t) {
-		ThreadPool.run(new Runnable() {
-			@Override
-			public void run() {
-				HttpClient httpClient = new DefaultHttpClient();
-
-				HttpPut httpPut = new HttpPut(URL.FEEDBACK_URL);
-				try {
-					// httpPost.addHeader("Accept", "application/json");
-					httpPut.addHeader("Content-Type",
-							"application/x-www-form-urlencoded");
-					// FeedbackVo feedbackVo = new FeedbackVo();
-					// feedbackVo.setDeviceId(DeviceInfoUtil.getDeviceId(context));
-					// feedbackVo.setSendId(t.getId());
-					HttpEntity httpEntity = null;
-					// httpEntity = new
-					// StringEntity(gson.toJson(feedbackVo),"utf-8");
-					String appKey = Application.class.cast(context.getApplicationContext())
-										.getCubeApplication().getAppKey();
-					List<NameValuePair> list = new ArrayList<NameValuePair>();
-					list.add(new BasicNameValuePair("deviceId", DeviceInfoUtil
-							.getDeviceId(context)));
-					list.add(new BasicNameValuePair("sendId", t.getId()));
-					list.add(new BasicNameValuePair("appId", appKey));
-					httpEntity = new UrlEncodedFormEntity(list);
-					httpPut.setEntity(httpEntity);
-					HttpResponse httpResponse = httpClient.execute(httpPut);
-					if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-						Log.d("ApplicationEx", "注册成功");
-					}
-				} catch (ClientProtocolException e) {
-					Log.e("MessageContentHandler", "MessageContentHandler", e);
-				} catch (IOException e) {
-					Log.e("MessageContentHandler", "MessageContentHandler", e);
-				}
-			}
-		});
-
-	}
+//	public void doFeedback(final MessageContent t) {
+//		ThreadPool.run(new Runnable() {
+//			@Override
+//			public void run() {
+//				HttpClient httpClient = new DefaultHttpClient();
+//
+//				HttpPut httpPut = new HttpPut();
+//				try {
+//					// httpPost.addHeader("Accept", "application/json");
+//					httpPut.addHeader("Content-Type",
+//							"application/x-www-form-urlencoded");
+//					// FeedbackVo feedbackVo = new FeedbackVo();
+//					// feedbackVo.setDeviceId(DeviceInfoUtil.getDeviceId(context));
+//					// feedbackVo.setSendId(t.getId());
+//					HttpEntity httpEntity = null;
+//					// httpEntity = new
+//					// StringEntity(gson.toJson(feedbackVo),"utf-8");
+//					String appKey = Application.class.cast(context.getApplicationContext())
+//										.getCubeApplication().getAppKey();
+//					List<NameValuePair> list = new ArrayList<NameValuePair>();
+//					list.add(new BasicNameValuePair("deviceId", DeviceInfoUtil
+//							.getDeviceId(context)));
+//					list.add(new BasicNameValuePair("sendId", t.getId()));
+//					list.add(new BasicNameValuePair("appId", appKey));
+//					httpEntity = new UrlEncodedFormEntity(list);
+//					httpPut.setEntity(httpEntity);
+//					HttpResponse httpResponse = httpClient.execute(httpPut);
+//					if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+//						Log.d("ApplicationEx", "注册成功");
+//					}
+//				} catch (ClientProtocolException e) {
+//					Log.e("MessageContentHandler", "MessageContentHandler", e);
+//				} catch (IOException e) {
+//					Log.e("MessageContentHandler", "MessageContentHandler", e);
+//				}
+//			}
+//		});
+//
+//	}
 
 }

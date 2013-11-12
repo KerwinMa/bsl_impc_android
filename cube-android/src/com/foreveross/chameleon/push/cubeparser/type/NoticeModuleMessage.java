@@ -5,7 +5,6 @@ package com.foreveross.chameleon.push.cubeparser.type;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -17,24 +16,14 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.content.Intent;
-
-import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
-import com.foreveross.chameleon.phone.modules.AttachmentModel;
-import com.foreveross.chameleon.push.client.Constants;
-import com.foreveross.chameleon.push.client.Notifier;
-import com.foreveross.chameleon.push.client.XmppManager;
 import com.foreveross.chameleon.store.core.StaticReference;
-import com.foreveross.chameleon.store.model.ChatGroupModel;
-import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.util.Preferences;
 import com.foreveross.chameleon.util.PushUtil;
 import com.j256.ormlite.field.DatabaseField;
@@ -57,8 +46,6 @@ public class NoticeModuleMessage extends ModuleMessage<NoticeModuleMessage> {
 	private String noticeId;
 	@DatabaseField
 	private String attachment;
-	
-	
 
 	public NoticeModuleMessage() {
 
@@ -85,14 +72,10 @@ public class NoticeModuleMessage extends ModuleMessage<NoticeModuleMessage> {
 	}
 
 	public String getAttachment() {
-		// 将attachment转换为model
-		
 		return attachment;
 	}
 
 	public void setAttachment(String attachment) {
-		
-		// 解析附件JSON
 		this.attachment = attachment;
 	}
 
@@ -172,4 +155,5 @@ public class NoticeModuleMessage extends ModuleMessage<NoticeModuleMessage> {
 
 		return i;
 	}
+
 }

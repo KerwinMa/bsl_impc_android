@@ -118,6 +118,7 @@ public class Application extends android.app.Application implements
 	public static boolean isAppExit = false;
 
 	private int loginType;
+	public  static String  token = null;
 
 	private ActivityManager activityManager = null;
 	private final static Logger log = LoggerFactory
@@ -688,12 +689,13 @@ public class Application extends android.app.Application implements
 		URL.SYNC = URL.BASE_WS + "csair-extension/api/extendClients/android/";
 		URL.UPLOAD = URL.BASE_WS + "csair-mam/api/mam/attachment/upload";
 //		URL.LOGIN = URL.BASE_WS + "csair-extension/api/oalogin/validate";
-		URL.LOGIN = URL.BASE_WS + "csair-extension/api/accounts/login";
+		URL.LOGIN = URL.BASE_WS + "csair-extension/api/csairauth/login";
 		URL.UPDATE = URL.BASE_WS + "csair-mam/api/mam/clients/update/android";
 		URL.UPDATE_RECORD = URL.BASE_WS
 				+ "csair-mam/api/mam/clients/update/appcount/android/";
 		URL.SNAPSHOT = URL.BASE_WS + "csair-mam/api/mam/clients/widget/";
 		URL.PUSH_BASE_URL = URL.BASE_WS + "csair-push/api/";
+		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"receipts/none-receipts/";
 		URL.CHECKIN_URL = URL.PUSH_BASE_URL + "checkinservice/checkins";
 		URL.CHECKOUT_URL = URL.PUSH_BASE_URL + "checkinservice/checkout";
 		URL.FEEDBACK_URL = URL.PUSH_BASE_URL + "receipts";
@@ -740,8 +742,6 @@ public class Application extends android.app.Application implements
 		MucManager.getInstanse(this).offLine();
 		showTopWindow(a);
 		ThreadPlatformUtils.shutdownAllTask();
-        //停止线程池
-        ThreadPool.shutdown();
 		Intent in = new Intent(BroadcastConstans.CANCEELDIOLOG);
 		sendBroadcast(in);
 		IMModelManager.instance().clear();
@@ -998,6 +998,7 @@ public class Application extends android.app.Application implements
 			MinaMobileClient minaMobileClient) {
 		this.sessionId = sessionId;
 		this.minaMobileClient = minaMobileClient;
+		Preferences.saveSessionID(sessionId, Application.sharePref);
 
 		ThreadPool.run(new Runnable() {
 			@Override
