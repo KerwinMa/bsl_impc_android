@@ -1,12 +1,10 @@
 new FastClick(document.body);
-//var myPsw = null;
+var myPsw = null;
+
 window.addEventListener("keydown", function(evt) {
 	if (evt.keyCode === 13) {
 		$("#LoginBtn").trigger("click");
-	}else if(evt.keyCode ===8){
-		myPsw = null;
 	}
-
 });
 $('input').focus(function() {
 	var keyword = $(this).val();
@@ -31,6 +29,9 @@ var clearPsw = function(){
 	}
     if(isRemember==="false"){
         $("#password").val("");
+    }else{
+    	$("#password").val("asof0&4*");
+    	bindClearFakePwdEvent();
     }
 };
 
@@ -41,7 +42,6 @@ $("#username_del").click(function() {
 $("#password_del").click(function() {
 	$(this).parent().hide();
 	$("#password").val("");
-	//myPsw = null;
 });
 $("#username,#password").live("input propertychange", function() {
 	var keyword = $(this).val();
@@ -61,19 +61,18 @@ $("body").click(function() {
 $("#LoginBtn").click(function() {
 	$(this).disabled = "disabled";
 	var username = $("#username").val();
-	/*if($("#password").val()=="" || $("#password").val()==null ||$("#password").val()==undefined){
-		myPsw = null;
-	}
-	if(myPsw !=undefined && myPsw!=null && myPsw!=""){
-		var password = myPsw;
-	}else{
-		var password = $("#password").val();
-	}*/
-	var password = $("#password").val();
+	
+	var password = $("#realpsw").val();
+
 	var isRemember = $('#isRemember:checked').val();
 
 	if (isRemember === undefined) {
 		isRemember = "false";
+	}
+	//是否启用离线登陆
+	var isOffLine = $('#isOffLine:checked').val();
+	if(isOffLine === undefined){
+		isOffLine = "false";
 	}
 
 
@@ -86,15 +85,9 @@ $("#LoginBtn").click(function() {
 
 		err = $.parseJSON(err);
 		$("#LoginBtn").removeAttr("disabled");
-	}, "CubeLogin", "login", [username, password, isRemember]);
+	}, "CubeLogin", "login", [username, password, isRemember, isOffLine]);
 
 });
-
-/*var bodyHeight = $(window).height();
-$("body").css({
-	'height':bodyHeight+'px',
-	'min-height':bodyHeight+'px'
-});*/
 
 var loadLogin = function(){
     var bodyHeight = $(window).height();
@@ -112,6 +105,15 @@ var loadLogin = function(){
                   });
 }
 
+function bindClearFakePwdEvent(){
+	$("#password").bind("click",function(){
+        $("#password").val("");
+        $("#realpsw").val("");
+        $("#password").unbind("click");
+    })
+}
+
+
 var app = {
 	initialize: function() {
 		this.bindEvents();
@@ -125,26 +127,33 @@ var app = {
 		app.receivedEvent('deviceready');
 	},
 	receivedEvent: function(id) {
-		/*var bodyHeight = $(window).height();
-		$("body").css({
-			'height': bodyHeight + 'px',
-			'min-height': bodyHeight + 'px'
-		});*/
+	
 		cordova.exec(function(data) {
 			data = $.parseJSON(data);
 			$("#username").val(data.username);
-			$("#password").val(data.password);
+//			$("#password").val(data.password);
 			
 			if (data.isRemember === true) {
 				$("#isRemember").attr("checked", 'checked');
 				//myPsw = data.password;
 			}
-			/*myPsw = data.password;
-			if(myPsw !=undefined &&myPsw!==null && myPsw!==""){
-				$("#password").val("12345678");
-			}*/
+			
+			if (data.isOffLine === true) {
+				$("#isOffLine").attr("checked", 'checked');
+			}
 
-
+			myPsw = data.password;
+            $("#realpsw").val(data.password);
+            
+			if(myPsw!== undefined &&myPsw!==null && myPsw!==""){
+                $("#password").unbind("input");
+                //如果是显示加密码,则用户点击密码框时清空
+                bindClearFakePwdEvent();
+				$("#password").val("asof0&4*");
+			}
+            $("#password").bind("input",function(){
+                $("#realpsw").val($(this).val());
+            });
 
 		}, function(err) {
 			alert(err);

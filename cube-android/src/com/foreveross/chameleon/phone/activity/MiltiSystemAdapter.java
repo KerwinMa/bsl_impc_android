@@ -24,16 +24,18 @@ public class MiltiSystemAdapter extends BaseAdapter {
 	private String userName;
 	private String passWord;
 	private Boolean isremember;
+	private Boolean isoutline;
 
 	public MiltiSystemAdapter(Context context,
 			List<SystemInfoModel> infoModels, String userName, String passWord,
-			Boolean isremember) {
+			Boolean isremember , Boolean isoutline) {
 		super();
 		this.context = context;
 		this.infoModels = infoModels;
 		this.userName = userName;
 		this.passWord = passWord;
 		this.isremember = isremember;
+		this.isoutline = isoutline;
 	}
 
 	@Override
@@ -79,6 +81,7 @@ public class MiltiSystemAdapter extends BaseAdapter {
 				bundle.put("username", userName);
 				bundle.put("password", passWord);
 				bundle.put("isremember", isremember);
+				bundle.put("isoutline", isoutline);
 				bundle.put("systemmodel", infoModel);
 				EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).post(bundle);
 				if (context instanceof Activity){

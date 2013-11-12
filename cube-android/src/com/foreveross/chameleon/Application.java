@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.foreveross.chameleon.util.*;
+
 import org.acra.CrashReport;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -745,8 +746,13 @@ public class Application extends android.app.Application implements
 		Intent in = new Intent(BroadcastConstans.CANCEELDIOLOG);
 		sendBroadcast(in);
 		IMModelManager.instance().clear();
-		CubeApplication application = getCubeApplication();
-		application.save(application);
+		
+		boolean outline = Preferences.getOutLine(Application.sharePref);
+		if (!outline){
+			CubeApplication application = getCubeApplication();
+			application.save(application);
+		}
+
 		Intent i = null;
 		if (PadUtils.isPad(this)) {
 			i = new Intent();
@@ -807,8 +813,11 @@ public class Application extends android.app.Application implements
 
 		ThreadPlatformUtils.shutdownAllTask();
 		IMModelManager.instance().clear();
-		CubeApplication application = getCubeApplication();
-		application.save(application);
+		boolean outline = Preferences.getOutLine(Application.sharePref);
+		if (!outline){
+			CubeApplication application = getCubeApplication();
+			application.save(application);
+		}
 		activityManager.popAllActivity();
 	}
 

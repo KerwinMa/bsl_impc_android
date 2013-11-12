@@ -13,6 +13,14 @@ public class MultiUserInfoModel extends BaseModel<MultiUserInfoModel, String> {
 
 	}
 
+	public MultiUserInfoModel(String userName, String passWord,
+			String systemId, String mD5Str) {
+		super();
+		this.userName = userName;
+		this.passWord = passWord;
+		this.systemId = systemId;
+		MD5Str = mD5Str;
+	}
 	/**
 	 * [用户名]
 	 */
