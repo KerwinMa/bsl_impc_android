@@ -35,6 +35,7 @@ import java.io.UnsupportedEncodingException;
 public class GeoManager {
 
     private Context mContext;
+    private boolean runFlag  = false;
 
     public GeoManager(Context mContext) {
         this.mContext = mContext;
@@ -50,7 +51,7 @@ public class GeoManager {
                         @Override
                         public void run() {
                             // 获取位置管理服务
-
+                            runFlag = true;
                             String serviceName = Context.LOCATION_SERVICE;
                             final LocationManager locationManager = (LocationManager) ctx.getSystemService(serviceName);
                             // 查找到服务信息

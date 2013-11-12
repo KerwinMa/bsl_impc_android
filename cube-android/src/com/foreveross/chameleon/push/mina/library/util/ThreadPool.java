@@ -26,5 +26,12 @@ public class ThreadPool {
 
 	public static void run(Runnable runnable){
 		pool.execute(runnable);
-	};
+	}
+    public static void shutdown()
+    {
+        if(!pool.isShutdown())
+        {
+            pool.shutdownNow();
+        }
+    }
 }

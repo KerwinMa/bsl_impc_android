@@ -740,6 +740,8 @@ public class Application extends android.app.Application implements
 		MucManager.getInstanse(this).offLine();
 		showTopWindow(a);
 		ThreadPlatformUtils.shutdownAllTask();
+        //停止线程池
+        ThreadPool.shutdown();
 		Intent in = new Intent(BroadcastConstans.CANCEELDIOLOG);
 		sendBroadcast(in);
 		IMModelManager.instance().clear();
