@@ -185,6 +185,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 	public void processLogined(boolean isremember, String name, String pass,
 			boolean isoutline, final CallbackContext callbackContext) {
+		if (StaticReference.userMf == null) {
+			StaticReference.userMC = ModelCreator.build(
+					application, name);
+			StaticReference.userMf = ModelFinder.build(application,
+					name);
+		}
 		final String username = name.trim();
 		final String password = pass.trim();
 		final boolean remember = isremember;
@@ -220,12 +226,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			String systemId = Preferences.getSystemId(Application.sharePref);
 			if ("".equals(systemId)) {
 				try {
-					if (StaticReference.userMf == null) {
-						StaticReference.userMC = ModelCreator.build(
-								application, username);
-						StaticReference.userMf = ModelFinder.build(application,
-								username);
-					}
 					ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
 					arrayList.addAll(StaticReference.userMf
 							.queryBuilder(SystemInfoModel.class).where()
@@ -343,10 +343,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							application.getCubeApplication().loadApplication();
 							cordova.getActivity().startActivity(successIntent);
 							application.setLoginType(TmpConstants.LOGIN_ONLINE);
-							StaticReference.userMC = ModelCreator.build(
-									application, username);
-							StaticReference.userMf = ModelFinder.build(
-									application, username);
 							if (!GeolocationUtil.isOpenGPSSettings(application)) {
 								Intent GPSIntent = new Intent();
 								GPSIntent
@@ -502,6 +498,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 									SystemInfoModel infoModel = new SystemInfoModel(
 											alias, systemId, systemName, curr,
 											username);
+									StaticReference.userMf.createOrUpdate(infoModel);
 									arrayList.add(infoModel);
 								}
 								// 跳转至activty进行选择 传入参数包括list ,userName,passWord

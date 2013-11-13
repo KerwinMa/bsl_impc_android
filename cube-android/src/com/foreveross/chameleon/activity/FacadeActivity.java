@@ -1290,11 +1290,6 @@ public class FacadeActivity extends FragmentActivity implements
 		boolean isoutline = (Boolean) b.get("isoutline");
 		// 保存当前的系统ID
 		Preferences.saveSytemId(model.getSysId(), Application.sharePref);
-		if (StaticReference.userMf == null) {
-			StaticReference.userMC = ModelCreator.build(application, userName);
-			StaticReference.userMf = ModelFinder.build(application, userName);
-		}
-		StaticReference.userMf.createOrUpdate(model);
 		if (activityResultCallback instanceof CubeLoginPlugin) {
 			CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
 			plugin.processLogined(isremember, userName, passWord,isoutline,

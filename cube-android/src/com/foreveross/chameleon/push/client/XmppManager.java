@@ -406,6 +406,8 @@ public class XmppManager {
 						connect(entry.getName(), entry.getPassword());
 					} catch (InterruptedException e) {
 						log.error("connect xmpp server error!", e);
+					} catch (Exception e) {
+						log.error("connect xmpp server error!", e);
 					}
 				}
 			}
@@ -476,6 +478,9 @@ public class XmppManager {
 			log.error("connect() InterruptedException", e);
 			result = false;
 		} catch (ExecutionException e) {
+			log.error("connect() ExecutionException", e);
+			result = false;
+		} catch (Exception e) {
 			log.error("connect() ExecutionException", e);
 			result = false;
 		}

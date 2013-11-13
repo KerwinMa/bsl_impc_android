@@ -117,7 +117,11 @@ function bindClearFakePwdEvent(){
 var app = {
 	initialize: function() {
 		this.bindEvents();
-		loadLogin();
+		setTimeout(function(){
+            loadLogin();
+        },100);
+
+		
 	},
 	bindEvents: function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);

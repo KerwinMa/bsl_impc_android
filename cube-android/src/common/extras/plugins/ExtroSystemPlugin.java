@@ -67,11 +67,13 @@ import com.foreveross.chameleon.util.Preferences;
  * [功能详细描述] 切换登录插件
  * 
  */
-public class CubeSwitchLoginPlugin extends CordovaPlugin {
+public class ExtroSystemPlugin extends CordovaPlugin {
 
 	private final static Logger log = LoggerFactory
-			.getLogger(CubeSwitchLoginPlugin.class);
+			.getLogger(ExtroSystemPlugin.class);
 	private Application application = null;
+	
+	private HttpRequestAsynTask loginTask;
 
 	public boolean isEmpty(String str) {
 		return str == null || str.trim().equals("");
@@ -90,15 +92,16 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 			String systemid = args.getString(2).toLowerCase();
 			processLogined(username, password,systemid,
 					callbackContext);
-		} else if (action.equals("getAccountMessage")) {
-			String username = args.getString(0).toLowerCase();
-			getSystemInfoList(username);
+		} else if (action.equals("cancle")){
+		}else if (action.equals("listAllExtroSystem")) {
+			getSystemInfoList();
 		}
 		return true;
 	}
 
 
-	private ArrayList<SystemInfoModel> getSystemInfoList(String username){
+	private ArrayList<SystemInfoModel> getSystemInfoList(){
+		String username = Preferences.getUserName(Application.sharePref);
 		ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
 		if (StaticReference.userMf == null) {
 			StaticReference.userMC = ModelCreator.build(
@@ -143,7 +146,7 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 			successIntent.putExtra("value", URL.PHONE_MAIN_URL);
 		}
 
-		HttpRequestAsynTask loginTask = new HttpRequestAsynTask(
+		loginTask = new HttpRequestAsynTask(
 				cordova.getActivity()) {
 			@Override
 			protected void doPostExecute(String json) {
@@ -205,10 +208,6 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 							application.getCubeApplication().loadApplication();
 							cordova.getActivity().startActivity(successIntent);
 							application.setLoginType(TmpConstants.LOGIN_ONLINE);
-							StaticReference.userMC = ModelCreator.build(
-									application, username);
-							StaticReference.userMf = ModelFinder.build(
-									application, username);
 							if (!GeolocationUtil.isOpenGPSSettings(application)) {
 								Intent GPSIntent = new Intent();
 								GPSIntent

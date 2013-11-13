@@ -139,7 +139,7 @@ Hello Cordova
     <feature name="CubeSwitchLoginPlugin" >
         <param
             name="android-package"
-            value="common.extras.plugins.CubeSwitchLoginPlugin" />
+            value="common.extras.plugins.ExtroSystemPlugin" />
     </feature>
 
 </widget>
