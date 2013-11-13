@@ -47,7 +47,7 @@ public class ManualCheckUpdateListener extends AutoCheckUpdateListener{
 		
 		AlertDialog dialog = new AlertDialog.Builder(context)
 		.setTitle("版本更新")
-		.setMessage("已是最新版本")
+		.setMessage("暂未发现有版本更新")
 		.setPositiveButton("确定", null)
 		.create();
 		dialog.show();
