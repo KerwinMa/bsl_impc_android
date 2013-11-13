@@ -64,9 +64,33 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 		Application app = Application.class.cast(cordova.getActivity()
 				.getApplicationContext());
 		Log.i("AAA", "action is =" + action);
+		if (args.length() > 0) {
+			String setting = args.getString(0).toLowerCase();
+			if ("setting".equals(setting)) {
+				boolean outline = Preferences.getOutLine(Application.sharePref);
+				if (outline) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							cordova.getActivity());
+					builder.setTitle("提示");
+					builder.setMessage("离线状态不能管理模块");
+					builder.setPositiveButton("确定", null);
+					Dialog dialog = builder.create();
+					dialog.show();
+					return true;
+				}
+			}
+		}
 		if (action.equals("sync")) {
 			// 只有同步不需要用到identifier
+
+			boolean outline = Preferences.getOutLine(Application.sharePref);
 			CubeApplication cubeApp = app.getCubeApplication();
+			if (outline) {
+				cubeApp.loadApplication();
+				callbackContext.success("sync success");
+				return true;
+			}
+
 			cubeApp.sync(new ApplicationSyncListener() {
 
 				@Override
@@ -279,8 +303,8 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 				String type = args.getString(1);
 
 				// 效能监控点击模块保存数据
-				 Application.class.cast(cordova.getActivity().getApplication
-				 ()).saveModulerRecord(module);
+				Application.class.cast(cordova.getActivity().getApplication())
+						.saveModulerRecord(module);
 
 				if (type.equals("main")) {
 					gotoModule(module);
@@ -290,7 +314,8 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 						PropertiesUtil propertiesUtil = PropertiesUtil
 								.readProperties(
 										CubeModuleOperatorPlugin.this.cordova
-												.getActivity(), CubeConstants.CUBE_CONFIG);
+												.getActivity(),
+										CubeConstants.CUBE_CONFIG);
 						String moduleDetailFragment = propertiesUtil.getString(
 								"moduleDetailFragment", "");
 						i.putExtra("identifier", module.getIdentifier());

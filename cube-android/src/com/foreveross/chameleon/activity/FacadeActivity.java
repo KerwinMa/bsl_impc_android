@@ -544,7 +544,6 @@ public class FacadeActivity extends FragmentActivity implements
 		application = Application.class.cast(FacadeActivity.this
 				.getApplication());
 		sendChatNotification = application.getShouldSendChatNotification();
-		Preferences.saveSytemId("", Application.sharePref);
 		sendMessageNotification = application
 				.getShouldSendMessageNotification();
 		sendNoticeNotification = application.getShouldSendNoticeNotification();
@@ -1288,17 +1287,17 @@ public class FacadeActivity extends FragmentActivity implements
 		String userName = (String) b.get("username");
 		String passWord = (String) b.get("password");
 		boolean isremember = (Boolean) b.get("isremember");
+		boolean isoutline = (Boolean) b.get("isoutline");
 		// 保存当前的系统ID
-
+		Preferences.saveSytemId(model.getSystemId(), Application.sharePref);
 		if (StaticReference.userMf == null) {
 			StaticReference.userMC = ModelCreator.build(application, userName);
 			StaticReference.userMf = ModelFinder.build(application, userName);
 		}
 		StaticReference.userMf.createOrUpdate(model);
-		Preferences.saveSytemId(model.getSystemId(), Application.sharePref);
 		if (activityResultCallback instanceof CubeLoginPlugin) {
 			CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
-			plugin.processLogined(isremember, userName, passWord,
+			plugin.processLogined(isremember, userName, passWord,isoutline,
 					plugin.getCallback());
 		}
 
@@ -1444,28 +1443,5 @@ public class FacadeActivity extends FragmentActivity implements
 		if (resultCode != android.app.Activity.RESULT_OK) {
 			return;
 		}
-		switch (requestCode) {
-		case SYSTEMDIALOG:
-			if (getIntent() != null && getIntent().getExtras() != null) {
-				Bundle b = getIntent().getExtras();
-				SystemInfoModel model = (SystemInfoModel) b
-						.getSerializable("systemmodel");
-				model.setCurr(true);
-				String userName = b.getString("userName");
-				String passWord = b.getString("passWord");
-				boolean isremember = b.getBoolean("isremember");
-				// 保存当前的系统ID
-				StaticReference.userMf.createOrUpdate(model);
-				Preferences.saveSytemId(model.getSystemId(),
-						Application.sharePref);
-				if (activityResultCallback instanceof CubeLoginPlugin) {
-					CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
-					plugin.processLogined(isremember, userName, passWord,
-							plugin.getCallback());
-				}
-			}
-			break;
-		}
-
 	}
 }

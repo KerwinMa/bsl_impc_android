@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,7 +15,7 @@ import android.content.Intent;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
-import com.foreveross.chameleon.phone.activity.AdminActivity;
+import com.foreveross.chameleon.phone.activity.SettingsActivity;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.HttpUtil;
@@ -181,7 +182,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 		}
 		else if(action.equals("redirectMain"))
 		{
-			redirect2Main(application);
+			cordova.getActivity().finish();
 		}
 		return true;
 	}

@@ -48,7 +48,8 @@ public class Preferences
     
     /** 系统ID */
     public static final String SYSTEMID = "systemid";
-    
+    /** 离线登录 */
+    public static final String OUTLINE = "outline";
     
     /** 用户昵称 */
     public static final String EXPERT_DATE = "expertDate";
@@ -333,5 +334,17 @@ public class Preferences
     
     public static String getSystemId(SharedPreferences preference) {
    	 return preference.getString(SYSTEMID, "");
+   }
+    
+    /* 记住当前系统是否为离线登录* */
+    public static void saveOutLine(Boolean outline, SharedPreferences preference)
+    {
+        Editor editor = preference.edit();
+        editor.putBoolean(OUTLINE, outline);
+        editor.commit();
+    }
+    
+    public static Boolean getOutLine(SharedPreferences preference) {
+   	 return preference.getBoolean(OUTLINE, false);
    }
 }

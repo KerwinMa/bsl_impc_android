@@ -173,17 +173,19 @@ public class CubeApplication implements Serializable {
 	public void loadApplication() {
 		// 拿到当前登陆的用户名
 		String username = Preferences.getUserName(Application.sharePref);
+		String systemId = Preferences.getSystemId(Application.sharePref);
 		String path = Environment.getExternalStorageDirectory().getPath();
 		if(!tool.isfileExist(path+"/" + context.getPackageName()+"/www", "com.csair.deviceregist"))
 		{
 			tool.CopyAssets("www/com.csair.deviceregist",path+"/" + context.getPackageName()+"/www/com.csair.deviceregist");
 		}
-		if (this.isUserExist(username)) {
+		if (this.isUserExist(username , systemId)) {
 			// 运行目录读取
 			System.out.println("运行时目录读取");
 			
 			String results = tool.readerFile(
-					path + "/" + context.getPackageName(), "Cube-"+username+".json");
+					path + "/" + context.getPackageName() , "Cube-" + username + "_"
+							+ systemId + ".json");
 			CubeApplication app = buildApplication(results);
 			app.context = this.context;
 			// 同步预置模块
@@ -292,11 +294,11 @@ public class CubeApplication implements Serializable {
 	 * 
 	 * @return
 	 */
-	public boolean isUserExist(String name) {
+	public boolean isUserExist(String name,String systemId) {
 		String path = Environment.getExternalStorageDirectory().getPath();
 		Boolean isExist = tool
 				.isfileExist(path + "/" + context.getPackageName(), "Cube-"
-						+ name + ".json");
+						+ name + "_" + systemId + ".json");
 		return isExist;
 	}
 
@@ -312,10 +314,10 @@ public class CubeApplication implements Serializable {
 	public void install() throws IOException {
 		// 拿到当前登陆的用户名
 		String username = Preferences.getUserName(Application.sharePref);
-
-		if (isUserExist(username)) {
+		String systemId = Preferences.getSystemId(Application.sharePref);
+		if (isUserExist(username , systemId)) {
 			tool.deleteFile(Environment.getExternalStorageDirectory().getPath()
-					+ "/" + context.getPackageName() + "/" + "Cube-"+username+".json");
+					+ "/" + context.getPackageName() + "/" + "Cube-" + username + "_" + systemId+".json");
 			System.out.println("删除原有的Cube.json");
 		}
 		// 复制Assets文件夹中的Cube.json 文件到运行时目录。
@@ -823,11 +825,12 @@ public class CubeApplication implements Serializable {
 	public void save(CubeApplication app) {
 
 		String userName = Preferences.getUserName(Application.sharePref);
+		String systemId = Preferences.getSystemId(Application.sharePref);
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 		String json = gson.toJson(app.translate());
 		try {
-			tool.writeToJsonFile("Cube-"+userName,
+			tool.writeToJsonFile("Cube-"+userName + "_" + systemId + ".json",
 					Environment.getExternalStorageDirectory().getPath() + "/"
 							+ context.getPackageName() + "/", json);
 		} catch (Exception e) {

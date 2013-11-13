@@ -96,7 +96,7 @@ public class FileCopeTool {
 			if (!file.exists()) {
 				file.mkdirs(); // 创建文件夹
 			}
-			file = new File(path + fileName + ".json");
+			file = new File(path + fileName);
 			output = new FileOutputStream(file);
 			output.write(json.getBytes());
 			output.flush();
