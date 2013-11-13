@@ -41,13 +41,11 @@ import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
-import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.CheckNetworkUtil;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.GeolocationUtil;
 import com.foreveross.chameleon.util.HttpUtil;
@@ -72,7 +70,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 	}
 
 	private CallbackContext callback = null;
-	
+
 	@Override
 	public boolean execute(String action, JSONArray args,
 			CallbackContext callbackContext) throws JSONException {
@@ -110,7 +108,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		boolean isremember = args.getBoolean(2);
 		boolean isoutline = args.getBoolean(3);
 		if (checkLogin(username, password)) {
-			processLogined(isremember, username, password, isoutline , callbackContext);
+			processLogined(isremember, username, password, isoutline,
+					callbackContext);
 			callback = callbackContext;
 		}
 
@@ -125,11 +124,11 @@ public class CubeLoginPlugin extends CordovaPlugin {
 	 *            2013-9-16 下午3:16:39
 	 */
 	private boolean checkLogin(String username, String password) {
-/*		if (!CheckNetworkUtil.checkNetWork(cordova.getActivity())) {
-			Toast.makeText(cordova.getActivity(), "网络异常，请检查设置！",
-					Toast.LENGTH_SHORT).show();
-			return false;
-		}*/
+		/*
+		 * if (!CheckNetworkUtil.checkNetWork(cordova.getActivity())) {
+		 * Toast.makeText(cordova.getActivity(), "网络异常，请检查设置！",
+		 * Toast.LENGTH_SHORT).show(); return false; }
+		 */
 		if (isEmpty(username) || isEmpty(password)) {
 			Log.i("AAA", "密码账号空");
 			Toast.makeText(cordova.getActivity(), "用户名和密码都不能为空，请检查！",
@@ -165,8 +164,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 	private Intent successIntent = null;
 
-	public void processLogined(boolean isremember, String name, String pass, boolean isoutline,
-			final CallbackContext callbackContext) {
+	public void processLogined(boolean isremember, String name, String pass,
+			boolean isoutline, final CallbackContext callbackContext) {
 		final String username = name.trim();
 		final String password = pass.trim();
 		final boolean remember = isremember;
@@ -197,23 +196,23 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			successIntent.putExtra("isPad", false);
 			successIntent.putExtra("value", URL.PHONE_MAIN_URL);
 		}
-		
-		
-		if (outline){
+
+		if (outline) {
 			String systemId = Preferences.getSystemId(Application.sharePref);
-			if ("".equals(systemId)){
+			if ("".equals(systemId)) {
 				try {
 					if (StaticReference.userMf == null) {
-						StaticReference.userMC = ModelCreator.build(application, username);
-						StaticReference.userMf = ModelFinder.build(application, username);
+						StaticReference.userMC = ModelCreator.build(
+								application, username);
+						StaticReference.userMf = ModelFinder.build(application,
+								username);
 					}
 					ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
 					arrayList.addAll(StaticReference.userMf
-					.queryBuilder(SystemInfoModel.class).where()
-					.eq("userName", username).query());
-					if (arrayList.size() != 0){
-						Intent intent = new Intent(
-								cordova.getActivity(),
+							.queryBuilder(SystemInfoModel.class).where()
+							.eq("userName", username).query());
+					if (arrayList.size() != 0) {
+						Intent intent = new Intent(cordova.getActivity(),
 								MultiSystemActivity.class);
 						Bundle bundle = new Bundle();
 						bundle.putString("username", username);
@@ -223,10 +222,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 						bundle.putSerializable("systemlist", arrayList);
 						intent.putExtras(bundle);
 						cordova.setActivityResultCallback(plugin);
-						cordova.getActivity().startActivityForResult(intent, FacadeActivity.SYSTEMDIALOG);
+						cordova.getActivity().startActivityForResult(intent,
+								FacadeActivity.SYSTEMDIALOG);
 						return;
 					} else {
-						Toast.makeText(cordova.getActivity(), "没有离线登录的系统", Toast.LENGTH_SHORT).show();
+						Toast.makeText(cordova.getActivity(), "没有离线登录的系统",
+								Toast.LENGTH_SHORT).show();
 						return;
 					}
 
@@ -265,7 +266,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 				try {
 					JSONObject jb = new JSONObject(json);
 					boolean error = jb.has("errmsg");
-					
+
 					if (error) {
 						String errmsg = jb.getString("errmsg");
 						Toast.makeText(cordova.getActivity(), errmsg,
@@ -301,11 +302,11 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							String systemId = (String) jsob.get("id");
 							String systemName = (String) jsob.get("sysName");
 							boolean curr = jsob.getBoolean("curr");
-							Preferences.saveSytemId(systemId, Application.sharePref);
+							Preferences.saveSytemId(systemId,
+									Application.sharePref);
 							SystemInfoModel infoModel = new SystemInfoModel(
 									alias, systemId, systemName, curr, username);
-							
-							
+
 							MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
 							multiUserInfoModel.setMD5Str(username, password);
 							multiUserInfoModel.setUserName(username);
@@ -313,7 +314,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							multiUserInfoModel.setSystemId(systemId);
 							// 保存当前的系统ID
 							StaticReference.userMf.createOrUpdate(infoModel);
-							StaticReference.userMf.createOrUpdate(multiUserInfoModel);
+							StaticReference.userMf
+									.createOrUpdate(multiUserInfoModel);
 							markLogined();
 							// 从本地读取文件cube.json
 							application.getCubeApplication().loadApplication();
@@ -476,7 +478,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 											.get("sysName");
 									boolean curr = jsob.getBoolean("curr");
 									SystemInfoModel infoModel = new SystemInfoModel(
-											alias, systemId, systemName, curr , username);
+											alias, systemId, systemName, curr,
+											username);
 									arrayList.add(infoModel);
 								}
 								// 跳转至activty进行选择 传入参数包括list ,userName,passWord
@@ -493,7 +496,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 								bundle.putSerializable("systemlist", arrayList);
 								intent.putExtras(bundle);
 								cordova.setActivityResultCallback(plugin);
-								cordova.getActivity().startActivityForResult(intent, FacadeActivity.SYSTEMDIALOG);
+								cordova.getActivity().startActivityForResult(
+										intent, FacadeActivity.SYSTEMDIALOG);
 							}
 						}
 					}
@@ -549,30 +553,9 @@ public class CubeLoginPlugin extends CordovaPlugin {
 	public CallbackContext getCallback() {
 		return callback;
 	}
-	
-	public void goInToMainOutLine(String username){
-		
-//		StaticReference.userMC = ModelCreator.build(
-//				application, username);
-//		StaticReference.userMf = ModelFinder.build(
-//				application, username);
-//		if (!GeolocationUtil.isOpenGPSSettings(application)) {
-//			Intent GPSIntent = new Intent();
-//			GPSIntent
-//					.setClassName("com.android.settings",
-//							"com.android.settings.widget.SettingsAppWidgetProvider");
-//			GPSIntent
-//					.addCategory("android.intent.category.ALTERNATIVE");
-//			GPSIntent.setData(Uri.parse("custom:3"));
-//			try {
-//				PendingIntent.getBroadcast(application, 0,
-//						GPSIntent, 0).send();
-//			} catch (PendingIntent.CanceledException e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			GeolocationUtil.isGPSON = true;
-//		}
+
+	public void goInToMainOutLine(String username) {
+
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
@@ -580,7 +563,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 				// 查询所有存储用户(没有用户组)
 				List<UserModel> userModels = StaticReference.userMf
 						.queryForAll(UserModel.class);
-
 				for (UserModel userModel : userModels) {
 					// 从json中恢复用户组,多个用户之前共用相用的用户组
 					if (!userModel.hasResoreGroup()) {
@@ -589,31 +571,21 @@ public class CubeLoginPlugin extends CordovaPlugin {
 					// 查找用户历史记录
 					userModel.findHistory(-1);
 					// 如果有相同
-					if (!IMModelManager.instance()
-							.containUserModel(
-									userModel.getJid())) {
-						IMModelManager.instance()
-								.addUserModel(userModel);
+					if (!IMModelManager.instance().containUserModel(
+							userModel.getJid())) {
+						IMModelManager.instance().addUserModel(userModel);
 					}
 
 				}
 
 				List<SessionModel> sessionModels = StaticReference.userMf
 						.queryForAll(SessionModel.class);
-				IMModelManager.instance()
-						.getSessionContainer()
+				IMModelManager.instance().getSessionContainer()
 						.addStuffs(sessionModels);
-
-				// 更新用户标签
-//				application.refreshRegisrer();
 
 				return null;
 			}
-
 			protected void onPostExecute(Void result) {
-//				application.loginChatClient(username,
-//						username);
-
 			};
 		}.execute();
 	}
