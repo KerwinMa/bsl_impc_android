@@ -39,11 +39,14 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -67,13 +70,15 @@ import com.foreveross.chameleon.util.Preferences;
  * [功能详细描述] 切换登录插件
  * 
  */
-public class ExtroSystemPlugin extends CordovaPlugin {
+public class ExtroSystem extends CordovaPlugin {
 
 	private final static Logger log = LoggerFactory
-			.getLogger(ExtroSystemPlugin.class);
+			.getLogger(ExtroSystem.class);
 	private Application application = null;
 	
 	private HttpRequestAsynTask loginTask;
+	
+	private boolean logining;
 
 	public boolean isEmpty(String str) {
 		return str == null || str.trim().equals("");
@@ -87,12 +92,15 @@ public class ExtroSystemPlugin extends CordovaPlugin {
 				.getApplicationContext());
 		log.debug("execute action {} in backgrund thread!", action);
 		if (action.equals("login")) {
+			logining = true;
 			String username = args.getString(0).toLowerCase();
 			String password = args.getString(1).toLowerCase();
 			String systemid = args.getString(2).toLowerCase();
 			processLogined(username, password,systemid,
 					callbackContext);
 		} else if (action.equals("cancle")){
+			loginTask.cancel(true);
+			logining = false;
 		}else if (action.equals("listAllExtroSystem")) {
 			getSystemInfoList();
 		}
@@ -148,8 +156,22 @@ public class ExtroSystemPlugin extends CordovaPlugin {
 
 		loginTask = new HttpRequestAsynTask(
 				cordova.getActivity()) {
+			
+			@Override
+			protected String doInBackground(String... params) { // 后台执行
+				String result = super.doInBackground(params);
+				if (logining){
+					return result;
+				} else {
+					return null;
+				}
+			}
+			
 			@Override
 			protected void doPostExecute(String json) {
+				if (json == null){
+					return;
+				}
 				try {
 					JSONObject jb = new JSONObject(json);
 					boolean error = jb.has("errmsg");
