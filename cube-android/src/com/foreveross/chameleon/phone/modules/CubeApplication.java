@@ -822,7 +822,7 @@ public class CubeApplication implements Serializable {
 
 	public void save(CubeApplication app) {
 
-		String userName = Preferences.getCurrentUserName(Application.sharePref);
+		String userName = Preferences.getUserName(Application.sharePref);
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 		String json = gson.toJson(app.translate());

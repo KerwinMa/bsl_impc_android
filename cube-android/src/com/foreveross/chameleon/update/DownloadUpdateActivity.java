@@ -66,7 +66,7 @@ public class DownloadUpdateActivity extends Activity {
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressDialog.setMax(100);
-		progressDialog.setTitle("版本更新");
+		progressDialog.setTitle("南航移动应用平台版本更新");
 		progressDialog.setMessage("下载中，请稍候...");
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.setCancelable(false);
