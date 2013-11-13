@@ -4,9 +4,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -46,9 +58,12 @@ import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.store.model.UserModel;
+import android.util.Base64;
+import com.foreveross.chameleon.util.DESEncrypt;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.GeolocationUtil;
 import com.foreveross.chameleon.util.HttpUtil;
+import com.foreveross.chameleon.util.MyBase64;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Preferences;
 
@@ -521,7 +536,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		loginTask.setNeedProgressDialog(true);
 		StringBuilder sb = new StringBuilder();
 		sb = sb.append("Form:username=").append(username).append(";password=")
-				.append(password).append(";deviceId=")
+				.append(decryptString(password)).append(";deviceId=")
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
@@ -589,4 +604,55 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			};
 		}.execute();
 	}
+	
+	private String decryptString(String passWord) {
+		String keySrc = cordova.getActivity().getPackageName();
+		byte[] key = keySrc.getBytes(); // 长度最少要8个字符
+		String encBase64Content = null;
+		try {
+			byte[] encContent = encrypt(key, passWord);
+			encBase64Content = Base64.encodeToString(encContent, Base64.DEFAULT);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return encBase64Content;
+	}
+	
+    public static byte[] encrypt(byte[] rawKeyData, String str)
+            throws InvalidKeyException, NoSuchAlgorithmException,
+            IllegalBlockSizeException, BadPaddingException,
+                NoSuchPaddingException, InvalidKeySpecException{
+            // DES算法要求有一个可信任的随机数源
+            SecureRandom sr = new SecureRandom();
+            // 从原始密匙数据创建一个DESKeySpec对象
+            DESKeySpec dks = new DESKeySpec(rawKeyData);
+            // 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            SecretKey key = keyFactory.generateSecret(dks);
+            // Cipher对象实际完成加密操作
+            Cipher cipher = Cipher.getInstance("DES");
+            // 用密匙初始化Cipher对象
+            cipher.init(Cipher.ENCRYPT_MODE, key, sr);
+            // 现在，获取数据并加密
+            byte data[] = str.getBytes();
+            // 正式执行加密操作
+            byte[] encryptedData = cipher.doFinal(data);
+            return encryptedData;
+        }
 }
