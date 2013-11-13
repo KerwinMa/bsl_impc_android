@@ -4,9 +4,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -22,13 +34,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,7 +47,6 @@ import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
-import com.foreveross.chameleon.phone.activity.MultiSystemActivity;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
@@ -67,7 +77,6 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 		return str == null || str.trim().equals("");
 	}
 
-	private CallbackContext callback = null;
 
 	@Override
 	public boolean execute(String action, JSONArray args,
@@ -76,9 +85,14 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 				.getApplicationContext());
 		log.debug("execute action {} in backgrund thread!", action);
 		if (action.equals("login")) {
-			Preferences.saveSytemId("", Application.sharePref);
+			String username = args.getString(0).toLowerCase();
+			String password = args.getString(1).toLowerCase();
+			String systemid = args.getString(2).toLowerCase();
+			processLogined(username, password,systemid,
+					callbackContext);
 		} else if (action.equals("getAccountMessage")) {
-
+			String username = args.getString(0).toLowerCase();
+			getSystemInfoList(username);
 		}
 		return true;
 	}
@@ -95,20 +109,23 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 		try {
 			arrayList.addAll(StaticReference.userMf
 					.queryBuilder(SystemInfoModel.class).where()
-					.eq("userName", username).query());
+					.eq("username", username).query());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 		return arrayList;
 	}
 	
 	private Intent successIntent = null;
 	
-	public void processLogined(String name, String pass,
+	public void processLogined(String name, String pass, String id,
 			final CallbackContext callbackContext) {
 		final String username = name.trim();
 		final String password = pass.trim();
+		final String systemid = id.trim();
 		String deviceId = DeviceInfoUtil.getDeviceId(cordova.getActivity());
 		String appId = cordova.getActivity().getPackageName();
 		if (PadUtils.isPad(application)) {
@@ -331,41 +348,6 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 							}.execute();
 							// initXmppDataFromDB();
 
-						} else {
-							// 如果没有错误信息，但登录不成功，弹出系统选择
-							boolean showOpt = jb.getBoolean("showOpt");
-							if (showOpt) {
-								ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
-								JSONArray jay = jb.getJSONArray("authSysList");
-								for (int i = 0; i < jay.length(); i++) {
-									JSONObject jsob = (JSONObject) jay.get(i);
-									String alias = (String) jsob.get("alias");
-									String systemId = (String) jsob.get("id");
-									String systemName = (String) jsob
-											.get("sysName");
-									boolean curr = jsob.getBoolean("curr");
-									SystemInfoModel infoModel = new SystemInfoModel(
-											alias, systemId, systemName, curr,
-											username);
-									arrayList.add(infoModel);
-								}
-								// 跳转至activty进行选择 传入参数包括list ,userName,passWord
-								// , isremember
-
-								Intent intent = new Intent(
-										cordova.getActivity(),
-										MultiSystemActivity.class);
-								Bundle bundle = new Bundle();
-								bundle.putString("username", username);
-								bundle.putString("password", password);
-								bundle.putBoolean("isremember", remember);
-								bundle.putBoolean("isoutline", outline);
-								bundle.putSerializable("systemlist", arrayList);
-								intent.putExtras(bundle);
-								cordova.setActivityResultCallback(plugin);
-								cordova.getActivity().startActivityForResult(
-										intent, FacadeActivity.SYSTEMDIALOG);
-							}
 						}
 					}
 				} catch (JSONException e) {
@@ -388,13 +370,83 @@ public class CubeSwitchLoginPlugin extends CordovaPlugin {
 		loginTask.setNeedProgressDialog(true);
 		StringBuilder sb = new StringBuilder();
 		sb = sb.append("Form:username=").append(username).append(";password=")
-				.append(decryptString(password)).append(";deviceId=")
+				.append(encryptString(password)).append(";deviceId=")
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
-				.append(Preferences.getSystemId(Application.sharePref));
+				.append(systemid);
 		String s = sb.toString();
 		loginTask.execute(URL.LOGIN, s, HttpUtil.UTF8_ENCODING,
 				HttpUtil.HTTP_POST);
 	}
+	
+	public void markLogined() {
+		Application application = (Application) cordova.getActivity()
+				.getApplication();
+		application.setHasLogined(true);
+	}
+	
+	public String loginResultMessage(String message, boolean isSuccess) {
+
+		try {
+			JSONObject jb = new JSONObject();
+			jb.put("isSuccess", isSuccess);
+			jb.put("message", message);
+			return jb.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	private String encryptString(String passWord) {
+		String keySrc = cordova.getActivity().getPackageName();
+		byte[] key = keySrc.getBytes(); // 长度最少要8个字符
+		String encBase64Content = null;
+		try {
+			byte[] encContent = encrypt(key, passWord);
+			encBase64Content = Base64.encodeToString(encContent, Base64.DEFAULT);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return encBase64Content;
+	}
+	
+    public byte[] encrypt(byte[] rawKeyData, String str)
+            throws InvalidKeyException, NoSuchAlgorithmException,
+            IllegalBlockSizeException, BadPaddingException,
+                NoSuchPaddingException, InvalidKeySpecException{
+            // DES算法要求有一个可信任的随机数源
+            SecureRandom sr = new SecureRandom();
+            // 从原始密匙数据创建一个DESKeySpec对象
+            DESKeySpec dks = new DESKeySpec(rawKeyData);
+            // 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            SecretKey key = keyFactory.generateSecret(dks);
+            // Cipher对象实际完成加密操作
+            Cipher cipher = Cipher.getInstance("DES");
+            // 用密匙初始化Cipher对象
+            cipher.init(Cipher.ENCRYPT_MODE, key, sr);
+            // 现在，获取数据并加密
+            byte data[] = str.getBytes();
+            // 正式执行加密操作
+            byte[] encryptedData = cipher.doFinal(data);
+            return encryptedData;
+        }
 }

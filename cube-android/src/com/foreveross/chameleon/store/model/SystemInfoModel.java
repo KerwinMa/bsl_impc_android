@@ -3,6 +3,7 @@ package com.foreveross.chameleon.store.model;
 import java.io.Serializable;
 
 import com.foreveross.chameleon.store.core.BaseModel;
+import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -10,14 +11,15 @@ import com.j256.ormlite.table.DatabaseTable;
 public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  implements Serializable{
 
 	private static final long serialVersionUID = 28849247123732893L;
-	public SystemInfoModel(String alias, String systemId, String systemName,
-			boolean curr, String userName) {
+
+	public SystemInfoModel(String alias, String sysId, String sysnName,
+			boolean curr, String username) {
 		super();
 		this.alias = alias;
-		this.systemId = systemId;
-		this.systemName = systemName;
+		this.sysId = sysId;
+		this.sysnName = sysnName;
 		this.curr = curr;
-		this.userName = userName;
+		this.username = username;
 	}
 
 	public SystemInfoModel() {
@@ -33,12 +35,12 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 	 * [当前系统ID]
 	 */
 	@DatabaseField(id = true, generatedId = false)
-	private String systemId = null;
+	private String sysId = null;
 	/**
 	 * [系统名称]
 	 */
 	@DatabaseField
-	private String systemName = null;
+	private String sysnName = null;
 	
 	/**
 	 * [是否为当前登录系统]
@@ -50,8 +52,8 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 	 * [使用这个系统的用户]
 	 */
 	@DatabaseField
-	private String  userName = null;
-	
+	private String  username = null;
+
 	public String getAlias() {
 		return alias;
 	}
@@ -60,20 +62,20 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 		this.alias = alias;
 	}
 
-	public String getSystemId() {
-		return systemId;
+	public String getSysId() {
+		return sysId;
 	}
 
-	public void setSystemId(String systemId) {
-		this.systemId = systemId;
+	public void setSysId(String sysId) {
+		this.sysId = sysId;
 	}
 
-	public String getSystemName() {
-		return systemName;
+	public String getSysnName() {
+		return sysnName;
 	}
 
-	public void setSystemName(String systemName) {
-		this.systemName = systemName;
+	public void setSysnName(String sysnName) {
+		this.sysnName = sysnName;
 	}
 
 	public boolean isCurr() {
@@ -82,7 +84,20 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 
 	public void setCurr(boolean curr) {
 		this.curr = curr;
-	}	
+	}
 
+	public String getUsername() {
+		return username;
+	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@Override
+	public String toString() {
+		return "SystemInfoModel [alias=" + alias + ", sysId=" + sysId
+				+ ", sysnName=" + sysnName + ", curr=" + curr + ", username="
+				+ username + "]";
+	}
 }

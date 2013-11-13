@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -58,7 +59,9 @@ import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.store.model.UserModel;
+
 import android.util.Base64;
+
 import com.foreveross.chameleon.util.DESEncrypt;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.GeolocationUtil;
@@ -66,6 +69,7 @@ import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.MyBase64;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Preferences;
+import com.google.gson.Gson;
 
 /**
  * <BR>
@@ -225,7 +229,10 @@ public class CubeLoginPlugin extends CordovaPlugin {
 					ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
 					arrayList.addAll(StaticReference.userMf
 							.queryBuilder(SystemInfoModel.class).where()
-							.eq("userName", username).query());
+							.eq("username", username).query());
+					Gson gson = new Gson();
+					String s2 = gson.toJson(arrayList);
+					Log.i("test", "s2" + s2);
 					if (arrayList.size() != 0) {
 						Intent intent = new Intent(cordova.getActivity(),
 								MultiSystemActivity.class);
@@ -536,11 +543,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		loginTask.setNeedProgressDialog(true);
 		StringBuilder sb = new StringBuilder();
 		sb = sb.append("Form:username=").append(username).append(";password=")
-				.append(decryptString(password)).append(";deviceId=")
+				.append((encryptString(password))).append(";deviceId=")
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
-				.append(Preferences.getSystemId(Application.sharePref));
+				.append(Preferences.getSystemId(Application.sharePref))
+				.append(";encrypt=").append(true);
 		String s = sb.toString();
 		loginTask.execute(URL.LOGIN, s, HttpUtil.UTF8_ENCODING,
 				HttpUtil.HTTP_POST);
@@ -605,7 +613,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		}.execute();
 	}
 	
-	private String decryptString(String passWord) {
+	private String encryptString(String passWord) {
 		String keySrc = cordova.getActivity().getPackageName();
 		byte[] key = keySrc.getBytes(); // 长度最少要8个字符
 		String encBase64Content = null;
@@ -634,7 +642,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		return encBase64Content;
 	}
 	
-    public static byte[] encrypt(byte[] rawKeyData, String str)
+    public byte[] encrypt(byte[] rawKeyData, String str)
             throws InvalidKeyException, NoSuchAlgorithmException,
             IllegalBlockSizeException, BadPaddingException,
                 NoSuchPaddingException, InvalidKeySpecException{

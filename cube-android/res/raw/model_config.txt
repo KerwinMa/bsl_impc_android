@@ -1,5 +1,5 @@
 #
-# generated on 2013/11/12 10:15:50
+# generated on 2013/11/13 11:30:03
 #
 # --table-start--
 dataClass=com.foreveross.chameleon.push.cubeparser.type.AbstractMessage
@@ -449,17 +449,17 @@ tableName=SystemInfoModel
 fieldName=alias
 # --field-end--
 # --field-start--
-fieldName=systemId
+fieldName=sysId
 id=true
 # --field-end--
 # --field-start--
-fieldName=systemName
+fieldName=sysnName
 # --field-end--
 # --field-start--
 fieldName=curr
 # --field-end--
 # --field-start--
-fieldName=userName
+fieldName=username
 # --field-end--
 # --table-fields-end--
 # --table-end--
