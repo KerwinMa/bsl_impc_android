@@ -1,5 +1,5 @@
 #
-# generated on 2013/11/13 11:30:03
+# generated on 2013/11/14 12:19:21
 #
 # --table-start--
 dataClass=com.foreveross.chameleon.push.cubeparser.type.AbstractMessage
@@ -392,7 +392,6 @@ tableName=MultiUserInfoModel
 # --table-fields-start--
 # --field-start--
 fieldName=userName
-id=true
 # --field-end--
 # --field-start--
 fieldName=passWord
@@ -402,6 +401,7 @@ fieldName=systemId
 # --field-end--
 # --field-start--
 fieldName=MD5Str
+id=true
 # --field-end--
 # --table-fields-end--
 # --table-end--

@@ -9,10 +9,22 @@ package com.foreveross.chameleon.util;
 //import java.io.FileWriter;
 //import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import android.util.Base64;
 
 /**
  * @author Administrator
@@ -186,5 +198,65 @@ public class DESEncrypt {
 		// byte[] srcBytes =
 		// TripleDESEncrypt.getInstance().decryptMode(encrypt.decode(encodedString));
 		// System.out.println("解密后的字符串:" + (new String(srcBytes,"UTF-8")));
+	}
+	
+	public static String encryptString(String keySrc , String passWord) {
+		byte[] key = keySrc.getBytes(); // 长度最少要8个字符
+		String encBase64Content = null;
+		try {
+			byte[] encContent = encrypt(key, passWord);
+			encBase64Content = Base64
+					.encodeToString(encContent, Base64.DEFAULT);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return encBase64Content;
+	}
+
+	public static byte[] encrypt(byte[] rawKeyData, String str)
+			throws InvalidKeyException, NoSuchAlgorithmException,
+			IllegalBlockSizeException, BadPaddingException,
+			NoSuchPaddingException, InvalidKeySpecException{
+		byte[] iv = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+		// DES算法要求有一个可信任的随机数源
+		// SecureRandom sr = new SecureRandom();
+		IvParameterSpec zeroIv = new IvParameterSpec(iv);
+		// 从原始密匙数据创建一个DESKeySpec对象
+		DESKeySpec dks = new DESKeySpec(rawKeyData);
+		// 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
+		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+		SecretKey key = keyFactory.generateSecret(dks);
+
+		// Cipher对象实际完成加密操作
+		Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+		// 用密匙初始化Cipher对象
+		try {
+			cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
+		} catch (InvalidAlgorithmParameterException e) {
+			e.printStackTrace(); // To change body of catch statement use File |
+									// Settings | File Templates.
+		}
+		// 现在，获取数据并加密
+		byte data[] = str.getBytes();
+		// 正式执行加密操作
+		byte[] encryptedData = cipher.doFinal(data);
+		return encryptedData;
 	}
 }

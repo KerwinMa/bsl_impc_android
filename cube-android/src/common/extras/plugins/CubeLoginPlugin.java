@@ -60,6 +60,7 @@ import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.util.DESEncrypt;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.GeolocationUtil;
 import com.foreveross.chameleon.util.HttpUtil;
@@ -232,9 +233,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 						MultiUserInfoModel model = new MultiUserInfoModel();
 						model.setUserName(systemInfoModel.getUsername());
 						model.setSystemId(systemInfoModel.getSysId());
+						List<MultiUserInfoModel> list = StaticReference.userMf
+								.queryForMatching(model);
+						if (list.size() > 0){
+							showArrayList.add(systemInfoModel);
+						}
 					}
-					
-					
 					
 					if (arrayList.size() != 0) {
 						Intent intent = new Intent(cordova.getActivity(),
@@ -244,7 +248,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 						bundle.putString("password", password);
 						bundle.putBoolean("isremember", remember);
 						bundle.putBoolean("isoutline", outline);
-						bundle.putSerializable("systemlist", arrayList);
+						bundle.putSerializable("systemlist", showArrayList);
 						intent.putExtras(bundle);
 						cordova.setActivityResultCallback(plugin);
 						cordova.getActivity().startActivityForResult(intent,
@@ -262,7 +266,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 				}
 			} else {
 				MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
-				multiUserInfoModel.setMD5Str(username, password);
+				multiUserInfoModel.setMD5Str(username, systemId);
 				multiUserInfoModel.setUserName(username);
 				multiUserInfoModel.setPassWord(password);
 				multiUserInfoModel.setSystemId(systemId);
@@ -543,8 +547,10 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		loginTask.setShowProgressDialog(true);
 		loginTask.setNeedProgressDialog(true);
 		StringBuilder sb = new StringBuilder();
+		String encryptPass = DESEncrypt.encryptString(cordova.getActivity()
+				.getPackageName(), password);
 		sb = sb.append("Form:username=").append(username).append(";password=")
-				.append((encryptString(password))).append(";deviceId=")
+				.append(encryptPass).append(";deviceId=")
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
@@ -613,66 +619,5 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			protected void onPostExecute(Void result) {
 			};
 		}.execute();
-	}
-
-	private String encryptString(String passWord) {
-		String keySrc = cordova.getActivity().getPackageName();
-		byte[] key = keySrc.getBytes(); // 长度最少要8个字符
-		String encBase64Content = null;
-		try {
-			byte[] encContent = encrypt(key, passWord);
-			encBase64Content = Base64
-					.encodeToString(encContent, Base64.DEFAULT);
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return encBase64Content;
-	}
-
-	public static byte[] encrypt(byte[] rawKeyData, String str)
-			throws InvalidKeyException, NoSuchAlgorithmException,
-			IllegalBlockSizeException, BadPaddingException,
-			NoSuchPaddingException, InvalidKeySpecException{
-		byte[] iv = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-		// DES算法要求有一个可信任的随机数源
-		// SecureRandom sr = new SecureRandom();
-		IvParameterSpec zeroIv = new IvParameterSpec(iv);
-		// 从原始密匙数据创建一个DESKeySpec对象
-		DESKeySpec dks = new DESKeySpec(rawKeyData);
-		// 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
-		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-		SecretKey key = keyFactory.generateSecret(dks);
-
-		// Cipher对象实际完成加密操作
-		Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-		// 用密匙初始化Cipher对象
-		try {
-			cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
-		} catch (InvalidAlgorithmParameterException e) {
-			e.printStackTrace(); // To change body of catch statement use File |
-									// Settings | File Templates.
-		}
-		// 现在，获取数据并加密
-		byte data[] = str.getBytes();
-		// 正式执行加密操作
-		byte[] encryptedData = cipher.doFinal(data);
-		return encryptedData;
 	}
 }

@@ -50,6 +50,7 @@ import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
+import com.foreveross.chameleon.phone.activity.MultiSystemActivity;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
@@ -59,11 +60,13 @@ import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.util.DESEncrypt;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.GeolocationUtil;
 import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Preferences;
+import com.google.gson.Gson;
 
 /**
  * <BR>
@@ -102,7 +105,10 @@ public class ExtroSystem extends CordovaPlugin {
 			loginTask.cancel(true);
 			logining = false;
 		}else if (action.equals("listAllExtroSystem")) {
-			getSystemInfoList();
+			ArrayList<SystemInfoModel> list = getSystemInfoList();
+			Gson gson = new Gson();
+			String jsonStr = gson.toJson(list);
+			callbackContext.success(jsonStr);
 		}
 		return true;
 	}
@@ -390,12 +396,15 @@ public class ExtroSystem extends CordovaPlugin {
 		loginTask.setShowProgressDialog(true);
 		loginTask.setNeedProgressDialog(true);
 		StringBuilder sb = new StringBuilder();
+		String encryptPass = DESEncrypt.encryptString(cordova.getActivity()
+				.getPackageName(), password);
 		sb = sb.append("Form:username=").append(username).append(";password=")
-				.append(encryptString(password)).append(";deviceId=")
+				.append(encryptPass).append(";deviceId=")
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
-				.append(systemid);
+				.append(Preferences.getSystemId(Application.sharePref))
+				.append(";encrypt=").append(true);
 		String s = sb.toString();
 		loginTask.execute(URL.LOGIN, s, HttpUtil.UTF8_ENCODING,
 				HttpUtil.HTTP_POST);
@@ -419,55 +428,4 @@ public class ExtroSystem extends CordovaPlugin {
 		}
 		return "";
 	}
-	
-	private String encryptString(String passWord) {
-		String keySrc = cordova.getActivity().getPackageName();
-		byte[] key = keySrc.getBytes(); // 长度最少要8个字符
-		String encBase64Content = null;
-		try {
-			byte[] encContent = encrypt(key, passWord);
-			encBase64Content = Base64.encodeToString(encContent, Base64.DEFAULT);
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return encBase64Content;
-	}
-	
-    public byte[] encrypt(byte[] rawKeyData, String str)
-            throws InvalidKeyException, NoSuchAlgorithmException,
-            IllegalBlockSizeException, BadPaddingException,
-                NoSuchPaddingException, InvalidKeySpecException{
-            // DES算法要求有一个可信任的随机数源
-            SecureRandom sr = new SecureRandom();
-            // 从原始密匙数据创建一个DESKeySpec对象
-            DESKeySpec dks = new DESKeySpec(rawKeyData);
-            // 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-            SecretKey key = keyFactory.generateSecret(dks);
-            // Cipher对象实际完成加密操作
-            Cipher cipher = Cipher.getInstance("DES");
-            // 用密匙初始化Cipher对象
-            cipher.init(Cipher.ENCRYPT_MODE, key, sr);
-            // 现在，获取数据并加密
-            byte data[] = str.getBytes();
-            // 正式执行加密操作
-            byte[] encryptedData = cipher.doFinal(data);
-            return encryptedData;
-        }
 }

@@ -24,7 +24,7 @@ public class MultiUserInfoModel extends BaseModel<MultiUserInfoModel, String> {
 	/**
 	 * [用户名]
 	 */
-	@DatabaseField(id = true, generatedId = false)
+	@DatabaseField
 	private String userName = null;
 	/**
 	 * [密码]
@@ -40,7 +40,7 @@ public class MultiUserInfoModel extends BaseModel<MultiUserInfoModel, String> {
 	/**
 	 * [MD5Str]
 	 */
-	@DatabaseField
+	@DatabaseField(id = true, generatedId = false)
 	private String MD5Str = null;
 
 	public String getUserName() {
@@ -71,10 +71,10 @@ public class MultiUserInfoModel extends BaseModel<MultiUserInfoModel, String> {
 		return MD5Str;
 	}
 
-	public void setMD5Str(String userName , String passWord) {
+	public void setMD5Str(String userName , String sysId) {
 		String mD5Str = null;
 		try {
-			mD5Str = md5(userName, passWord);
+			mD5Str = md5(userName, sysId);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
