@@ -24,7 +24,7 @@ public class URL {
 	public static String PAD_REGISTER_URL = null;
 	
 	public static String UPLOAD_URL = BASE_WEB + "csair-mam/attachment/clientUpload";
-	public static String SYNC = BASE_WS + "csair-extension/api/extendClients/android/";
+	public static String SYNC = BASE_WS + "csair-extension/api/csairauth/privileges";
 	public static String UPLOAD = BASE_WS + "csair-mam/api/mam/attachment/upload";
 	public static String LOGIN = BASE_WS+ "csair-extension/api/csairauth/login";
 	public static String UPDATE = BASE_WS+ "csair-mam/api/mam/clients/update/android";
