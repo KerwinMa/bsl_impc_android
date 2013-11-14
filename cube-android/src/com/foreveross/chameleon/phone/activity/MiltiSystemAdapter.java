@@ -71,7 +71,7 @@ public class MiltiSystemAdapter extends BaseAdapter {
 		}
 
 		final SystemInfoModel infoModel = infoModels.get(position);
-		holder.alias.setText(infoModel.getSysnName());
+		holder.alias.setText(infoModel.getSysName());
 		holder.alias.setOnClickListener(new OnClickListener() {
 			
 			@Override

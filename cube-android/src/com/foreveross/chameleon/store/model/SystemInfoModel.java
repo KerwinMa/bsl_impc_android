@@ -3,7 +3,6 @@ package com.foreveross.chameleon.store.model;
 import java.io.Serializable;
 
 import com.foreveross.chameleon.store.core.BaseModel;
-import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -12,12 +11,12 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 
 	private static final long serialVersionUID = 28849247123732893L;
 
-	public SystemInfoModel(String alias, String sysId, String sysnName,
+	public SystemInfoModel(String alias, String sysId, String sysName,
 			boolean curr, String username) {
 		super();
 		this.alias = alias;
 		this.sysId = sysId;
-		this.sysnName = sysnName;
+		this.sysName = sysName;
 		this.curr = curr;
 		this.username = username;
 	}
@@ -40,7 +39,7 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 	 * [系统名称]
 	 */
 	@DatabaseField
-	private String sysnName = null;
+	private String sysName = null;
 	
 	/**
 	 * [是否为当前登录系统]
@@ -70,12 +69,12 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 		this.sysId = sysId;
 	}
 
-	public String getSysnName() {
-		return sysnName;
+	public String getSysName() {
+		return sysName;
 	}
 
-	public void setSysnName(String sysnName) {
-		this.sysnName = sysnName;
+	public void setSysName(String sysName) {
+		this.sysName = sysName;
 	}
 
 	public boolean isCurr() {
@@ -97,7 +96,7 @@ public class SystemInfoModel extends BaseModel<SystemInfoModel, String>  impleme
 	@Override
 	public String toString() {
 		return "SystemInfoModel [alias=" + alias + ", sysId=" + sysId
-				+ ", sysnName=" + sysnName + ", curr=" + curr + ", username="
+				+ ", sysName=" + sysName + ", curr=" + curr + ", username="
 				+ username + "]";
 	}
 }
