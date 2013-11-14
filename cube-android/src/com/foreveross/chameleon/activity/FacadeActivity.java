@@ -86,6 +86,7 @@ import com.foreveross.chameleon.phone.muc.MucManagerFragment;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
+import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
 import com.foreveross.chameleon.update.AutoCheckUpdateListener;
 import com.foreveross.chameleon.update.CheckUpdateTask;
@@ -98,6 +99,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 
 import common.extras.plugins.CubeLoginPlugin;
+import common.extras.plugins.ExtroSystem;
 
 public class FacadeActivity extends FragmentActivity implements
 		CordovaInterface {
@@ -1293,6 +1295,19 @@ public class FacadeActivity extends FragmentActivity implements
 		if (activityResultCallback instanceof CubeLoginPlugin) {
 			CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
 			plugin.processLogined(isremember, userName, passWord,isoutline,
+					plugin.getCallback());
+		} else if (activityResultCallback instanceof ExtroSystem){
+			MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
+			multiUserInfoModel.setUserName(userName);
+			multiUserInfoModel.setSystemId(model.getSysId());
+			List<MultiUserInfoModel> list = StaticReference.userMf
+					.queryForMatching(multiUserInfoModel);
+			if (list.size() > 0){
+				MultiUserInfoModel multiModel = list.get(0);
+				passWord = multiModel.getPassWord();
+			}
+			ExtroSystem plugin = (ExtroSystem) activityResultCallback;
+			plugin.processLogined(userName, passWord , model.getSysId() , model ,
 					plugin.getCallback());
 		}
 

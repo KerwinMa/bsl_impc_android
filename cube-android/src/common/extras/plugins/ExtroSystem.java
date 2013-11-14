@@ -82,6 +82,8 @@ public class ExtroSystem extends CordovaPlugin {
 	private HttpRequestAsynTask loginTask;
 	
 	private boolean logining;
+	
+	private CallbackContext callback = null;
 
 	public boolean isEmpty(String str) {
 		return str == null || str.trim().equals("");
@@ -91,24 +93,35 @@ public class ExtroSystem extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args,
 			CallbackContext callbackContext) throws JSONException {
+		callback = callbackContext;
 		application = Application.class.cast(this.cordova.getActivity()
 				.getApplicationContext());
 		log.debug("execute action {} in backgrund thread!", action);
 		if (action.equals("login")) {
-			logining = true;
 			String username = args.getString(0).toLowerCase();
 			String password = args.getString(1).toLowerCase();
 			String systemid = args.getString(2).toLowerCase();
-			processLogined(username, password,systemid,
+			processLogined(username, password,systemid, null,
 					callbackContext);
 		} else if (action.equals("cancle")){
 			loginTask.cancel(true);
 			logining = false;
 		}else if (action.equals("listAllExtroSystem")) {
 			ArrayList<SystemInfoModel> list = getSystemInfoList();
-			Gson gson = new Gson();
-			String jsonStr = gson.toJson(list);
-			callbackContext.success(jsonStr);
+			final ExtroSystem plugin = this;
+			cordova.setActivityResultCallback(plugin);
+			Intent intent = new Intent(cordova.getActivity(),
+					MultiSystemActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putString("username", Preferences.getUserName(Application.sharePref));
+			bundle.putString("password", "");
+			bundle.putBoolean("isremember", true);
+			bundle.putBoolean("isoutline", false);
+			bundle.putSerializable("systemlist", list);
+			intent.putExtras(bundle);
+			cordova.setActivityResultCallback(plugin);
+			cordova.getActivity().startActivityForResult(intent,
+					FacadeActivity.SYSTEMDIALOG);
 		}
 		return true;
 	}
@@ -138,8 +151,21 @@ public class ExtroSystem extends CordovaPlugin {
 	
 	private Intent successIntent = null;
 	
-	public void processLogined(String name, String pass, String id,
+	public CallbackContext getCallback() {
+		return callback;
+	}
+	public void processLogined(String name, String pass, String id, SystemInfoModel model ,
 			final CallbackContext callbackContext) {
+		logining = true;
+		if (model != null){
+			Gson gson = new Gson();
+			if ("".equals(pass) || pass == null ){
+				callbackContext.success(gson.toJson(model));
+				return;
+			} else {
+				callbackContext.error(gson.toJson(model));
+			}
+		}
 		final String username = name.trim();
 		final String password = pass.trim();
 		final String systemid = id.trim();
