@@ -410,7 +410,7 @@ public class ExtroSystem extends CordovaPlugin {
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
-				.append(Preferences.getSystemId(Application.sharePref))
+				.append(systemid)
 				.append(";encrypt=").append(true);
 		String s = sb.toString();
 		loginTask.execute(URL.LOGIN, s, HttpUtil.UTF8_ENCODING,
