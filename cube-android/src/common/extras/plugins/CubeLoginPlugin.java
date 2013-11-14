@@ -221,12 +221,21 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			if ("".equals(systemId)) {
 				try {
 					ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
+					ArrayList<SystemInfoModel> showArrayList = new ArrayList<SystemInfoModel>();
 					arrayList.addAll(StaticReference.userMf
 							.queryBuilder(SystemInfoModel.class).where()
 							.eq("username", username).query());
 					Gson gson = new Gson();
 					String s2 = gson.toJson(arrayList);
 					Log.i("test", "s2" + s2);
+					for (SystemInfoModel systemInfoModel : arrayList) {
+						MultiUserInfoModel model = new MultiUserInfoModel();
+						model.setUserName(systemInfoModel.getUsername());
+						model.setSystemId(systemInfoModel.getSysId());
+					}
+					
+					
+					
 					if (arrayList.size() != 0) {
 						Intent intent = new Intent(cordova.getActivity(),
 								MultiSystemActivity.class);

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="libs/asmack-level7-3.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.1.jar"/>
@@ -15,5 +14,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/mina-core-2.0.7.jar" sourcepath="H:/installedDevs/mavenRepository/org/apache/mina/mina-core/2.0.7/mina-core-2.0.7-sources.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/httpmime-4.2.2.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
