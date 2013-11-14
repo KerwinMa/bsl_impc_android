@@ -136,10 +136,10 @@ Hello Cordova
             name="android-package"
             value="org.apache.cordova.dialogs.Notification" />
     </feature>
-    <feature name="CubeSwitchLoginPlugin" >
+    <feature name="ExtroSystem" >
         <param
             name="android-package"
-            value="common.extras.plugins.CubeSwitchLoginPlugin" />
+            value="common.extras.plugins.ExtroSystem" />
     </feature>
 
 </widget>

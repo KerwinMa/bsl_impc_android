@@ -146,7 +146,7 @@ public class CubeModule implements Serializable {
 		notifyCountChange();
 	}
 
-	private List<Privilege> privileges;
+	private String privileges;
 
 	public boolean isUpdatable() {
 		return updatable;
@@ -329,11 +329,11 @@ public class CubeModule implements Serializable {
 		this.noticeCount = noticeCount;
 	}
 
-	public List<Privilege> getPrivileges() {
+	public String getPrivileges() {
 		return privileges;
 	}
 
-	public void setPrivileges(List<Privilege> privileges) {
+	public void setPrivileges(String privileges) {
 		this.privileges = privileges;
 	}
 

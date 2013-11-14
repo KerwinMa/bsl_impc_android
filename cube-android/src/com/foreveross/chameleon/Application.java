@@ -687,7 +687,7 @@ public class Application extends android.app.Application implements
 		URL.PHONE_REGISTER_URL = propertiesUtil.getString("PHONE_REGISTER_URL", "");
 		URL.PAD_REGISTER_URL = propertiesUtil.getString("PAD_REGISTER_URL", "");
 		URL.UPLOAD_URL = URL.BASE_WEB + "mam/attachment/clientUpload";
-		URL.SYNC = URL.BASE_WS + "csair-extension/api/extendClients/android/";
+		URL.SYNC = URL.BASE_WS + "csair-extension/api/csairauth/privileges";
 		URL.UPLOAD = URL.BASE_WS + "csair-mam/api/mam/attachment/upload";
 //		URL.LOGIN = URL.BASE_WS + "csair-extension/api/oalogin/validate";
 		URL.LOGIN = URL.BASE_WS + "csair-extension/api/csairauth/login";

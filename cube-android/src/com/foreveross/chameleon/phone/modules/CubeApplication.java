@@ -514,23 +514,31 @@ public class CubeApplication implements Serializable {
 		};
 		// String url =
 		// "http://58.215.176.89:9000/m/apps/com.foreveross.cube.android/4";
-		long time = new Date().getTime();
 		// String url = URL.BASE + "m/apps/" + getPackageName() + "/"+
 		// app.getVersionCode()
 		// +"?"+"token="+Preferences.getToken(Application.sharePref) + "&"
 		// +"timeStamp="+ time;
-		String url = URL.SYNC + app.getPackageName() + "/" + app.getVersion()
-				+ "/" + "?" + "username="
-				+ Preferences.getUserName(Application.sharePref) + "&"
-				+ "sessionKey=" + Preferences.getSESSION(Application.sharePref)
-				+ "&" + "timeStamp=" + time;
-		System.out.println("网络请求url == " + url);
+		
+		String appId = app.getPackageName();
+		String version = app.getVersion();
+		String platform = "android";
+		String username = Preferences.getUserName(Application.sharePref);
+		StringBuilder sb = new StringBuilder();
+		sb = sb.append("Form:username=").append(username)
+				.append(";platform=").append(platform)
+				.append(";version=").append(version)
+				.append(";identifier=").append(appId)
+				.append(";sysId=").append(Preferences.getSystemId(Application.sharePref))
+				;
 		// 3、真正发起http请求
 		task.setLockScreen(false);
 		task.setDialogContent("正在同步...");
 		task.setShowProgressDialog(dialogNeed);
 		task.setNeedProgressDialog(dialogNeed);
-		task.execute(url, "", HttpUtil.UTF8_ENCODING, HttpUtil.HTTP_GET);
+		String s = sb.toString();
+		String url = URL.SYNC + "?" +"sessionKey=" + Preferences.getSESSION(Application.sharePref);
+		task.execute(url, s, HttpUtil.UTF8_ENCODING,
+				HttpUtil.HTTP_POST);
 	}
 
 	public synchronized CubeApplication compareAndSetApp(

@@ -197,6 +197,8 @@ public class ChatRoomFragment extends Fragment {
 	private long start = 0;
 	
 	private boolean voiceStatus;
+	
+	private boolean roomIsNoExit;
 	/**
 	 * [一句话功能简述]<BR>
 	 * [功能详细描述]
@@ -339,12 +341,15 @@ public class ChatRoomFragment extends Fragment {
 		if ("room".equals(chat)) {
 //			changeButton.setVisibility(View.GONE);
 			roomId = i.getStringExtra("jid");
+			
 			//保存当前聊天用户
 			Preferences.saveChatJid(roomId, Application.sharePref);
 			chatGroupModel = IMModelManager.instance()
 					.getChatRoomContainer().getStuff(roomId);
-			titlebar_right.setVisibility(View.VISIBLE);
+			
 			if (chatGroupModel != null) {
+				roomIsNoExit = false;
+				titlebar_right.setVisibility(View.VISIBLE);
 				CubeModule module = CubeModuleManager.getInstance()
 						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 				if (module != null) {
@@ -352,6 +357,17 @@ public class ChatRoomFragment extends Fragment {
 				}
 				chatGroupModel.clearNewMessageCount();
 				conversations = chatGroupModel.getConversations();
+			} else {
+				roomIsNoExit = true;
+				titlebar_right.setVisibility(View.GONE);
+				// 用戶群为已解散用户群
+				// 构建一个假的chatGroupModel
+				chatGroupModel = new ChatGroupModel();
+				SessionModel model = IMModelManager.instance()
+						.getSessionContainer().getStuff(roomId);
+				chatGroupModel.setGroupName(model.getRoomName());
+				chatGroupModel.setGroupCode(roomId);
+				chatGroupModel.setRoomJid(roomId);
 			}
 			
 		} else {
@@ -554,10 +570,15 @@ public class ChatRoomFragment extends Fragment {
 
 				@Override
 				protected Void doInBackground(Void... params) {
-					chatGroupModel.findHistory(-1);
+					if (roomIsNoExit){
+						conversations = chatGroupModel.findLastHistory(-1);
+					} else {
+						chatGroupModel.findHistory(-1);
+					}
 					return null;
 				}
 				protected void onPostExecute(Void result) {
+					
 					listview.setSelection(adapter.getCount());
 					adapter.notifyDataSetChanged();
 				};

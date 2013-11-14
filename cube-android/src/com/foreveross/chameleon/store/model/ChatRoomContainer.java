@@ -122,10 +122,6 @@ public class ChatRoomContainer extends
 			module.decreaseMsgCountBy(chatGroupModel.getUnreadMessageCount());
 		}
 		removeStuff(roomJid);
-		// 清除历史记录的数据
-		IMModelManager.instance().getSessionContainer().removeStuff(roomJid);
-		IMModelManager.instance().getSessionContainer().notifyContentChange();
-		StaticReference.defMf.deleteById(roomJid, SessionModel.class);
 	}
 	
 	@Override

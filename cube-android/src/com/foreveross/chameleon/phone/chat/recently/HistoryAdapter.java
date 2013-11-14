@@ -269,6 +269,7 @@ public class HistoryAdapter extends BaseAdapter implements Filterable {
 									public void onClick(DialogInterface dialog,
 											int which) {
 										IMModelManager.instance().getSessionContainer().removeSession(sessionModel.getChatter());
+										notifyDataSetChanged();
 									}
 								}).setNegativeButton("取消", null).show();
 			} else {
@@ -307,6 +308,7 @@ public class HistoryAdapter extends BaseAdapter implements Filterable {
 											IMModelManager.instance().getChatRoomContainer().leave(dialogContext,sessionModel.getChatter());
 										}
 										IMModelManager.instance().getSessionContainer().removeSession(sessionModel.getChatter());
+										notifyDataSetChanged();
 									}
 								}).setNegativeButton("取消", null).show();
 			}
