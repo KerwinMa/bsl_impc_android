@@ -193,13 +193,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		final CubeLoginPlugin plugin = this;
 		String deviceId = DeviceInfoUtil.getDeviceId(cordova.getActivity());
 		String appId = cordova.getActivity().getPackageName();
-		if (isremember) {
-			Preferences.saveUser(password, username, isremember,
-					Application.sharePref);
-		} else {
-			Preferences.saveUser("", username, isremember,
-					Application.sharePref);
-		}
 		Preferences.saveOutLine(outline, Application.sharePref);
 		Preferences.savePWD(pass, Application.sharePref);
 		if (PadUtils.isPad(application)) {
@@ -226,9 +219,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 					arrayList.addAll(StaticReference.userMf
 							.queryBuilder(SystemInfoModel.class).where()
 							.eq("username", username).query());
-					Gson gson = new Gson();
-					String s2 = gson.toJson(arrayList);
-					Log.i("test", "s2" + s2);
 					for (SystemInfoModel systemInfoModel : arrayList) {
 						MultiUserInfoModel model = new MultiUserInfoModel();
 						model.setUserName(systemInfoModel.getUsername());
@@ -304,6 +294,13 @@ public class CubeLoginPlugin extends CordovaPlugin {
 					} else {
 						boolean loginOK = jb.getBoolean("loginOK");
 						if (loginOK) {
+							if (remember) {
+								Preferences.saveUser(password, username,
+										remember, Application.sharePref);
+							} else {
+								Preferences.saveUser("", username, remember,
+										Application.sharePref);
+							}
 							callbackContext.success("登录成功");
 							String sessionKey = jb.getString("sessionKey");
 							Application.isAppExit = false;
