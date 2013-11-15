@@ -1295,7 +1295,7 @@ public class FacadeActivity extends FragmentActivity implements
 		// 保存当前的系统ID
 		if (activityResultCallback instanceof CubeLoginPlugin) {
 			CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
-			plugin.processLogined(isremember, userName, passWord,isoutline,
+			plugin.processLogined(isremember, userName, passWord,model.getSysId(),isoutline,
 					plugin.getCallback());
 		} else if (activityResultCallback instanceof ExtroSystem){
 			MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();

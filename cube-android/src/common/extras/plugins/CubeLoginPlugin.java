@@ -124,7 +124,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		boolean isremember = args.getBoolean(2);
 		boolean isoutline = args.getBoolean(3);
 		if (checkLogin(username, password)) {
-			processLogined(isremember, username, password, isoutline,
+			processLogined(isremember, username, password,"", isoutline,
 					callbackContext);
 			callback = callbackContext;
 		}
@@ -180,7 +180,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 	private Intent successIntent = null;
 
-	public void processLogined(boolean isremember, String name, String pass,
+	public void processLogined(boolean isremember, String name, String pass,String systId,
 			boolean isoutline, final CallbackContext callbackContext) {
 		if (StaticReference.userMf == null) {
 			StaticReference.userMC = ModelCreator.build(application, name);
@@ -188,6 +188,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		}
 		final String username = name.trim();
 		final String password = pass.trim();
+		final String sysmId = systId.trim();
 		final boolean remember = isremember;
 		final boolean outline = isoutline;
 		final CubeLoginPlugin plugin = this;
@@ -558,7 +559,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 				.append(deviceId.toLowerCase().trim()).append(";appKey=")
 				.append(application.getCubeApplication().getAppKey())
 				.append(";appIdentify=").append(appId).append(";sysId=")
-				.append(Preferences.getSystemId(Application.sharePref))
+				.append(sysmId)
 				.append(";encrypt=").append(true);
 		String s = sb.toString();
 		loginTask.execute(URL.LOGIN, s, HttpUtil.UTF8_ENCODING,
