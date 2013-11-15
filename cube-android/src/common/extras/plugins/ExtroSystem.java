@@ -45,6 +45,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.TmpConstants;
@@ -123,6 +124,8 @@ public class ExtroSystem extends CordovaPlugin {
 			cordova.setActivityResultCallback(plugin);
 			cordova.getActivity().startActivityForResult(intent,
 					FacadeActivity.SYSTEMDIALOG);
+			cordova.getActivity().overridePendingTransition(R.anim.push_right_in,
+					R.anim.push_left_out);
 		} else if (action.equals("getCurrSystem")){
 			SystemInfoModel model = getCurrSystemInfo();
 			Gson gson = new Gson();
