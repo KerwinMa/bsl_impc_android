@@ -368,6 +368,8 @@ public class ChatRoomFragment extends Fragment {
 				chatGroupModel.setGroupName(model.getRoomName());
 				chatGroupModel.setGroupCode(roomId);
 				chatGroupModel.setRoomJid(roomId);
+				conversations = chatGroupModel.findLastHistory(-1);
+				Log.i("conversations" , conversations.toString());
 			}
 			
 		} else {
@@ -566,23 +568,20 @@ public class ChatRoomFragment extends Fragment {
 		listview.setSelection(conversations.size());
 
 		if (chatGroupModel != null){
-			new AsyncTask<Void, Void, Void>() {
+			if (!roomIsNoExit){
+				new AsyncTask<Void, Void, Void>() {
 
-				@Override
-				protected Void doInBackground(Void... params) {
-					if (roomIsNoExit){
-						conversations = chatGroupModel.findLastHistory(-1);
-					} else {
+					@Override
+					protected Void doInBackground(Void... params) {
 						chatGroupModel.findHistory(-1);
+						return null;
 					}
-					return null;
-				}
-				protected void onPostExecute(Void result) {
-					
-					listview.setSelection(adapter.getCount());
-					adapter.notifyDataSetChanged();
-				};
-			}.execute();
+					protected void onPostExecute(Void result) {
+						listview.setSelection(adapter.getCount());
+						adapter.notifyDataSetChanged();
+					};
+				}.execute();
+			}
 		}
 		
 		progressDialog = new ProgressDialog(getAssocActivity());

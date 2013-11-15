@@ -327,24 +327,23 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							for (int i = 0; i < jay.length(); i++) {
 								JSONObject jsob = (JSONObject) jay.get(i);
 								boolean curr = jsob.getBoolean("curr");
-								
+								String alias = (String) jsob.get("alias");
+								String systemId = (String) jsob.get("id");
+								String systemName = (String) jsob
+										.get("sysName");
+								SystemInfoModel infoModel = new SystemInfoModel(
+										alias, systemId, systemName, curr, username);
+								StaticReference.userMf.createOrUpdate(infoModel);
 								if (curr){
-									String alias = (String) jsob.get("alias");
-									String systemId = (String) jsob.get("id");
-									String systemName = (String) jsob
-											.get("sysName");
 									// 保存当前的系统ID
 									Preferences.saveSytemId(systemId,
 											Application.sharePref);
-									SystemInfoModel infoModel = new SystemInfoModel(
-											alias, systemId, systemName, curr, username);
-
 									MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
 									multiUserInfoModel.setMD5Str(username, systemId);
 									multiUserInfoModel.setUserName(username);
 									multiUserInfoModel.setPassWord(password);
 									multiUserInfoModel.setSystemId(systemId);
-									StaticReference.userMf.createOrUpdate(infoModel);
+									
 									StaticReference.userMf
 											.createOrUpdate(multiUserInfoModel);
 								}
@@ -524,6 +523,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 								bundle.putString("password", password);
 								bundle.putBoolean("isremember", remember);
 								bundle.putBoolean("isoutline", outline);
+								bundle.putBoolean("switchsys", false);
 								bundle.putSerializable("systemlist", arrayList);
 								intent.putExtras(bundle);
 								cordova.setActivityResultCallback(plugin);

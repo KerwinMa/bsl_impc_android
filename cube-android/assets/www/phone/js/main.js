@@ -402,7 +402,7 @@ var initial = function(type, data) {
 
 
 
-	     
+	/*<!--     
     //把data转换成array
 	var array = [];
 	for(var category in data){
@@ -428,8 +428,8 @@ var initial = function(type, data) {
 			'tag': i
 		}));
 		_.each((data), function(value, key) {
-     
-	/*
+     -->*/
+	//<!--
 	_.each(data, function(value, key) {
 
 		$("#myul").append(_.template($("#t2").html(), {
@@ -438,7 +438,7 @@ var initial = function(type, data) {
 		}));
 		_.each((value), function(value, key) {
 
-			*/
+			//-->
 
 
 			console.log('AAAAAAAA identifier icon = ' + value.identifier + " -- " + value.icon);
@@ -488,7 +488,6 @@ var loadModuleList = function(plugin, action, type, callback) {
 	//	isOver = isOver + 1;
 	var accountName = "";
 	//获取用户名
-	
 	cordova.exec(function(account) {
 		console.log("进入exec获取accountName");
 		var a = $.parseJSON(account);
@@ -504,7 +503,7 @@ var loadModuleList = function(plugin, action, type, callback) {
 	if (accountName !== "") {
 		accountName = " " + accountName + " ";
 	}
-	
+
 	$(".mainContent").html("");
 	$(".mainContent").remove();
 
@@ -566,11 +565,11 @@ $('#top_left_btn')
 				//$('#top_left_btn').addClass("left_btn").addClass("btn");
 				
 				
-				
+
 				//开启欢迎光临
 				$('.account_content').show();
 				$('.searchContent').css("height", "60px");
-				
+
 				//返回刷新列表
 				//$('#top_left_btn').removeClass("disabled");
 				loadModuleList("CubeModuleList", "mainList", "main", function() {
@@ -881,8 +880,7 @@ $('#manager_btn')
 
 		$('#manager_btn').addClass("disabled");
 		console.log("点击");
-
-		cordovaExec("CubeModuleOperator", "sync", ["setting"], function() {
+		cordovaExec("CubeModuleOperator", "sync", ["manager"], function() {
 			console.log("开始同步");
 			$('#manager_btn').removeClass("disabled");
 			loadModuleList("CubeModuleList", "uninstallList", "uninstall", function() {
@@ -894,14 +892,14 @@ $('#manager_btn')
 				$('.buttomContent').css('display', 'block');
 				$('#title').html("模块管理");
 
-				
+
 				//关闭欢迎光临
 				$('.account_content').hide();
 				$('.searchContent').css("height", "37px");
 				$('#top_left_btn').removeClass('left_btn');
 				$('#top_left_btn').addClass('back_btn');
 				//设置左边按键class做标志
-				
+
 				//$('#top_left_btn').removeClass("btn").css("background","url('img/nav_back@2x.ing') no-repeat").css("height","32px").css("width","48px");
 				$('#top_left_btn').removeClass("left_btn");
 				$('#top_left_btn').addClass("back_btn");

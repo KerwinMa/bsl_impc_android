@@ -19,6 +19,7 @@ public class MultiSystemActivity extends Activity {
 	private String passWord;
 	private Boolean isremember;
 	private Boolean isoutline;
+	private Boolean switchsys;
 	private ArrayList<SystemInfoModel> arrayList;
 	private Button multi_cancle;
 
@@ -47,9 +48,10 @@ public class MultiSystemActivity extends Activity {
 			passWord = b.getString("password");
 			isremember = b.getBoolean("isremember");
 			isoutline = b.getBoolean("isoutline");
+			switchsys = b.getBoolean("switchsys");
 		}
 		MiltiSystemAdapter adapter = new MiltiSystemAdapter(this, arrayList,
-				userName, passWord, isremember , isoutline);
+				userName, passWord, isremember , isoutline , switchsys);
 		multisystem_listview.setAdapter(adapter);
 	}
 

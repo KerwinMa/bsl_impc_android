@@ -8,7 +8,7 @@ document.addEventListener("deviceready", function(){
 		console.info("cancel");
 		cancel();
 	});
-	//testData();
+	// testData();
 }, false);
 
 //测试用
@@ -69,10 +69,10 @@ function submit(){
 		}
 		cordova.exec(
 			function(){	
-				//alert("注册成功"); 
+				// alert("注册成功"); 
 			}, 
 			function(err) {
-				//alert("提交失败,请检查网络连接！");
+				// alert("提交失败,请检查网络连接！");
         	}
         , "DeviceRegister", submitType, [JSON.stringify(json)]);
 	}
@@ -87,10 +87,18 @@ function cancel(){
 				function(err) {
 	        	}
 	        , "DeviceRegister", "redirectMain", []);
+		window.location.href="index.html?cube-action=pop";
 	}
 }
 
 function fillData(data){
+	alert("fill data: "+data);
+	if(data){
+		$("#registInfo").html("您的设备已注册");
+	}else{
+		$("#registInfo").html("您的设备未进行注册");
+	}
+	
 	data = JSON.parse(data);
 	var inputs = $("input");
 	for(var i = 0; i < inputs.length; i++){
@@ -99,4 +107,5 @@ function fillData(data){
 			$(input).val(data[input.name]);
 		}
 	}
+	
 }

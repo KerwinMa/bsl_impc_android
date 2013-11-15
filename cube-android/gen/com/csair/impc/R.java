@@ -1353,7 +1353,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:content_window_id
+          @attr name com.csair.impc:content_window_id
         */
         public static final int ClosableWindow_content_window_id = 1;
         /**
@@ -1367,7 +1367,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:title
+          @attr name com.csair.impc:title
         */
         public static final int ClosableWindow_title = 0;
     };
