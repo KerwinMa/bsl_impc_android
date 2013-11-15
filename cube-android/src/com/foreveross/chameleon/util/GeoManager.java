@@ -53,6 +53,7 @@ public class GeoManager {
 
                         @Override
                         protected Void doInBackground(Void... voids) {
+                        	return null; /*
                             // 获取位置管理服务
                             runFlag = true;
                             String serviceName = Context.LOCATION_SERVICE;
@@ -150,7 +151,7 @@ public class GeoManager {
                                     });
                             locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
                             return null;
-                        }
+                        */}
                     }.execute();
 
                 }

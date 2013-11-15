@@ -15,6 +15,7 @@ import android.content.Intent;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
+import com.foreveross.chameleon.phone.activity.AdminActivity;
 import com.foreveross.chameleon.phone.activity.SettingsActivity;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
@@ -182,6 +183,21 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 		}
 		else if(action.equals("redirectMain"))
 		{
+			if (cordova.getActivity() instanceof FacadeActivity){
+				FacadeActivity activity = (FacadeActivity) cordova.getActivity();
+				if (PadUtils.isPad(application)) {
+					Intent i = new Intent(activity, FacadeActivity.class);
+					i.putExtra("value", URL.PAD_LOGIN_URL);
+					i.putExtra("isPad", true);
+					activity.startActivity(i);
+				} else {// 手机
+					Intent i = new Intent(activity, FacadeActivity.class);
+					i.putExtra("value", URL.PHONE_LOGIN_URL);
+					i.putExtra("isPad", false);
+					activity.startActivity(i);
+				}
+				return true;
+			}
 			cordova.getActivity().finish();
 		}
 		return true;
