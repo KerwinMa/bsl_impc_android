@@ -33,7 +33,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 		final CallbackContext callback = callbackContext;
 		if(action.equals("queryDevcieInfo"))
 		{
-			HttpRequestAsynTask task = new HttpRequestAsynTask(application) {
+			HttpRequestAsynTask task = new HttpRequestAsynTask(cordova.getActivity()) {
 
 				@Override
 				protected void doPostExecute(String result) {
@@ -62,7 +62,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 		else if(action.equals("updateDevice"))
 		{
 			JSONObject json =  args.getJSONObject(0);
-			HttpRequestAsynTask task = new HttpRequestAsynTask(application) {
+			HttpRequestAsynTask task = new HttpRequestAsynTask(cordova.getActivity()) {
 
 				@Override
 				protected void doPostExecute(String result) {
@@ -97,7 +97,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 		else if(action.equals("submitInfo"))
 		{
 			JSONObject json =  new JSONObject(args.get(0).toString());
-			HttpRequestAsynTask task = new HttpRequestAsynTask(application) {
+			HttpRequestAsynTask task = new HttpRequestAsynTask(cordova.getActivity()) {
 
 				@Override
 				protected void doPostExecute(String result) {
@@ -105,7 +105,8 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 					{
 						try {
 							JSONObject json = new JSONObject(result);
-							if(json.getBoolean("result"))
+							String jb = json.getString("result");
+							if("success".equals(jb))
 							{
 								AlertDialog.Builder builder = new AlertDialog.Builder(
 										context);
@@ -204,19 +205,21 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 	}
 
 	private void redirect2Main(Application application) {
-		// 平板
-		if (PadUtils.isPad(application)) {
-			Intent i = new Intent(cordova.getActivity(), FacadeActivity.class);
-			i.putExtra("value", URL.PAD_LOGIN_URL);
-			i.putExtra("isPad", true);
-			cordova.getActivity().startActivity(i);
-		} else {// 手机
-			Intent i = new Intent(cordova.getActivity(), FacadeActivity.class);
-			i.putExtra("value", URL.PHONE_LOGIN_URL);
-			i.putExtra("isPad", false);
-			cordova.getActivity().startActivity(i);
+		if (cordova.getActivity() instanceof FacadeActivity) {
+			FacadeActivity activity = (FacadeActivity) cordova.getActivity();
+			if (PadUtils.isPad(application)) {
+				Intent i = new Intent(activity, FacadeActivity.class);
+				i.putExtra("value", URL.PAD_LOGIN_URL);
+				i.putExtra("isPad", true);
+				activity.startActivity(i);
+			} else {// 手机
+				Intent i = new Intent(activity, FacadeActivity.class);
+				i.putExtra("value", URL.PHONE_LOGIN_URL);
+				i.putExtra("isPad", false);
+				activity.startActivity(i);
+			}
+			return;
 		}
+		cordova.getActivity().finish();
 	}
-	
-
 }
