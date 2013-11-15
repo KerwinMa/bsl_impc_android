@@ -122,11 +122,24 @@ public class ExtroSystem extends CordovaPlugin {
 			cordova.setActivityResultCallback(plugin);
 			cordova.getActivity().startActivityForResult(intent,
 					FacadeActivity.SYSTEMDIALOG);
+		} else if (action.equals("getCurrSystem")){
+			SystemInfoModel model = getCurrSystemInfo();
+			Gson gson = new Gson();
+			callbackContext.success(gson.toJson(model));
 		}
 		return true;
 	}
 
-
+	private SystemInfoModel getCurrSystemInfo(){
+		ArrayList<SystemInfoModel> models = getSystemInfoList();
+		for (SystemInfoModel systemInfoModel : models) {
+			if (systemInfoModel.isCurr()){
+				return systemInfoModel;
+			}
+		}
+		return null;
+	}
+	
 	private ArrayList<SystemInfoModel> getSystemInfoList(){
 		String username = Preferences.getUserName(Application.sharePref);
 		ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
