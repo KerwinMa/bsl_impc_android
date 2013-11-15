@@ -245,7 +245,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 								FacadeActivity.SYSTEMDIALOG);
 						return;
 					} else {
-						Toast.makeText(cordova.getActivity(), "没有离线登录的系统",
+						Toast.makeText(cordova.getActivity(), "用户未曾登录过应用，不能使用离线登录",
 								Toast.LENGTH_SHORT).show();
 						return;
 					}

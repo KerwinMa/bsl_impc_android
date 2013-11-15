@@ -47,9 +47,12 @@ public class GeoManager {
                 if (intent.getAction().equals("com.foss.geoReload"))
                 {
                     final Context ctx = context;
-                    ThreadPool.run(new Runnable() {
+
+                    new AsyncTask<Void,Void,Void>()
+                    {
+
                         @Override
-                        public void run() {
+                        protected Void doInBackground(Void... voids) {
                             // 获取位置管理服务
                             runFlag = true;
                             String serviceName = Context.LOCATION_SERVICE;
@@ -62,7 +65,7 @@ public class GeoManager {
                             criteria.setCostAllowed(true);
                             criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
                             String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-                            Looper.prepare();
+//                            Looper.prepare();
                             locationManager.requestLocationUpdates(provider, 30 * 1000, 0,
                                     new LocationListener() {
                                         @Override
@@ -146,10 +149,10 @@ public class GeoManager {
                                         }
                                     });
                             locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
-
-
+                            return null;
                         }
-                    });
+                    }.execute();
+
                 }
             }
         };

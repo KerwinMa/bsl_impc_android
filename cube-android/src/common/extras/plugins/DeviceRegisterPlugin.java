@@ -56,7 +56,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 			task.setNeedProgressDialog(false);
 			task.setShowProgressDialog(false);
 			String url = URL.BASE_WS +"csair-extension/api/deviceRegInfo/get/"+deviceId+"?appKey="+appKey;
-			task.execute(new String[]{url,"",HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_GET});
+			task.execute(url,"",HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_GET);
 		}
 		else if(action.equals("updateDevice"))
 		{
@@ -90,7 +90,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 			.append(";email=").append(json.getString("email")).append(";telPhone=").append(json.getString("telPhone"))
 			.append(";deviceSrc=").append(json.getString("deviceSrc")).append(";deviceId=").append(deviceId);
 			String url = URL.BASE_WS +"csair-extension/api/deviceRegInfo/update?appKey="+appKey;
-			task.execute(new String[]{url,buff.toString(),HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_POST});
+			task.execute(url,buff.toString(),HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_POST);
 			
 		}
 		else if(action.equals("submitInfo"))
@@ -177,7 +177,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 			.append(";email=").append(json.getString("email")).append(";telPhone=").append(json.getString("telPhone"))
 			.append(";deviceSrc=").append(json.getString("deviceSrc")).append(";deviceId=").append(deviceId);
 			String url = URL.BASE_WS +"csair-extension/api/deviceRegInfo/reg?appKey="+appKey;
-			task.execute(new String[]{url,buff.toString(),HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_POST});
+			task.execute(url,buff.toString(),HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_POST);
 
 		}
 		else if(action.equals("redirectMain"))
