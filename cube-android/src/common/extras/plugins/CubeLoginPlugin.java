@@ -212,7 +212,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		}
 
 		if (outline) {
-			String systemId = Preferences.getSystemId(Application.sharePref);
+			String systemId = systId;
 			if ("".equals(systemId)) {
 				try {
 					ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();

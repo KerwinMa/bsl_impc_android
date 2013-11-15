@@ -120,9 +120,11 @@ public class MiltiSystemAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				SystemInfoModel infoModel = infoModels.get((Integer) v.getTag());
-				if (infoModel.isCurr()){
-					Toast.makeText(context, "已经是当前系统，不需要切换", Toast.LENGTH_SHORT).show();
-					return;
+				if (!isoutline ){
+					if (infoModel.isCurr()){
+						Toast.makeText(context, "已经是当前系统，不需要切换", Toast.LENGTH_SHORT).show();
+						return;
+					}
 				}
 				HashMap<String, Object> bundle = new HashMap<String, Object>();
 				bundle.put("username", userName);
