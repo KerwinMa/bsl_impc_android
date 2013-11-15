@@ -164,14 +164,16 @@ public class FacadeActivity extends FragmentActivity implements
 		loadUrl(url);
 		registerReceiver();
 	}
-
+	
 	public void checkUpdate(String url) {
-		if (url != null && url.contains("login")) {
-			acuListener = new AutoCheckUpdateListener(this);
-			updateTask = new CheckUpdateTask(Application.class.cast(
-					FacadeActivity.this.getApplication()).getCubeApplication(),
-					acuListener);
-			updateTask.execute();
+		if (url != null) {
+			if (url.contains("login") || url.contains("deviceregist")){
+				acuListener = new AutoCheckUpdateListener(this);
+				updateTask = new CheckUpdateTask(Application.class.cast(
+						FacadeActivity.this.getApplication()).getCubeApplication(),
+						acuListener);
+				updateTask.execute();
+			}
 		}
 	}
 
