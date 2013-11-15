@@ -97,8 +97,7 @@ public class ExtroSystem extends CordovaPlugin {
 		application = Application.class.cast(this.cordova.getActivity()
 				.getApplicationContext());
 		log.debug("execute action {} in backgrund thread!", action);
-		return false;
-/*		if (action.equals("login")) {
+		if (action.equals("login")) {
 			String username = args.getString(0).toLowerCase();
 			String password = args.getString(1).toLowerCase();
 			String systemid = args.getString(2).toLowerCase();
@@ -124,7 +123,7 @@ public class ExtroSystem extends CordovaPlugin {
 			cordova.getActivity().startActivityForResult(intent,
 					FacadeActivity.SYSTEMDIALOG);
 		}
-		return true;*/
+		return true;
 	}
 
 
