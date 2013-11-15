@@ -176,7 +176,7 @@ public class ExtroSystem extends CordovaPlugin {
 				callbackContext.success(gson.toJson(model));
 				return;
 			} else {
-				callbackContext.error(gson.toJson(model));
+//				callbackContext.error(gson.toJson(model));
 			}
 		}
 		final String username = name.trim();
