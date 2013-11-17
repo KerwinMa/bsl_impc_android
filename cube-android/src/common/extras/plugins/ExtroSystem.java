@@ -52,6 +52,7 @@ import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.phone.activity.MultiSystemActivity;
+import com.foreveross.chameleon.phone.modules.LoginModel;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
@@ -275,7 +276,7 @@ public class ExtroSystem extends CordovaPlugin {
 									multiUserInfoModel.setUserName(username);
 									multiUserInfoModel.setPassWord(password);
 									multiUserInfoModel.setSystemId(systemId);
-									
+									LoginModel.instance().putSysInfo(systemId, infoModel);
 									StaticReference.userMf
 											.createOrUpdate(multiUserInfoModel);
 								}

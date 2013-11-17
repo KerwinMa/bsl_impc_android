@@ -34,7 +34,7 @@ public class IMModelManager {
 		addUserGroupModel(favorContainer);
 	}
 
-	private static IMModelManager imModelManager = new IMModelManager();;
+	private static IMModelManager imModelManager = new IMModelManager();
 
 	public static synchronized IMModelManager instance() {
 		return imModelManager;

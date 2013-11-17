@@ -4,22 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -42,7 +29,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -51,6 +37,7 @@ import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.phone.activity.MultiSystemActivity;
+import com.foreveross.chameleon.phone.modules.LoginModel;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
@@ -66,7 +53,6 @@ import com.foreveross.chameleon.util.GeolocationUtil;
 import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Preferences;
-import com.google.gson.Gson;
 
 /**
  * <BR>
@@ -337,6 +323,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 								StaticReference.userMf.createOrUpdate(infoModel);
 								if (curr){
 									// 保存当前的系统ID
+									
 									Preferences.saveSytemId(systemId,
 											Application.sharePref);
 									MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
@@ -344,7 +331,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 									multiUserInfoModel.setUserName(username);
 									multiUserInfoModel.setPassWord(password);
 									multiUserInfoModel.setSystemId(systemId);
-									
+									LoginModel.instance().putSysInfo(systemId, infoModel);
 									StaticReference.userMf
 											.createOrUpdate(multiUserInfoModel);
 								}

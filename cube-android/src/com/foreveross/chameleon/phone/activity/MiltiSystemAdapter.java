@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.EventBus;
+import com.foreveross.chameleon.phone.modules.LoginModel;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
@@ -33,7 +34,7 @@ public class MiltiSystemAdapter extends BaseAdapter {
 	private Boolean switchsys;
 	
 	private ArrayList<String> showArrayList;
-
+	
 	public MiltiSystemAdapter(Context context,
 			List<SystemInfoModel> infoModels, String userName, String passWord,
 			Boolean isremember , Boolean isoutline , Boolean switchsys) {
@@ -45,29 +46,6 @@ public class MiltiSystemAdapter extends BaseAdapter {
 		this.isremember = isremember;
 		this.isoutline = isoutline;
 		this.switchsys = switchsys;
-		if (switchsys){
-			ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
-			showArrayList = new ArrayList<String>();
-			try {
-				arrayList.addAll(StaticReference.userMf
-						.queryBuilder(SystemInfoModel.class).where()
-						.eq("username", userName).query());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			for (SystemInfoModel systemInfoModel : arrayList) {
-				MultiUserInfoModel model = new MultiUserInfoModel();
-				model.setUserName(systemInfoModel.getUsername());
-				model.setSystemId(systemInfoModel.getSysId());
-				List<MultiUserInfoModel> list = StaticReference.userMf
-						.queryForMatching(model);
-				if (list.size() > 0){
-					showArrayList.add(systemInfoModel.getSysId());
-				}
-			}
-		}
-
 	}
 
 	@Override
@@ -103,7 +81,7 @@ public class MiltiSystemAdapter extends BaseAdapter {
 		}
 		final SystemInfoModel infoModel = infoModels.get(position);
 		if (switchsys){
-			if (showArrayList.contains(infoModel.getSysId())){
+			if (LoginModel.instance().containSysId(infoModel.getSysId())){
 				holder.alias.setText(infoModel.getSysName() + "(已登录)");
 			} else {
 				holder.alias.setText(infoModel.getSysName());

@@ -10,7 +10,6 @@ import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.cordova.CallbackContext;
 import org.apache.cordova.Config;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -81,10 +80,9 @@ import com.foreveross.chameleon.pad.fragment.ViewCreateCallBack;
 import com.foreveross.chameleon.pad.modle.SkinModel;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
+import com.foreveross.chameleon.phone.modules.LoginModel;
 import com.foreveross.chameleon.phone.modules.task.ThreadPlatformUtils;
 import com.foreveross.chameleon.phone.muc.MucManagerFragment;
-import com.foreveross.chameleon.store.core.ModelCreator;
-import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.MultiUserInfoModel;
 import com.foreveross.chameleon.store.model.SystemInfoModel;
@@ -93,11 +91,9 @@ import com.foreveross.chameleon.update.CheckUpdateTask;
 import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Pool;
-import com.foreveross.chameleon.util.Preferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
-
 import common.extras.plugins.CubeLoginPlugin;
 import common.extras.plugins.ExtroSystem;
 
@@ -1298,14 +1294,16 @@ public class FacadeActivity extends FragmentActivity implements
 			plugin.processLogined(isremember, userName, passWord,model.getSysId(),isoutline,
 					plugin.getCallback());
 		} else if (activityResultCallback instanceof ExtroSystem){
-			MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
-			multiUserInfoModel.setUserName(userName);
-			multiUserInfoModel.setSystemId(model.getSysId());
-			List<MultiUserInfoModel> list = StaticReference.userMf
-					.queryForMatching(multiUserInfoModel);
-			if (list.size() > 0){
-				MultiUserInfoModel multiModel = list.get(0);
-				passWord = multiModel.getPassWord();
+			if (LoginModel.instance().containSysId(model.getSysId())){
+				MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
+				multiUserInfoModel.setUserName(userName);
+				multiUserInfoModel.setSystemId(model.getSysId());
+				List<MultiUserInfoModel> list = StaticReference.userMf
+						.queryForMatching(multiUserInfoModel);
+				if (list.size() > 0){
+					MultiUserInfoModel multiModel = list.get(0);
+					passWord = multiModel.getPassWord();
+				}
 			}
 			ExtroSystem plugin = (ExtroSystem) activityResultCallback;
 			plugin.processLogined(userName, passWord , model.getSysId() , model ,
