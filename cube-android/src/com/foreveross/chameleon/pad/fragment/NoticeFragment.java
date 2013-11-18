@@ -430,9 +430,11 @@ public class NoticeFragment extends Fragment {
 				noticeModules.clear();
 				List<NoticeModuleMessage> queryData = new ArrayList<NoticeModuleMessage>();
 				try {
+					String userName = Preferences.getUserName(Application.sharePref);
 					queryData.addAll(StaticReference.defMf
 							.queryBuilder(NoticeModuleMessage.class)
-							.orderBy("sendTime", false).query());
+							.orderBy("sendTime", true).where().eq("userName", userName).
+							query());
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

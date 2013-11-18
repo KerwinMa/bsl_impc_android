@@ -1,9 +1,6 @@
 package com.foreveross.chameleon.push.cubeparser;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Delayed;
@@ -26,14 +23,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
-import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.push.cubeparser.type.ChanmeleonMessage;
 import com.foreveross.chameleon.push.cubeparser.type.CommonModuleMessage;
 import com.foreveross.chameleon.push.cubeparser.type.MDMMessage;
@@ -44,9 +39,7 @@ import com.foreveross.chameleon.push.mina.library.Constants;
 import com.foreveross.chameleon.push.mina.library.protocol.PushProtocol.MapEntity;
 import com.foreveross.chameleon.push.mina.library.protocol.PushProtocol.MessageContent;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
-import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.Preferences;
-import com.google.gson.JsonObject;
 
 public class PushContentParser {
 	/**
@@ -100,9 +93,10 @@ public class PushContentParser {
 									sendid += messsageId+",";
 								}
 								ChanmeleonMessage messageDelay = null;
+								String userName = Preferences.getUserName(Application.sharePref);
 								if (Constants.MESSAGE_TYPE_SYSTEM.equals(messageType)) {
 									messageDelay = new ChanmeleonMessage(new SystemMessage(sendTime,
-											messsageId, title, content));
+											messsageId, title, content) , userName);
 								} else if (Constants.MESSAGE_TYPE_MODULE.equals(messageType)) {
 									
 									JSONObject jsonObjects = new JSONObject(jsonObject.getString("extras"));
@@ -151,7 +145,7 @@ public class PushContentParser {
 										{
 											noticeModuleMessage.setAttachment(jsonObjects.getString("noticeFiles"));
 										}
-										messageDelay = new ChanmeleonMessage(noticeModuleMessage);
+										messageDelay = new ChanmeleonMessage(noticeModuleMessage , userName);
 									} else if(cubeModule !=null&&cubeModule.getModuleType()==CubeModule.INSTALLED){
 										// 模块消息
 										CommonModuleMessage commonModuleMessage = new CommonModuleMessage(
@@ -160,7 +154,7 @@ public class PushContentParser {
 										commonModuleMessage
 										.setGroupBelong(moduleName == null ? moduleIdentifer
 												: moduleName);
-										messageDelay = new ChanmeleonMessage(commonModuleMessage);
+										messageDelay = new ChanmeleonMessage(commonModuleMessage , userName);
 									}
 									ModuleMessage.class.cast(messageDelay.getPackedMessage())
 									.setLinkable(busiDetailBool);
@@ -171,7 +165,7 @@ public class PushContentParser {
 									// 设备消息
 									JSONObject jsonObjectMdm = new JSONObject(jsonObject.getString("extras"));
 									messageDelay = new ChanmeleonMessage(new MDMMessage(sendTime,
-											messsageId, title, content, jsonObjectMdm.getString("mdm")));
+											messsageId, title, content, jsonObjectMdm.getString("mdm")) , userName);
 								}
 								
 								if (messageDelay != null) {

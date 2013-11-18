@@ -23,6 +23,10 @@ public class ChanmeleonMessage implements Delayed {
 
 	}
 
+	public ChanmeleonMessage(AbstractMessage<?> packedMessage,String userName) {
+		this.packedMessage = packedMessage;
+		this.packedMessage.setUserName(userName);
+	}
 	/**
 	 * [包裹对象]
 	 */

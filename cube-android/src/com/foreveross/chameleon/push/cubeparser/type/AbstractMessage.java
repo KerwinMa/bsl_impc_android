@@ -32,6 +32,9 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 		this.id = id;
 	}
 
+	@DatabaseField
+	private String userName;
+	
 	public AbstractMessage() {
 		super();
 	}
@@ -172,13 +175,21 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 		});
 	}
 
-	@Override
-	public String toString() {
-		return "AbstractMessage [id=" + id + ", sendTime=" + sendTime
-				+ ", messsageId=" + messsageId + ", title=" + title
-				+ ", content=" + content + ", groupBelong=" + groupBelong
-				+ ", hasRead=" + hasRead + ", editable=" + editable
-				+ ", selected=" + selected + "]";
+	public String getUserName() {
+		return userName;
 	}
 
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	@Override
+	public String toString() {
+		return "AbstractMessage [id=" + id + ", userName=" + userName
+				+ ", sendTime=" + sendTime + ", messsageId=" + messsageId
+				+ ", title=" + title + ", content=" + content
+				+ ", groupBelong=" + groupBelong + ", hasRead=" + hasRead
+				+ ", moduleUrl=" + moduleUrl + ", editable=" + editable
+				+ ", selected=" + selected + "]";
+	}
 }

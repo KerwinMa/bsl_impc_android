@@ -1,5 +1,5 @@
 #
-# generated on 2013/11/14 03:04:40
+# generated on 2013/11/18 11:29:27
 #
 # --table-start--
 dataClass=com.foreveross.chameleon.push.cubeparser.type.AbstractMessage
@@ -8,6 +8,9 @@ tableName=abstractmessage
 # --field-start--
 fieldName=id
 generatedId=true
+# --field-end--
+# --field-start--
+fieldName=userName
 # --field-end--
 # --field-start--
 fieldName=sendTime
@@ -60,6 +63,9 @@ fieldName=id
 generatedId=true
 # --field-end--
 # --field-start--
+fieldName=userName
+# --field-end--
+# --field-start--
 fieldName=sendTime
 # --field-end--
 # --field-start--
@@ -90,6 +96,9 @@ tableName=mdmmessage
 # --field-start--
 fieldName=id
 generatedId=true
+# --field-end--
+# --field-start--
+fieldName=userName
 # --field-end--
 # --field-start--
 fieldName=sendTime
@@ -128,6 +137,9 @@ fieldName=linkable
 # --field-start--
 fieldName=id
 generatedId=true
+# --field-end--
+# --field-start--
+fieldName=userName
 # --field-end--
 # --field-start--
 fieldName=sendTime
@@ -174,6 +186,9 @@ fieldName=id
 generatedId=true
 # --field-end--
 # --field-start--
+fieldName=userName
+# --field-end--
+# --field-start--
 fieldName=sendTime
 # --field-end--
 # --field-start--
@@ -218,6 +233,9 @@ fieldName=id
 generatedId=true
 # --field-end--
 # --field-start--
+fieldName=userName
+# --field-end--
+# --field-start--
 fieldName=sendTime
 # --field-end--
 # --field-start--
@@ -248,6 +266,9 @@ tableName=SystemMessage
 # --field-start--
 fieldName=id
 generatedId=true
+# --field-end--
+# --field-start--
+fieldName=userName
 # --field-end--
 # --field-start--
 fieldName=sendTime
