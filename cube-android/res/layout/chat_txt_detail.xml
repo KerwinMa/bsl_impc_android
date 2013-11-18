@@ -37,20 +37,29 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/txt_layout"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/title_layout" >
+        android:scrollbars="none"
+        android:visibility="visible" 
+        android:layout_below="@+id/title_layout">
 
-        <TextView
-            android:id="@+id/txt_detail"
-            android:layout_margin="10dip"
+        <RelativeLayout
+            android:id="@+id/txt_layout"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:background="@color/White"
-            android:textColor="@color/font_black"
-            android:textSize="20sp" />
-    </RelativeLayout>
+             >
+
+            <TextView
+                android:id="@+id/txt_detail"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dip"
+                android:background="@color/White"
+                android:textColor="@color/font_black"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
