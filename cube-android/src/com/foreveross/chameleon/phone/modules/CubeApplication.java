@@ -381,7 +381,10 @@ public class CubeApplication implements Serializable {
 								ThreadEnforcer.MAIN).post(
 								new ModuleChangedEvent(module.getIdentifier(),
 										module.getCategory()));
-						app.save(app);
+						boolean outline = Preferences.getOutLine(Application.sharePref);
+						if (!outline){
+							save(app);
+						}
 					} else {
 						module.setModuleType(CubeModule.UNINSTALL);
 						if (!module.isHidden()) {
@@ -407,7 +410,10 @@ public class CubeApplication implements Serializable {
 		}
 
 		app.getModules().addAll(configApp.getModules());
-		app.save(app);
+		boolean outline = Preferences.getOutLine(Application.sharePref);
+		if (!outline){
+			app.save(app);
+		}
 	}
 
 	/**
@@ -501,7 +507,11 @@ public class CubeApplication implements Serializable {
 				context.sendBroadcast(new Intent("com.csair.cubeModelChange")
 						.putExtra("identifier", "none"));
 
-				save(app);
+				
+				boolean outline = Preferences.getOutLine(Application.sharePref);
+				if (!outline){
+					save(app);
+				}
 				listener.syncFinish();
 			}
 
@@ -854,7 +864,10 @@ public class CubeApplication implements Serializable {
 		tool.deleteFolder(Environment.getExternalStorageDirectory().getPath()
 				+ "/" + context.getPackageName() + "/www/" + identify);
 		instance.getModules().remove(module);
-		save(instance);
+		boolean outline = Preferences.getOutLine(Application.sharePref);
+		if (!outline){
+			save(instance);
+		}
 	}
 
 	public CubeModule getModuleByIdentify(String identify) {

@@ -73,6 +73,7 @@ import com.foreveross.chameleon.phone.ActivityManager;
 import com.foreveross.chameleon.phone.modules.CubeApplication;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
+import com.foreveross.chameleon.phone.modules.LoginModel;
 import com.foreveross.chameleon.phone.modules.MessageFragmentModel;
 import com.foreveross.chameleon.phone.modules.task.ThreadPlatformUtils;
 import com.foreveross.chameleon.phone.muc.MucManager;
@@ -752,7 +753,7 @@ public class Application extends android.app.Application implements
 			CubeApplication application = getCubeApplication();
 			application.save(application);
 		}
-
+		LoginModel.instance().clear();
 		Intent i = null;
 		if (PadUtils.isPad(this)) {
 			i = new Intent();
@@ -818,6 +819,7 @@ public class Application extends android.app.Application implements
 			CubeApplication application = getCubeApplication();
 			application.save(application);
 		}
+		LoginModel.instance().clear();
 		activityManager.popAllActivity();
 	}
 

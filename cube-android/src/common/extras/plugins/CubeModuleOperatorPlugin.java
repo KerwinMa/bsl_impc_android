@@ -18,11 +18,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.BroadcastConstans;
 import com.foreveross.chameleon.CubeAndroid;
 import com.foreveross.chameleon.CubeConstants;
-import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.phone.activity.AppDetailActivity;
@@ -40,6 +40,7 @@ import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Pool;
 import com.foreveross.chameleon.util.Preferences;
+import com.google.gson.Gson;
 
 /**
  * <BR>
@@ -87,184 +88,190 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 			CubeApplication cubeApp = app.getCubeApplication();
 			if (outline) {
 				cubeApp.loadApplication();
-				callbackContext.success("sync success");
-				return true;
-			}
-
-			cubeApp.sync(new ApplicationSyncListener() {
-
-				@Override
-				public void syncStart() {
-					// showCustomDialog(true);
+				if(args.length() >0){
+					Toast.makeText(cordova.getActivity(), "离线不能管理模块", Toast.LENGTH_SHORT).show();
+					callbackContext.error("");
+					return false;
 				}
+				callbackContext.success("sync success");
+			}
+			else {
+				cubeApp.sync(new ApplicationSyncListener() {
 
-				@Override
-				public void syncFinish() {
+					@Override
+					public void syncStart() {
+						// showCustomDialog(true);
+					}
 
-					// cancelDialog();
-					callbackContext.success("sync success");
-					String name = Preferences
-							.getUserName(Application.sharePref);
-					unInstalledModules = new ArrayList<CubeModule>();
-					updateModules = new ArrayList<CubeModule>();
-					isAutoShowModules = new ArrayList<CubeModule>();
-					// 获得自动更新列表
-					if (CubeModuleManager.getInstance().getUpdatable_map()
-							.size() != 0) {
-						for (List<CubeModule> list : CubeModuleManager
-								.getInstance().getUpdatable_map().values()) {
-							updateModules.addAll(list);
+					@Override
+					public void syncFinish() {
+
+						// cancelDialog();
+						callbackContext.success("sync success");
+						String name = Preferences
+								.getUserName(Application.sharePref);
+						unInstalledModules = new ArrayList<CubeModule>();
+						updateModules = new ArrayList<CubeModule>();
+						isAutoShowModules = new ArrayList<CubeModule>();
+						// 获得自动更新列表
+						if (CubeModuleManager.getInstance().getUpdatable_map()
+								.size() != 0) {
+							for (List<CubeModule> list : CubeModuleManager
+									.getInstance().getUpdatable_map().values()) {
+								updateModules.addAll(list);
+							}
 						}
-					}
 
-					try {
-						// 查出数据库 用户不需要自动下载的模块列表
-						autoDownloadRecord = StaticReference.userMf
-								.queryBuilder(AutoDownloadRecord.class).query();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-
-					// 获得弹出窗口
-					if (CubeModuleManager.getInstance().getInstalled_map()
-							.size() != 0) {
-						for (List<CubeModule> list : CubeModuleManager
-								.getInstance().getInstalled_map().values()) {
-
-							isAutoShowModules.addAll(list);
+						try {
+							// 查出数据库 用户不需要自动下载的模块列表
+							autoDownloadRecord = StaticReference.userMf
+									.queryBuilder(AutoDownloadRecord.class).query();
+						} catch (SQLException e) {
+							e.printStackTrace();
 						}
-					}
 
-					Boolean isExit = false;//
-					if (CubeModuleManager.getInstance().getUninstalled_map()
-							.size() != 0) {
-						for (List<CubeModule> list : CubeModuleManager
-								.getInstance().getUninstalled_map().values()) {
-							for (CubeModule c : list) {
-								// 判断是否有自动下载的字段
-								if (c.isAutoDownload()) {
-									if (autoDownloadRecord.size() != 0) {
-										for (AutoDownloadRecord a : autoDownloadRecord) {
-											// 判断需要自动下载的模块 在数据库里是否标识为不下载 1 为下载 0
-											// 为不下
-											if (c.getIdentifier().equals(
-													a.getIdentifier())
-													&& a.getHasShow().equals(
-															"1")) {
-												unInstalledModules.add(c);// 把需要自动下载的模块列表增加到list中
-												isExit = true;
-												break;
-											} else if (c.getIdentifier()
-													.equals(a.getIdentifier())
-													&& a.getHasShow().equals(
-															"0")) {
-												isExit = true;
-												break;
+						// 获得弹出窗口
+						if (CubeModuleManager.getInstance().getInstalled_map()
+								.size() != 0) {
+							for (List<CubeModule> list : CubeModuleManager
+									.getInstance().getInstalled_map().values()) {
+
+								isAutoShowModules.addAll(list);
+							}
+						}
+
+						Boolean isExit = false;//
+						if (CubeModuleManager.getInstance().getUninstalled_map()
+								.size() != 0) {
+							for (List<CubeModule> list : CubeModuleManager
+									.getInstance().getUninstalled_map().values()) {
+								for (CubeModule c : list) {
+									// 判断是否有自动下载的字段
+									if (c.isAutoDownload()) {
+										if (autoDownloadRecord.size() != 0) {
+											for (AutoDownloadRecord a : autoDownloadRecord) {
+												// 判断需要自动下载的模块 在数据库里是否标识为不下载 1 为下载 0
+												// 为不下
+												if (c.getIdentifier().equals(
+														a.getIdentifier())
+														&& a.getHasShow().equals(
+																"1")) {
+													unInstalledModules.add(c);// 把需要自动下载的模块列表增加到list中
+													isExit = true;
+													break;
+												} else if (c.getIdentifier()
+														.equals(a.getIdentifier())
+														&& a.getHasShow().equals(
+																"0")) {
+													isExit = true;
+													break;
+												}
 											}
 										}
-									}
-									if (!isExit) {
-										unInstalledModules.add(c);
+										if (!isExit) {
+											unInstalledModules.add(c);
+										}
 									}
 								}
 							}
 						}
-					}
-					// 运行网业务
-					// if(CubeModuleManager.getInstance().getUninstalled_map().size()!=0){
-					// for(List<CubeModule> list :
-					// CubeModuleManager.getInstance().getUninstalled_map().values()){
-					// for(CubeModule c :list) {
-					// //判断是否有自动下载的字段
-					// if(c.isAutoDownload()) {
-					// unInstalledModules.add(c);
-					// }
-					// }
-					// }
-					// }
+						// 运行网业务
+						// if(CubeModuleManager.getInstance().getUninstalled_map().size()!=0){
+						// for(List<CubeModule> list :
+						// CubeModuleManager.getInstance().getUninstalled_map().values()){
+						// for(CubeModule c :list) {
+						// //判断是否有自动下载的字段
+						// if(c.isAutoDownload()) {
+						// unInstalledModules.add(c);
+						// }
+						// }
+						// }
+						// }
 
-					// //弹出更新窗口
-					if (updateModules.size() != 0) {
-						showUpdateAlert(name);
-					}
-					// 弹出下载窗口
-					if (unInstalledModules.size() != 0
-							&& Preferences.getAutoDownload(name,
-									Application.sharePref)) {
-						showDownloadAlert(name);
-					}
+						// //弹出更新窗口
+						if (updateModules.size() != 0) {
+							showUpdateAlert(name);
+						}
+						// 弹出下载窗口
+						if (unInstalledModules.size() != 0
+								&& Preferences.getAutoDownload(name,
+										Application.sharePref)) {
+							showDownloadAlert(name);
+						}
 
-					List<AutoShowViewRecord> autoShowViewRecordlist = null;
-					try {
-						// 查出数据库 自动弹出窗口的信息
-						autoShowViewRecordlist = StaticReference.userMf
-								.queryBuilder(AutoShowViewRecord.class).query();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					// 判断是不是主界面 如果是管理界面 直接跳出 不做弹出模块处理
-					if (Preferences.getAppMainView(Application.sharePref)) {
-						return;
-					}
-					Preferences.saveAppMainView(true, Application.sharePref);
-					// 自动弹出指定模块界面
-					for (List<CubeModule> list : CubeModuleManager
-							.getInstance().getInstalled_map().values()) {
-						for (CubeModule c : list) {
-							if (c.isAutoShow()
-									&& autoShowViewRecordlist.size() == 0) {
-								Preferences.saveAppMainView(true,
-										Application.sharePref);
-								gotoModule(c);// 自动跳转模块
-								// 自动弹出模块后 存储当前时间
-								AutoShowViewRecord autoShowViewRecord = new AutoShowViewRecord();
-								autoShowViewRecord.setShowTime(System
-										.currentTimeMillis());
-								autoShowViewRecord.setShowIntervalTime(c
-										.getShowIntervalTime());
-								autoShowViewRecord.setUserName(Preferences
-										.getUserName(Application.sharePref));
-								autoShowViewRecord.setTimeUnit(c.getTimeUnit());
-								StaticReference.userMf
-										.createOrUpdate(autoShowViewRecord);
-								return;
-							} else {
+						List<AutoShowViewRecord> autoShowViewRecordlist = null;
+						try {
+							// 查出数据库 自动弹出窗口的信息
+							autoShowViewRecordlist = StaticReference.userMf
+									.queryBuilder(AutoShowViewRecord.class).query();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						// 判断是不是主界面 如果是管理界面 直接跳出 不做弹出模块处理
+						if (Preferences.getAppMainView(Application.sharePref)) {
+							return;
+						}
+						Preferences.saveAppMainView(true, Application.sharePref);
+						// 自动弹出指定模块界面
+						for (List<CubeModule> list : CubeModuleManager
+								.getInstance().getInstalled_map().values()) {
+							for (CubeModule c : list) {
 								if (c.isAutoShow()
-										&& saveViewModule(
-												autoShowViewRecordlist.get(0),
-												c)) {
-
+										&& autoShowViewRecordlist.size() == 0) {
 									Preferences.saveAppMainView(true,
 											Application.sharePref);
 									gotoModule(c);// 自动跳转模块
-									// 更新时间
-									AutoShowViewRecord autoShowViewRecord = autoShowViewRecordlist
-											.get(0);
+									// 自动弹出模块后 存储当前时间
+									AutoShowViewRecord autoShowViewRecord = new AutoShowViewRecord();
 									autoShowViewRecord.setShowTime(System
 											.currentTimeMillis());
 									autoShowViewRecord.setShowIntervalTime(c
 											.getShowIntervalTime());
-									autoShowViewRecord
-											.setUserName(Preferences
-													.getUserName(Application.sharePref));
-									autoShowViewRecord.setTimeUnit(c
-											.getTimeUnit());
+									autoShowViewRecord.setUserName(Preferences
+											.getUserName(Application.sharePref));
+									autoShowViewRecord.setTimeUnit(c.getTimeUnit());
 									StaticReference.userMf
 											.createOrUpdate(autoShowViewRecord);
 									return;
+								} else {
+									if (c.isAutoShow()
+											&& saveViewModule(
+													autoShowViewRecordlist.get(0),
+													c)) {
+
+										Preferences.saveAppMainView(true,
+												Application.sharePref);
+										gotoModule(c);// 自动跳转模块
+										// 更新时间
+										AutoShowViewRecord autoShowViewRecord = autoShowViewRecordlist
+												.get(0);
+										autoShowViewRecord.setShowTime(System
+												.currentTimeMillis());
+										autoShowViewRecord.setShowIntervalTime(c
+												.getShowIntervalTime());
+										autoShowViewRecord
+												.setUserName(Preferences
+														.getUserName(Application.sharePref));
+										autoShowViewRecord.setTimeUnit(c
+												.getTimeUnit());
+										StaticReference.userMf
+												.createOrUpdate(autoShowViewRecord);
+										return;
+									}
 								}
 							}
 						}
 					}
-				}
 
-				@Override
-				public void syncFail() {
-					// cancelDialog();
-					// callbackContext.error("sync error");
-					callbackContext.success("sync success");
-				}
-			}, cubeApp, cordova.getActivity(), true);
+					@Override
+					public void syncFail() {
+						// cancelDialog();
+						// callbackContext.error("sync error");
+						callbackContext.success("sync success");
+					}
+				}, cubeApp, cordova.getActivity(), true);
+			}
+
 		} else if (action.equals("setting")) {
 			Intent i = new Intent();
 			i.setClass(cordova.getActivity(), SettingsActivity.class);
@@ -605,5 +612,13 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 			progressDialog.cancel();
 		}
 	}
+	
+	class OffLine {
+		private boolean offline = false;
 
+		@Override
+		public String toString() {
+			return "offLine [offline=" + offline + "]";
+		}
+	}
 }

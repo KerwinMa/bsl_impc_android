@@ -34,4 +34,10 @@ public class LoginModel {
 		}
 		hasMap.put(SysID, model);
 	}
+	
+	public void clear(){
+		if (hasMap != null){
+			hasMap.clear();
+		}
+	}
 }

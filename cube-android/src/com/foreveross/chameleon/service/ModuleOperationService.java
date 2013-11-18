@@ -42,6 +42,7 @@ import com.foreveross.chameleon.phone.modules.task.ThreadPlatformUtils;
 import com.foreveross.chameleon.phone.modules.task.UnZipTask;
 import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.FileIntent;
+import com.foreveross.chameleon.util.Preferences;
 import com.squareup.otto.ThreadEnforcer;
 
 public class ModuleOperationService extends Service {
@@ -158,7 +159,10 @@ public class ModuleOperationService extends Service {
 							sendModuleBroadcast(module);
 							sendProcessBroadcast(module, 101);
 							sendWebBroadCast(module, "install");
-							cubeApplication.save(cubeApplication);
+							boolean outline = Preferences.getOutLine(Application.sharePref);
+							if (!outline){
+								cubeApplication.save(cubeApplication);
+							}
 							Log.v("Depends", "安装成功，开始检查依赖");
 							
 							ThreadPlatformUtils.SecreaseAutodownLoadTaskCout();//
@@ -382,7 +386,10 @@ public class ModuleOperationService extends Service {
 							.cast(getApplication()).getCubeApplication()
 							.getModules();
 					storedSet.remove(cubeModule);
-					app.save(app);
+					boolean outline = Preferences.getOutLine(Application.sharePref);
+					if (!outline){
+						app.save(app);
+					}
 					sendModuleBroadcast(cubeModule);
 					sendProcessBroadcast(cubeModule, 101);
 				} else {
@@ -575,7 +582,12 @@ public class ModuleOperationService extends Service {
 									oldModule.getIdentifier());
 							storedSet.remove(oldModule);
 							storedSet.add(module);
-							cubeApplication.save(cubeApplication);
+							
+							boolean outline = Preferences.getOutLine(Application.sharePref);
+							if (!outline){
+								cubeApplication.save(cubeApplication);
+							}
+							
 							sendWebBroadCast(module, "upgrade");
 							sendModuleBroadcast(module);
 							sendProcessBroadcast(module, 101);

@@ -109,6 +109,11 @@ public class ExtroSystem extends CordovaPlugin {
 			loginTask.cancel(true);
 			logining = false;
 		}else if (action.equals("listAllExtroSystem")) {
+			boolean outline = Preferences.getOutLine(Application.sharePref);
+			if (outline){
+				Toast.makeText(cordova.getActivity(), "离线模式不能切换登录用户", Toast.LENGTH_SHORT).show();
+				return true;
+			}
 			ArrayList<SystemInfoModel> list = getSystemInfoList();
 			final ExtroSystem plugin = this;
 			cordova.setActivityResultCallback(plugin);
