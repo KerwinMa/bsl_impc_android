@@ -22,7 +22,7 @@ public class ManualCheckUpdateListener extends AutoCheckUpdateListener{
 		//检测等待对话框
 		loadingDialog = new ProgressDialog(context);
 		loadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		loadingDialog.setTitle("版本更新");
+		loadingDialog.setTitle("南航移动应用平台版本更新");
 		loadingDialog.setMessage("正在检测更新，请稍后...");
 		loadingDialog.setCancelable(false);
 	}
@@ -46,7 +46,7 @@ public class ManualCheckUpdateListener extends AutoCheckUpdateListener{
 		loadingDialog.dismiss();
 		
 		AlertDialog dialog = new AlertDialog.Builder(context)
-		.setTitle("版本更新")
+		.setTitle("南航移动应用平台版本更新")
 		.setMessage("暂未发现有版本更新")
 		.setPositiveButton("确定", null)
 		.create();

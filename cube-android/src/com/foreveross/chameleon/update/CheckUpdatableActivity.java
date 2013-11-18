@@ -40,7 +40,7 @@ public class CheckUpdatableActivity extends Activity {
 		final CubeApplication curApp = (CubeApplication) i.getSerializableExtra("curApp");
 		final CubeApplication newApp = (CubeApplication) i.getSerializableExtra("newApp");
 		dialog = new AlertDialog.Builder(CheckUpdatableActivity.this)
-		.setTitle("应用更新")
+		.setTitle("南航移动应用平台版本更新")
 		.setMessage(msg)
 		.setCancelable(false)
 		.setPositiveButton("更新", new DialogInterface.OnClickListener() {

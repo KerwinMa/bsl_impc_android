@@ -56,7 +56,7 @@ public class AutoCheckUpdateListener implements CheckUpdateListener {
 				releaseNote);
 		
 		dialog = new AlertDialog.Builder(context)
-		.setTitle("应用更新")
+		.setTitle("南航移动应用平台版本更新")
 		.setMessage(msg)
 		.setCancelable(false)
 		.setPositiveButton("更新", new DialogInterface.OnClickListener() {
