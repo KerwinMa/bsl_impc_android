@@ -141,6 +141,7 @@ public class ChatRoomFragment extends Fragment {
 	private RelativeLayout flowview;
 	private RelativeLayout chat_send_layout;
 	private LinearLayout chat_net_exception;
+	private TextView chat_error_message;
 	private Dialog dialog;
 	public static UserModel userModel = null;
 	private ChatRoomAdapter adapter;
@@ -338,6 +339,9 @@ public class ChatRoomFragment extends Fragment {
 		chat_emotion_btn.setOnClickListener(mClickListener);
 		collect_friend = (Button) view.findViewById(R.id.chatroom_collect_friend_icon);
 		collect_friend.setOnClickListener(mClickListener);
+		chat_error_message = (TextView) view.findViewById(R.id.chat_error_message);
+		chat_net_exception = (LinearLayout) view.findViewById(R.id.chat_net_exception);
+		chat_send_layout = (RelativeLayout) view.findViewById(R.id.chat_send_layout);
 		if ("room".equals(chat)) {
 //			changeButton.setVisibility(View.GONE);
 			roomId = i.getStringExtra("jid");
@@ -370,6 +374,9 @@ public class ChatRoomFragment extends Fragment {
 				chatGroupModel.setRoomJid(roomId);
 				conversations = chatGroupModel.findLastHistory(-1);
 				Log.i("conversations" , conversations.toString());
+				chat_net_exception.setVisibility(View.VISIBLE);
+				chat_send_layout.setVisibility(View.GONE);
+				chat_error_message.setText("你已退出用户组");
 			}
 			
 		} else {
@@ -397,8 +404,6 @@ public class ChatRoomFragment extends Fragment {
 		
 		flowview = (RelativeLayout) view.findViewById(R.id.chat_room_flowview);
 		flowview.setOnClickListener(mClickListener);
-		chat_net_exception = (LinearLayout) view.findViewById(R.id.chat_net_exception);
-		chat_send_layout = (RelativeLayout) view.findViewById(R.id.chat_send_layout);
 		if (application.getNotificationService() != null){
 			currentAccount = Preferences.getUserName(Application.sharePref) + "@"
 					+ application.getNotificationService().getXmppServiceName();
@@ -447,9 +452,12 @@ public class ChatRoomFragment extends Fragment {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (application.getNotificationService() != null 
 						&& !application.getNotificationService().isOnline()) {
-					flowview.setVisibility(View.VISIBLE);
-					chat_net_exception.setVisibility(View.VISIBLE);
-					chat_send_layout.setVisibility(View.GONE);
+					
+					if (!roomIsNoExit){
+						flowview.setVisibility(View.VISIBLE);
+						chat_net_exception.setVisibility(View.VISIBLE);
+						chat_send_layout.setVisibility(View.GONE);
+					}
 					return true;
 				}
 
@@ -595,13 +603,18 @@ public class ChatRoomFragment extends Fragment {
 		NotificationService notificationService = Application.class.cast(
 				getAssocActivity().getApplication()).getNotificationService();
 		if (notificationService != null && notificationService.isOnline()) {
-			flowview.setVisibility(View.GONE);
-			chat_net_exception.setVisibility(View.GONE);
-			chat_send_layout.setVisibility(View.VISIBLE);
+			if (!roomIsNoExit){
+				flowview.setVisibility(View.GONE);
+				chat_net_exception.setVisibility(View.GONE);
+				chat_send_layout.setVisibility(View.VISIBLE);
+			}
+
 		} else {
-			flowview.setVisibility(View.VISIBLE);
-			chat_net_exception.setVisibility(View.VISIBLE);
-			chat_send_layout.setVisibility(View.GONE);
+			if (!roomIsNoExit){
+				flowview.setVisibility(View.VISIBLE);
+				chat_net_exception.setVisibility(View.VISIBLE);
+				chat_send_layout.setVisibility(View.GONE);
+			}
 			
 		}
 
@@ -710,9 +723,11 @@ public class ChatRoomFragment extends Fragment {
 			case R.id.chat_btn_sendcontent:
 				if (application.getNotificationService() != null &&
 				!application.getNotificationService().isOnline()) {
-					flowview.setVisibility(View.VISIBLE);
-					chat_net_exception.setVisibility(View.VISIBLE);
-					chat_send_layout.setVisibility(View.GONE);
+					if (!roomIsNoExit){
+						flowview.setVisibility(View.VISIBLE);
+						chat_net_exception.setVisibility(View.VISIBLE);
+						chat_send_layout.setVisibility(View.GONE);
+					}
 					return;
 				}
 				String content = edittext.getText().toString();
@@ -820,9 +835,11 @@ public class ChatRoomFragment extends Fragment {
 			case R.id.title_barright:
 				if (application.getNotificationService() != null && 
 						!application.getNotificationService().isOnline()) {
-					flowview.setVisibility(View.VISIBLE);
-					chat_net_exception.setVisibility(View.VISIBLE);
-					chat_send_layout.setVisibility(View.GONE);
+					if (!roomIsNoExit){
+						flowview.setVisibility(View.VISIBLE);
+						chat_net_exception.setVisibility(View.VISIBLE);
+						chat_send_layout.setVisibility(View.GONE);
+					}
 					return;
 				}
 				if (PadUtils.isPad(getAssocActivity())) {
@@ -845,9 +862,11 @@ public class ChatRoomFragment extends Fragment {
 			case R.id.chatroom_collect_friend_icon:
 				if (application.getNotificationService() != null && 
 						!application.getNotificationService().isOnline()) {
-					flowview.setVisibility(View.VISIBLE);
-					chat_net_exception.setVisibility(View.VISIBLE);
-					chat_send_layout.setVisibility(View.GONE);
+					if (!roomIsNoExit){
+						flowview.setVisibility(View.VISIBLE);
+						chat_net_exception.setVisibility(View.VISIBLE);
+						chat_send_layout.setVisibility(View.GONE);
+					}
 					return;
 				}
 				Application application = Application.class.cast(getAssocActivity()
@@ -1018,11 +1037,12 @@ public class ChatRoomFragment extends Fragment {
 		} else {
 			Toast.makeText(getAssocActivity(), "连接服务器失败", Toast.LENGTH_SHORT)
 					.show();
-			flowview.setVisibility(View.VISIBLE);
-			chat_net_exception.setVisibility(View.VISIBLE);
-			chat_send_layout.setVisibility(View.GONE);
+			if (!roomIsNoExit){
+				flowview.setVisibility(View.VISIBLE);
+				chat_net_exception.setVisibility(View.VISIBLE);
+				chat_send_layout.setVisibility(View.GONE);
+			}
 		}
-
 	}
 
 	@Override
@@ -1181,13 +1201,17 @@ public class ChatRoomFragment extends Fragment {
 			ConnectStatusChangeEvent connectStatusChnageEvent) {
 		String status = connectStatusChnageEvent.getStatus();
 		if (ConnectStatusChangeEvent.CONN_STATUS_ONLINE.equals(status)) {
-			flowview.setVisibility(View.GONE);
-			chat_net_exception.setVisibility(View.GONE);
-			chat_send_layout.setVisibility(View.VISIBLE);
+			if (!roomIsNoExit){
+				flowview.setVisibility(View.GONE);
+				chat_net_exception.setVisibility(View.GONE);
+				chat_send_layout.setVisibility(View.VISIBLE);
+			}
 		} else {
-			flowview.setVisibility(View.VISIBLE);
-			chat_net_exception.setVisibility(View.VISIBLE);
-			chat_send_layout.setVisibility(View.GONE);
+			if (!roomIsNoExit){
+				flowview.setVisibility(View.VISIBLE);
+				chat_net_exception.setVisibility(View.VISIBLE);
+				chat_send_layout.setVisibility(View.GONE);
+			}
 		}
 	}
 
@@ -1446,9 +1470,11 @@ public class ChatRoomFragment extends Fragment {
 				if (application.getNotificationService() != null && 
 						!application.getNotificationService().isOnline()) {
 					Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "网络连接出现错误", Toast.LENGTH_SHORT).show();
-					flowview.setVisibility(View.VISIBLE);
-					chat_net_exception.setVisibility(View.VISIBLE);
-					chat_send_layout.setVisibility(View.GONE);
+					if (!roomIsNoExit){
+						flowview.setVisibility(View.VISIBLE);
+						chat_net_exception.setVisibility(View.VISIBLE);
+						chat_send_layout.setVisibility(View.GONE);
+					}
 					return;
 				}
 				// ====================直接显示
