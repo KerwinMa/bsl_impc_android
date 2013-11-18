@@ -3,7 +3,6 @@ package com.foreveross.chameleon.store.model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import android.content.Context;

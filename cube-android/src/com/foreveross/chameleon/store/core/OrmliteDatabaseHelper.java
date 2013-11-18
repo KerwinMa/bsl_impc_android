@@ -11,6 +11,7 @@ import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessageStub;
 import com.foreveross.chameleon.push.cubeparser.type.SystemMessage;
 import com.foreveross.chameleon.store.model.AutoDownloadRecord;
 import com.foreveross.chameleon.store.model.AutoShowViewRecord;
+import com.foreveross.chameleon.store.model.ChatDataModel;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.MessageModule;
 import com.foreveross.chameleon.store.model.MultiUserInfoModel;
@@ -47,6 +48,7 @@ public class OrmliteDatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, AutoShowViewRecord.class);
 			TableUtils.createTable(connectionSource, MultiUserInfoModel.class);
 			TableUtils.createTable(connectionSource, SystemInfoModel.class);
+			TableUtils.createTable(connectionSource, ChatDataModel.class);
 		} catch (Exception e) {
 			Log.e(OrmliteDatabaseHelper.class.getName(),"Can't create database", e);
 			throw new RuntimeException(e);
@@ -74,6 +76,7 @@ public class OrmliteDatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, AutoShowViewRecord.class, true);
 			TableUtils.dropTable(connectionSource, MultiUserInfoModel.class, true);
 			TableUtils.dropTable(connectionSource, SystemInfoModel.class, true);
+			TableUtils.dropTable(connectionSource, ChatDataModel.class, true);
 			onCreate(db, connectionSource);
 		} catch (Exception e) {
 			Log.e(OrmliteDatabaseHelper.class.getName(),

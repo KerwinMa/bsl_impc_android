@@ -67,9 +67,9 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.CubeConstants;
-import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -93,6 +93,7 @@ import com.foreveross.chameleon.push.client.NotificationService;
 import com.foreveross.chameleon.push.client.XmppManager.RosterManager;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.store.core.StaticReference;
+import com.foreveross.chameleon.store.model.ChatDataModel;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
@@ -376,7 +377,16 @@ public class ChatRoomFragment extends Fragment {
 				Log.i("conversations" , conversations.toString());
 				chat_net_exception.setVisibility(View.VISIBLE);
 				chat_send_layout.setVisibility(View.GONE);
-				chat_error_message.setText("你已退出用户组");
+				List<ChatDataModel> models = StaticReference.userMf.queryForEq("roomJid",roomId,ChatDataModel.class);
+				if (models != null && models.size()>0){
+					ChatDataModel chatModel = models.get(0);
+					if (chatModel.getMycreate()){
+						chat_error_message.setText("用户组已解散");
+					} else {
+						chat_error_message.setText("你已退出用户组");
+					}
+				}
+				
 			}
 			
 		} else {

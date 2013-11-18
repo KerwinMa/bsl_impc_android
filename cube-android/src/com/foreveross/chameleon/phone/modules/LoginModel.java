@@ -28,6 +28,10 @@ public class LoginModel {
 		return hasMap.containsKey(SysID);
 	}
 	
+	public SystemInfoModel getSystemModel(String SysID){
+		return hasMap.get(SysID);
+	}
+	
 	public void putSysInfo(String SysID , SystemInfoModel model){
 		if (hasMap == null ){
 			hasMap = new HashMap<String, SystemInfoModel>();

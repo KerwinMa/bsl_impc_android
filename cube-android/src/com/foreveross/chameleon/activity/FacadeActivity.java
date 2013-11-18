@@ -1288,6 +1288,7 @@ public class FacadeActivity extends FragmentActivity implements
 		String passWord = (String) b.get("password");
 		boolean isremember = (Boolean) b.get("isremember");
 		boolean isoutline = (Boolean) b.get("isoutline");
+		String sysId = null;
 		// 保存当前的系统ID
 		if (activityResultCallback instanceof CubeLoginPlugin) {
 			CubeLoginPlugin plugin = (CubeLoginPlugin) activityResultCallback;
@@ -1295,18 +1296,21 @@ public class FacadeActivity extends FragmentActivity implements
 					plugin.getCallback());
 		} else if (activityResultCallback instanceof ExtroSystem){
 			if (LoginModel.instance().containSysId(model.getSysId())){
+				SystemInfoModel sysModel = LoginModel.instance().getSystemModel(model.getSysId());
 				MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
-				multiUserInfoModel.setUserName(userName);
-				multiUserInfoModel.setSystemId(model.getSysId());
+				multiUserInfoModel.setUserName(sysModel.getUsername());
+				multiUserInfoModel.setSystemId(sysModel.getSysId());
 				List<MultiUserInfoModel> list = StaticReference.userMf
 						.queryForMatching(multiUserInfoModel);
 				if (list.size() > 0){
 					MultiUserInfoModel multiModel = list.get(0);
 					passWord = multiModel.getPassWord();
+					userName = multiModel.getUserName();
+					sysId = multiModel.getSystemId();
 				}
 			}
 			ExtroSystem plugin = (ExtroSystem) activityResultCallback;
-			plugin.processLogined(userName, passWord , model.getSysId() , model ,
+			plugin.processLogined(userName, passWord , sysId , model ,
 					plugin.getCallback());
 		}
 

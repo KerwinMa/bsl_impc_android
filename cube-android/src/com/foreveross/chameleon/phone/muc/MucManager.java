@@ -26,10 +26,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
+import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.event.EventBus;
@@ -38,9 +37,12 @@ import com.foreveross.chameleon.push.client.Constants;
 import com.foreveross.chameleon.push.client.Monitor;
 import com.foreveross.chameleon.push.client.Notifier;
 import com.foreveross.chameleon.push.client.XmppManager;
+import com.foreveross.chameleon.store.core.StaticReference;
+import com.foreveross.chameleon.store.model.ChatDataModel;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
+import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.store.model.UserModel;
 import com.foreveross.chameleon.store.model.UserStatus;
 import com.foreveross.chameleon.util.HttpUtil;
@@ -1076,6 +1078,30 @@ public class MucManager {
 						chatGroupModel.setCreatorJid(creator);
 						IMModelManager.instance().addUserGroupModel(
 								chatGroupModel);
+						ChatDataModel model = new ChatDataModel();
+						model.setCreatorJid(creator);
+						model.setRoomJid(roomId);
+						String myJid = XmppManager.getMeJid();
+						if (creator.equals(myJid)){
+							model.setMycreate(true);
+						} else {
+							model.setMycreate(false);
+						}
+						List<ConversationMessage> conversations = new ArrayList<ConversationMessage>();
+						conversations.addAll(StaticReference.userMf
+								.queryBuilder(ConversationMessage.class).where()
+								.eq("chater", roomId).query());
+						if (conversations.size() == 0){
+							// 如果聊天记录为空，即在最近聊天处加一个聊天记录
+							SessionModel sessionModel = IMModelManager.instance()
+									.getSessionContainer().getSessionModel(roomId, true);
+							sessionModel.setFromType(SessionModel.SESSION_ROOM);
+							sessionModel.setRoomName(chatGroupModel.getGroupName());
+							sessionModel.setChatter(roomId);
+							sessionModel.setSendTime(System.currentTimeMillis());
+							StaticReference.userMf.createOrUpdate(sessionModel);
+						}
+						StaticReference.userMf.createOrUpdate(model);
 					
 					} else {
 						chatGroupModel = (ChatGroupModel) IMModelManager

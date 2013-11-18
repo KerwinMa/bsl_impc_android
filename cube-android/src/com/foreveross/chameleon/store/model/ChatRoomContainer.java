@@ -42,6 +42,11 @@ public class ChatRoomContainer extends
 		}
 		if (me.getJid() != null){
 			chatGroupModel.setCreatorJid(me.getJid());
+			ChatDataModel model = new ChatDataModel();
+			model.setCreatorJid(me.getJid());
+			model.setRoomJid(chatGroupModel.getGroupCode());
+			model.setMycreate(true);
+			StaticReference.userMf.createOrUpdate(model);
 		}
 		List<UserModel> invitors = new ArrayList<UserModel>();
 		for(UserModel fris :list){
