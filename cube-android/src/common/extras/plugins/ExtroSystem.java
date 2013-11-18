@@ -239,6 +239,14 @@ public class ExtroSystem extends CordovaPlugin {
 					} else {
 						boolean loginOK = jb.getBoolean("loginOK");
 						if (loginOK) {
+							boolean isRemember = Preferences.getIsRemember(Application.sharePref);
+							if (isRemember) {
+								Preferences.saveUser(password, username,
+										isRemember, Application.sharePref);
+							} else {
+								Preferences.saveUser("", username, isRemember,
+										Application.sharePref);
+							}
 							callbackContext.success("登录成功");
 							String sessionKey = jb.getString("sessionKey");
 							Application.isAppExit = false;
