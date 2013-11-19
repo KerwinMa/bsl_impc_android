@@ -1,12 +1,10 @@
 package com.foreveross.chameleon.phone.modules;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,20 +37,13 @@ import android.widget.Toast;
 
 import com.artifex.mupdfdemo.MuPDFActivity;
 import com.csair.impc.R;
-import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.phone.chat.chatroom.PicutureDetailActivity;
 import com.foreveross.chameleon.phone.chat.chatroom.TxtDetailActivity;
-import com.foreveross.chameleon.push.client.XmppManager;
 import com.foreveross.chameleon.push.cubeparser.type.AbstractMessage;
 import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessage;
-import com.foreveross.chameleon.store.model.ChatGroupModel;
-import com.foreveross.chameleon.store.model.ConversationMessage;
-import com.foreveross.chameleon.store.model.IMModelManager;
-import com.foreveross.chameleon.store.model.SessionModel;
 import com.foreveross.chameleon.util.Pool;
-
 import common.extras.plugins.FileIntent;
 
 public class NoticeListAdapter extends BaseAdapter {
@@ -161,37 +151,8 @@ public class NoticeListAdapter extends BaseAdapter {
 		}
 
 		if (TextUtils.isEmpty(noticeModuleMessage.getAttachment())) {
-			// noticeItem.attachmentsView.setVisibility(View.GONE);
-			// 假数据
-
-			noticeItem.attachmentsView.removeAllViews();
-			ArrayList<AttachmentModel> arrayList = parseJson(noticeModuleMessage
-					.getAttachment());
-			for (AttachmentModel attachmentModel : arrayList) {
-				RelativeLayout layout = (RelativeLayout) LayoutInflater.from(
-						context).inflate(R.layout.notice_attach_icon, null);
-				ImageView new_attach_icon = (ImageView) layout
-						.findViewById(R.id.new_attach_icon);
-				ProgressBar new_attach_progressBar = (ProgressBar) layout
-						.findViewById(R.id.new_attach_progressBar);
-				String fileName = attachmentModel.getFileName();
-				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")) {
-					new_attach_icon.setImageResource(R.drawable.image_default);
-				} else if (fileName.endsWith(".pdf")
-						|| fileName.endsWith(".PDF")) {
-					new_attach_icon.setImageResource(R.drawable.pdf_default);
-				} else if (fileName.endsWith(".txt")
-						|| fileName.endsWith(".TXT")) {
-					new_attach_icon.setImageResource(R.drawable.txt_default);
-				}
-				new_attach_icon.setOnClickListener(new AttachOnClickListener(
-						attachmentModel, new_attach_progressBar));
-				noticeItem.attachmentsView.addView(layout, 0);
-			}
+			noticeItem.attachmentsView.setVisibility(View.GONE);
 		} else {
-			// noticeItem.attachmentsView.setVisibility(View.GONE);
-			// 假数据
-
 			noticeItem.attachmentsView.removeAllViews();
 			ArrayList<AttachmentModel> arrayList = parseJson(noticeModuleMessage
 					.getAttachment());
@@ -200,10 +161,24 @@ public class NoticeListAdapter extends BaseAdapter {
 						context).inflate(R.layout.notice_attach_icon, null);
 				ImageView new_attach_icon = (ImageView) layout
 						.findViewById(R.id.new_attach_icon);
+				TextView new_attach_name = (TextView) layout
+						.findViewById(R.id.new_attach_name);
+				TextView new_attach_size = (TextView) layout
+						.findViewById(R.id.new_attach_size);
+				TextView new_attach_download = (TextView) layout
+						.findViewById(R.id.new_attach_download);
+				if (attachmentModel.getStatus().equals(AttachmentModel.downloaded)){
+					new_attach_download.setText("[已下载]");
+				} else {
+					new_attach_download.setText("[末下载]");
+				}
+				new_attach_name.setText(attachmentModel.getFileName());
+				new_attach_size.setText(attachmentModel.getFileSize() + "Kb");
 				ProgressBar new_attach_progressBar = (ProgressBar) layout
 						.findViewById(R.id.new_attach_progressBar);
 				String fileName = attachmentModel.getFileName();
-				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")) {
+				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")
+						|| fileName.endsWith(".jpg") || fileName.endsWith(".JPG")) {
 					new_attach_icon.setImageResource(R.drawable.image_default);
 				} else if (fileName.endsWith(".pdf")
 						|| fileName.endsWith(".PDF")) {
@@ -212,8 +187,11 @@ public class NoticeListAdapter extends BaseAdapter {
 						|| fileName.endsWith(".TXT")) {
 					new_attach_icon.setImageResource(R.drawable.txt_default);
 				}
-				new_attach_icon.setOnClickListener(new AttachOnClickListener(
-						attachmentModel, new_attach_progressBar));
+				if (attachmentModel.getStatus().equals(AttachmentModel.downloading)){
+					new_attach_progressBar.setVisibility(View.VISIBLE);
+				}
+				layout.setOnClickListener(new AttachOnClickListener(
+						attachmentModel, new_attach_progressBar , new_attach_download));
 				noticeItem.attachmentsView.addView(layout, 0);
 			}
 		}
@@ -285,7 +263,8 @@ public class NoticeListAdapter extends BaseAdapter {
 				String fileName = (String) jb.get("fileName");
 				String fileSize = (String) jb.get("fileSize");
 				String filePath = null;
-				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")) {
+				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")
+						|| fileName.endsWith(".jpg") || fileName.endsWith(".JPG")) {
 					attachmentModel.setType("png");
 					filePath = fileId + ".png";
 				} else if (fileName.endsWith(".pdf")
@@ -297,13 +276,36 @@ public class NoticeListAdapter extends BaseAdapter {
 					attachmentModel.setType("txt");
 					filePath = fileId + ".txt";
 				}
+				
+				String filePathtemp = null;
+				if (fileName.endsWith(".png") || fileName.endsWith(".PNG")
+						|| fileName.endsWith(".jpg") || fileName.endsWith(".JPG")) {
+					attachmentModel.setType("png");
+					filePathtemp = fileId + "temp" +".png";
+				} else if (fileName.endsWith(".pdf")
+						|| fileName.endsWith(".PDF")) {
+					attachmentModel.setType("pdf");
+					filePathtemp = fileId + "temp" + ".pdf";
+				} else if (fileName.endsWith(".txt")
+						|| fileName.endsWith(".TXT")) {
+					attachmentModel.setType("txt");
+					filePathtemp = fileId + "temp" +".txt";
+				}
+				
 				// 如果文件存在
 				String dir = Environment.getExternalStorageDirectory()
 						.getPath() + "/" + TmpConstants.ATTACHMENT_PATH;
 				File attachmentDir = new File(dir + "/" + filePath);
 				if (attachmentDir.exists()) {
 					attachmentModel.setFilePath(dir + "/" + filePath);
+					attachmentModel.setStatus(AttachmentModel.downloaded);
+				} else {
+					attachmentModel.setStatus(AttachmentModel.notdownload);
 				}
+				File attachmentDirtemp = new File(dir + "/" + filePathtemp);
+				if (attachmentDirtemp.exists()) {
+					attachmentModel.setStatus(AttachmentModel.downloading);
+				} 
 				attachmentModel.setFileId(fileId);
 				attachmentModel.setFileName(fileName);
 				attachmentModel.setFileSize(fileSize);
@@ -318,20 +320,63 @@ public class NoticeListAdapter extends BaseAdapter {
 	class AttachOnClickListener implements OnClickListener {
 		AttachmentModel attachmentModel;
 		ProgressBar progressBar;
-
+		TextView download;
+		
 		public AttachOnClickListener(AttachmentModel attachmentModel,
-				ProgressBar progressBar) {
+				ProgressBar progressBar , TextView download) {
 			this.attachmentModel = attachmentModel;
 			this.progressBar = progressBar;
+			this.download = download;
 		}
 
 		@Override
 		public void onClick(View v) {
+			String downStatus = attachmentModel.getStatus();
+			if (downStatus.equals(AttachmentModel.downloaded)){
+				String type = attachmentModel.getType();
+				if ("png".equals(type)) {
+					Intent detailIntent = new Intent();
+					detailIntent.putExtra("imagePath",
+							attachmentModel.getFilePath());
+					detailIntent
+							.putExtra("showFlag", false);
+					detailIntent
+							.putExtra("showTitle", true);
+					detailIntent
+							.putExtra("filename", attachmentModel.getFileName());
+					detailIntent.setClass(context,
+							PicutureDetailActivity.class);
+					context.startActivity(detailIntent);
+				} else if ("pdf".equals(type)) {
+					Uri uri = Uri.parse(attachmentModel
+							.getFilePath());
+					Intent intent = new Intent(context,
+							MuPDFActivity.class);
+					intent.putExtra("pdfTitle",
+							attachmentModel.getFileName());
+					intent.setAction(Intent.ACTION_VIEW);
+					intent.setData(uri);
+					context.startActivity(intent);
+				} else if ("txt".equals(type)) {
+					Intent detailIntent = new Intent();
+					detailIntent.putExtra("txtPath",
+							attachmentModel.getFilePath());
+					detailIntent.putExtra("txtTitle",
+							attachmentModel.getFileName());
+					detailIntent.setClass(context,
+							TxtDetailActivity.class);
+					context.startActivity(detailIntent);
+				}
+				return;
+			} else if (downStatus.equals(AttachmentModel.downloading)){
+				Toast.makeText(context, "文件正在下载", Toast.LENGTH_SHORT).show();
+				return;
+			}
 			Dialog dialog = new AlertDialog.Builder(context)
 					.setTitle(
 							"文件名称：" + attachmentModel.getFileName()
 									+ "    文件大小"
-									+ attachmentModel.getFileSize() + "B")
+									+ attachmentModel.getFileSize() + "Kb")
 					.setPositiveButton("打开",
 							new DialogInterface.OnClickListener() {
 
@@ -341,8 +386,8 @@ public class NoticeListAdapter extends BaseAdapter {
 									String filePath = attachmentModel
 											.getFilePath();
 									if (filePath == null) {
-										Toast.makeText(context, "文件末下载，请先下载",
-												Toast.LENGTH_SHORT).show();
+										new AttachmentTask(progressBar,
+												attachmentModel ,download , true).execute("");
 										dialog.dismiss();
 										return;
 									}
@@ -353,6 +398,10 @@ public class NoticeListAdapter extends BaseAdapter {
 												attachmentModel.getFilePath());
 										detailIntent
 												.putExtra("showFlag", false);
+										detailIntent
+												.putExtra("showTitle", true);
+										detailIntent
+												.putExtra("filename", attachmentModel.getFileName());
 										detailIntent.setClass(context,
 												PicutureDetailActivity.class);
 										context.startActivity(detailIntent);
@@ -361,6 +410,8 @@ public class NoticeListAdapter extends BaseAdapter {
 												.getFilePath());
 										Intent intent = new Intent(context,
 												MuPDFActivity.class);
+										intent.putExtra("pdfTitle",
+												attachmentModel.getFileName());
 										intent.setAction(Intent.ACTION_VIEW);
 										intent.setData(uri);
 										context.startActivity(intent);
@@ -368,6 +419,8 @@ public class NoticeListAdapter extends BaseAdapter {
 										Intent detailIntent = new Intent();
 										detailIntent.putExtra("txtPath",
 												attachmentModel.getFilePath());
+										detailIntent.putExtra("txtTitle",
+												attachmentModel.getFileName());
 										detailIntent.setClass(context,
 												TxtDetailActivity.class);
 										context.startActivity(detailIntent);
@@ -390,7 +443,7 @@ public class NoticeListAdapter extends BaseAdapter {
 										return;
 									}
 									new AttachmentTask(progressBar,
-											attachmentModel).execute("");
+											attachmentModel ,download).execute("");
 									dialog.dismiss();
 								}
 							}).create();
@@ -403,11 +456,22 @@ public class NoticeListAdapter extends BaseAdapter {
 		// 刷新进度条
 		private ProgressBar progressBar;
 		private AttachmentModel attachmentModel;
+		private TextView download;
+		private boolean open;
 
 		public AttachmentTask(ProgressBar progressBar,
-				AttachmentModel attachmentModel) {
+				AttachmentModel attachmentModel , TextView download) {
 			this.progressBar = progressBar;
 			this.attachmentModel = attachmentModel;
+			this.download = download;
+		}
+		
+		public AttachmentTask(ProgressBar progressBar,
+				AttachmentModel attachmentModel , TextView download , boolean open) {
+			this.progressBar = progressBar;
+			this.attachmentModel = attachmentModel;
+			this.download = download;
+			this.open = open;
 		}
 
 		@Override
@@ -419,6 +483,11 @@ public class NoticeListAdapter extends BaseAdapter {
 
 		@Override
 		protected String doInBackground(String... params) {
+			if (attachmentModel.getStatus().equals(AttachmentModel.downloading)){
+				return null;
+			} else {
+				attachmentModel.setStatus(AttachmentModel.downloading);
+			}
 			InputStream is = null;
 			FileOutputStream output = null;
 			String attachmentPath = null;
@@ -504,6 +573,44 @@ public class NoticeListAdapter extends BaseAdapter {
 			if (result != null) {
 				attachmentModel.setFilePath(result);
 				progressBar.setVisibility(View.GONE);
+				attachmentModel.setStatus(AttachmentModel.downloaded);
+				download.setText("[已下载]");
+				if (open){
+					String type = attachmentModel.getType();
+					if ("png".equals(type)) {
+						Intent detailIntent = new Intent();
+						detailIntent.putExtra("imagePath",
+								attachmentModel.getFilePath());
+						detailIntent
+								.putExtra("showFlag", false);
+						detailIntent
+								.putExtra("showTitle", true);
+						detailIntent
+								.putExtra("filename", attachmentModel.getFileName());
+						detailIntent.setClass(context,
+								PicutureDetailActivity.class);
+						context.startActivity(detailIntent);
+					} else if ("pdf".equals(type)) {
+						Uri uri = Uri.parse(attachmentModel
+								.getFilePath());
+						Intent intent = new Intent(context,
+								MuPDFActivity.class);
+						intent.putExtra("pdfTitle",
+								attachmentModel.getFileName());
+						intent.setAction(Intent.ACTION_VIEW);
+						intent.setData(uri);
+						context.startActivity(intent);
+					} else if ("txt".equals(type)) {
+						Intent detailIntent = new Intent();
+						detailIntent.putExtra("txtPath",
+								attachmentModel.getFilePath());
+						detailIntent.putExtra("txtTitle",
+								attachmentModel.getFileName());
+						detailIntent.setClass(context,
+								TxtDetailActivity.class);
+						context.startActivity(detailIntent);
+					}
+				}
 			}
 		}
 

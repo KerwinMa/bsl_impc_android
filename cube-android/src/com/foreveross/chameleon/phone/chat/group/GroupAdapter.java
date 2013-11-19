@@ -1,8 +1,12 @@
 package com.foreveross.chameleon.phone.chat.group;
 
+import java.text.Collator;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,10 +18,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Filter;
@@ -27,18 +29,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
-import com.foreveross.chameleon.URL;
-import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
-import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.FriendGroupModel;
-import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.UserModel;
 import com.foreveross.chameleon.store.model.UserStatus;
-import com.foreveross.chameleon.util.HttpUtil;
-import com.foreveross.chameleon.util.Preferences;
-import com.foreveross.chameleon.util.TimeUnit;
 
 public class GroupAdapter extends BaseExpandableListAdapter implements
 		Filterable {
@@ -50,6 +44,9 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 	public GroupAdapter(Context context, List<FriendGroupModel> groupData,
 			Filter filter) {
 		this.context = context;
+		
+		PinyinSimpleComparator comparator = new PinyinSimpleComparator();
+		Collections.sort(groupData, comparator);
 		this.groupData = groupData;
 		this.filter = filter;
 	}
@@ -354,4 +351,11 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 		}
 		return dateString;
 	}
+	
+	class PinyinSimpleComparator implements Comparator<FriendGroupModel> { 
+	    public int compare(FriendGroupModel o1, FriendGroupModel o2) { 
+	        return Collator.getInstance(Locale.CHINESE).compare(o1.getGroupName(), o2.getGroupName()); 
+	    } 
+	} 
+
 }

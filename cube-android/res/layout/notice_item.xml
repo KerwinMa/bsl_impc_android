@@ -94,8 +94,8 @@
             <LinearLayout
                 android:id="@+id/attachmentsView"
                 android:layout_width="fill_parent"
-                android:layout_height="35sp"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:paddingLeft="10dip"
                 android:paddingRight="10dip" >
             </LinearLayout>

@@ -25,11 +25,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/pic_title"
+            android:id="@+id/pdf_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:singleLine="true"
+            android:maxWidth="200dip"
             android:text="PDF预览"
             android:textColor="#ffffff"
             android:textSize="20sp"

@@ -22,4 +22,6 @@ public class MucBroadCastEvent {
 	public static final String PUSH_MUC_ADDFRIEND_FAIL = "PUSH_MUC_ADDFRIEND_FAIL";
 	
 	public static final String PUSH_MUC_ADDFRIEND_SHOWLIST = "PUSH_MUC_ADDFRIEND_SHOWLIST";
+	
+	public static final String PUSH_MUC_COUNT = "PUSH_MUC_COUNT";
 }

@@ -249,6 +249,8 @@ public class ChatRoomAdapter extends BaseAdapter {
 												.putExtra("imagePath", path);
 										detailIntent
 												.putExtra("showFlag", false);
+										detailIntent
+										.putExtra("showTitle", false);
 										detailIntent.setClass(context,
 												PicutureDetailActivity.class);
 										context.startActivity(detailIntent);
@@ -347,6 +349,8 @@ public class ChatRoomAdapter extends BaseAdapter {
 								Intent detailIntent = new Intent();
 								detailIntent.putExtra("imagePath", path);
 								detailIntent.putExtra("showFlag", false);
+								detailIntent
+								.putExtra("showTitle", false);
 								detailIntent.setClass(context,
 										PicutureDetailActivity.class);
 								context.startActivity(detailIntent);
@@ -393,6 +397,8 @@ public class ChatRoomAdapter extends BaseAdapter {
 												.putExtra("imagePath", path);
 										detailIntent
 												.putExtra("showFlag", false);
+										detailIntent
+										.putExtra("showTitle", false);
 										detailIntent.setClass(context,
 												PicutureDetailActivity.class);
 										context.startActivity(detailIntent);
@@ -490,6 +496,8 @@ public class ChatRoomAdapter extends BaseAdapter {
 								Intent detailIntent = new Intent();
 								detailIntent.putExtra("imagePath", path);
 								detailIntent.putExtra("showFlag", false);
+								detailIntent
+								.putExtra("showTitle", false);
 								detailIntent.setClass(context,
 										PicutureDetailActivity.class);
 								context.startActivity(detailIntent);

@@ -88,6 +88,16 @@ public class ExtroSystem extends CordovaPlugin {
 			String username = args.getString(0).toLowerCase();
 			String password = args.getString(1).toLowerCase();
 			String systemid = args.getString(2).toLowerCase();
+			if ("".equals(username)){
+				Toast.makeText(cordova.getActivity(), "用户名不能为空", Toast.LENGTH_SHORT).show();
+				callbackContext.error("");
+				return false;
+			}
+			if ("".equals(password)){
+				Toast.makeText(cordova.getActivity(), "密码不能为空", Toast.LENGTH_SHORT).show();
+				callbackContext.error("");
+				return false;
+			}
 			processLogined(username, password,systemid, null,
 					callbackContext);
 		} else if (action.equals("cancle")){

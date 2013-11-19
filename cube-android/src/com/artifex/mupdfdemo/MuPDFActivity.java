@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.csair.impc.R;
@@ -609,6 +610,9 @@ public class MuPDFActivity extends Activity implements OnClickListener
 		mPageSlider.setVisibility(View.INVISIBLE);
 		Button pdf_back_btn = (Button) mButtonsView.findViewById(R.id.pdf_back_btn);
 		pdf_back_btn.setOnClickListener(this);
+		TextView pdf_title  = (TextView) mButtonsView.findViewById(R.id.pdf_title);
+		String pdfTielt = getIntent().getStringExtra("pdfTitle");
+		pdf_title.setText(pdfTielt);
 	}
 
 	void showKeyboard() {}

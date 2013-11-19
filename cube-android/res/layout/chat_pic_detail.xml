@@ -34,6 +34,7 @@
             android:text="图片预览" 
             android:textColor="#ffffff"
 	        android:singleLine="true"
+	        android:maxWidth="200dip"
 	        android:textStyle="bold"
 	        android:textSize="20sp" />
 

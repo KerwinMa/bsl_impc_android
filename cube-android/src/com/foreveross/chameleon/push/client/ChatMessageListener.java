@@ -257,6 +257,8 @@ public class ChatMessageListener implements PacketListener {
 		// {
 		EventBus.getEventBus(TmpConstants.EVENTBUS_MESSAGE_CONTENT,
 				ThreadEnforcer.MAIN).post(new ConversationChangedEvent());
+		EventBus.getEventBus(TmpConstants.EVENTBUS_MUC_BROADCAST,
+				ThreadEnforcer.MAIN).post(MucBroadCastEvent.PUSH_MUC_COUNT);
 		// }
 
 	}

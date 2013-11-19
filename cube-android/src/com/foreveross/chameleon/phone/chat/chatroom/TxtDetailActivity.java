@@ -22,7 +22,9 @@ import com.foreveross.chameleon.phone.chat.image.CropImage;
 public class TxtDetailActivity extends Activity implements OnClickListener {
 
 	private TextView txt_detail;
+	private TextView txt_title;
 	String txtPath;
+	String txtTitle;
 	private Button back_btn;
 
 	@Override
@@ -31,7 +33,10 @@ public class TxtDetailActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat_txt_detail);
 		txt_detail = (TextView) findViewById(R.id.txt_detail);
+		txt_title = (TextView) findViewById(R.id.txt_title);
 		txtPath = getIntent().getStringExtra("txtPath");
+		txtTitle = getIntent().getStringExtra("txtTitle");
+		txt_title.setText(txtTitle);
 		if (txtPath != null){
 			String txt = convertCodeAndGetText(txtPath);
 			txt_detail.setText(txt);

@@ -40,7 +40,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.foreveross.chameleon.Application;
 import com.csair.impc.R;
 import com.foreveross.chameleon.phone.chat.image.CropImage;
 import com.foreveross.chameleon.phone.chat.image.Util;
@@ -125,11 +124,18 @@ public class PicutureDetailActivity extends Activity implements
 		image_layout = (RelativeLayout) findViewById(R.id.image_layout);
 		title_layout = (RelativeLayout) findViewById(R.id.title_layout);
 		bottom_layout = (RelativeLayout) findViewById(R.id.bottom_layout);
+		TextView pic_title = (TextView) findViewById(R.id.pic_title);
 		// 隐藏裁剪功能
 		bottom_layout.setVisibility(View.GONE);
 		// showCustomDialog(true);
 		imagePath = getIntent().getStringExtra("imagePath");
 		flag = getIntent().getBooleanExtra("showFlag", true);
+		
+		boolean showTitle = getIntent().getBooleanExtra("showTitle", true);
+		if (showTitle){
+			String filename = getIntent().getStringExtra("filename");
+			pic_title.setText(filename);
+		}
 		dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		if (flag) {

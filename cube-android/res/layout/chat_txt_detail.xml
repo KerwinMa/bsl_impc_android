@@ -26,13 +26,14 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/pic_title"
+            android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:singleLine="true"
             android:text="文本预览"
             android:textColor="#ffffff"
+            android:maxWidth="200dip"
             android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>

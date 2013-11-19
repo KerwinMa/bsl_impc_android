@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,9 +32,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.CubeConstants;
-import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
@@ -112,6 +111,8 @@ public class GroupFragment extends Fragment {
 
 	private LinearLayout friend_recently;
 	private TextView friend_recently_text; 
+	private ImageView countView;
+	private TextView text;
 	private ImageView friend_recently_line;
 	private LinearLayout friend_all;
 	private TextView friend_all_text; 
@@ -234,6 +235,11 @@ public class GroupFragment extends Fragment {
 		friend_recently = (LinearLayout) view.findViewById(R.id.friend_recently);
 		friend_recently.setOnClickListener(clickListener);
 		friend_recently_text = (TextView) view.findViewById(R.id.friend_recently_text);
+		countView = (ImageView) view.findViewById(R.id.count_img);
+		text = (TextView) view.findViewById(R.id.count_text);
+		CubeModule module = CubeModuleManager.getInstance()
+				.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
+		drawCountWithImg(module.getMsgCount());
 		friend_recently_line = (ImageView) view.findViewById(R.id.friend_recently_line);
 		
 		friend_all = (LinearLayout) view.findViewById(R.id.friend_all);
@@ -269,6 +275,7 @@ public class GroupFragment extends Fragment {
 							.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 					if (module != null && chatModel != null) {
 						module.decreaseMsgCountBy(chatModel.getUnreadMessageCount());
+						drawCountWithImg(module.getMsgCount());
 					}
 					if (chatModel != null){
 						chatModel.clearNewMessageCount();
@@ -301,6 +308,7 @@ public class GroupFragment extends Fragment {
 							.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 					if (module != null && user != null) {
 						module.decreaseMsgCountBy(user.getUnreadMessageCount());
+						drawCountWithImg(module.getMsgCount());
 					}
 					String chatroom = propertiesUtil.getString("chatroom", "");
 					if (user != null){
@@ -374,6 +382,7 @@ public class GroupFragment extends Fragment {
 						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 				if (module != null && user != null) {
 					module.decreaseMsgCountBy(user.getUnreadMessageCount());
+					drawCountWithImg(module.getMsgCount());
 				}
 				
 				String chatroom = propertiesUtil.getString("chatroom", "");
@@ -478,6 +487,7 @@ public class GroupFragment extends Fragment {
 						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 				if (module != null && user != null) {
 					module.decreaseMsgCountBy(user.getUnreadMessageCount());
+					drawCountWithImg(module.getMsgCount());
 				}
 				String chatroom = propertiesUtil.getString("chatroom", "");
 				if (user != null){
@@ -610,6 +620,7 @@ public class GroupFragment extends Fragment {
 						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 				if (module != null && chatModel != null) {
 					module.decreaseMsgCountBy(chatModel.getUnreadMessageCount());
+					drawCountWithImg(module.getMsgCount());
 				}
 				String chatroom = propertiesUtil.getString("chatroom", "");
 				if (chatModel != null){
@@ -652,7 +663,7 @@ public class GroupFragment extends Fragment {
 		
 		// 显示历史会话
 		currentTab = 1;
-		titlebar_content.setText("历史会话");
+		titlebar_content.setText("即时通讯");
 		recently_listview.setVisibility(View.VISIBLE);
 		group_exlistview.setVisibility(View.GONE);
 		collect_listview.setVisibility(View.GONE);
@@ -723,6 +734,7 @@ public class GroupFragment extends Fragment {
 						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 				if (module != null) {
 					module.decreaseMsgCountBy(user.getUnreadMessageCount());
+					drawCountWithImg(module.getMsgCount());
 				}
 				user.clearNewMessageCount();
 				// TODO[TEST]多组会产生bug;
@@ -773,6 +785,7 @@ public class GroupFragment extends Fragment {
 									.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 							if (module != null && chatModel != null) {
 								module.decreaseMsgCountBy(chatModel.getUnreadMessageCount());
+								drawCountWithImg(module.getMsgCount());
 							}
 							if (chatModel != null){
 								chatModel.clearNewMessageCount();
@@ -805,6 +818,7 @@ public class GroupFragment extends Fragment {
 									.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
 							if (module != null && user != null) {
 								module.decreaseMsgCountBy(user.getUnreadMessageCount());
+								drawCountWithImg(module.getMsgCount());
 							}
 							String chatroom = propertiesUtil.getString("chatroom", "");
 							if (user != null){
@@ -975,7 +989,7 @@ public class GroupFragment extends Fragment {
 				friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
 				friend_collect_line.setBackground(null);
 				currentTab = 1;
-				titlebar_content.setText("最近聊天");
+				titlebar_content.setText("即时通讯");
 				recently_listview.setVisibility(View.VISIBLE);
 				group_exlistview.setVisibility(View.GONE);
 				collect_listview.setVisibility(View.GONE);
@@ -1006,7 +1020,7 @@ public class GroupFragment extends Fragment {
 				friend_collect_line.setBackground(null);
 
 				currentTab = 2;
-				titlebar_content.setText("好友列表");
+				titlebar_content.setText("即时通讯");
 				recently_listview.setVisibility(View.GONE);
 				group_exlistview.setVisibility(View.VISIBLE);
 				collect_listview.setVisibility(View.GONE);
@@ -1038,7 +1052,7 @@ public class GroupFragment extends Fragment {
 				friend_collect_line.setBackgroundResource(R.drawable.tab_line_light);
 
 				currentTab = 3;
-				titlebar_content.setText("好友收藏");
+				titlebar_content.setText("即时通讯");
 				recently_listview.setVisibility(View.GONE);
 				group_exlistview.setVisibility(View.GONE);
 				collect_listview.setVisibility(View.VISIBLE);
@@ -1122,6 +1136,9 @@ public class GroupFragment extends Fragment {
 				if (roomAdapter != null){
 					roomAdapter.notifyDataSetChanged();
 				}
+				CubeModule module = CubeModuleManager.getInstance()
+						.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
+				drawCountWithImg(module.getMsgCount());
 			}
 		});
 	}
@@ -1214,7 +1231,7 @@ public class GroupFragment extends Fragment {
 			friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
 			friend_collect_line.setBackground(null);
 			currentTab = 1;
-			titlebar_content.setText("最近聊天");
+			titlebar_content.setText("即时通讯");
 			recently_listview.setVisibility(View.VISIBLE);
 			group_exlistview.setVisibility(View.GONE);
 			collect_listview.setVisibility(View.GONE);
@@ -1232,8 +1249,50 @@ public class GroupFragment extends Fragment {
 		}
 	}
 	
+	@Subscribe
+	public void onCountRefreshEvent(String countRefreshEvent) {
+		if (MucBroadCastEvent.PUSH_MUC_COUNT.equals(countRefreshEvent)) {
+			getAssocActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					CubeModule module = CubeModuleManager.getInstance()
+							.getCubeModuleByIdentifier(TmpConstants.CHAT_RECORD_IDENTIFIER);
+					drawCountWithImg(module.getMsgCount());}
+			});
+		}
+	}
+	
 	public void closeKeyboard(){
 		InputMethodManager imm2 = (InputMethodManager) getAssocActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm2.hideSoftInputFromWindow(app_search_edt.getWindowToken(), 0);
+	}
+	
+	public void drawCountWithImg(int count) {
+		if (count == 0) {
+			countView.setVisibility(View.GONE);
+			text.setVisibility(View.GONE);
+		} else {
+			countView.setVisibility(View.VISIBLE);
+			text.setVisibility(View.VISIBLE);
+			text.setText(String.valueOf(count));
+			int tmpCount = 1;
+			while (count >= 10) {
+				count = count / 10;
+				tmpCount++;
+			}
+			switch (tmpCount) {
+			case 1:
+				countView.setBackgroundResource(R.drawable.push_count_1);
+				break;
+			case 2:
+				countView.setBackgroundResource(R.drawable.push_count_10);
+				break;
+			case 3:
+				countView.setBackgroundResource(R.drawable.push_count_100);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }

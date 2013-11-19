@@ -1436,6 +1436,8 @@ public class ChatRoomFragment extends Fragment {
 			Intent detailIntent = new Intent();
 			detailIntent.putExtra("imagePath", selectpath);
 			detailIntent.putExtra("showFlag", true);
+			detailIntent
+			.putExtra("showTitle", false);
 			detailIntent.setClass(getAssocActivity(),
 					PicutureDetailActivity.class);
 			startActivityForResult(detailIntent, REQUEST_CODE_CROP_IMAGE);
@@ -1575,6 +1577,8 @@ public class ChatRoomFragment extends Fragment {
 		Intent detailIntent = new Intent();
 		detailIntent.putExtra("imagePath", mFileTemp.getPath());
 		detailIntent.putExtra("showFlag", true);
+		detailIntent
+		.putExtra("showTitle", false);
 		detailIntent.setClass(getAssocActivity(),
 				PicutureDetailActivity.class);
 		startActivityForResult(detailIntent, REQUEST_CODE_CROP_IMAGE);
