@@ -1050,20 +1050,14 @@ public class MucManager {
 								final String invitationroomname = roomName;
 								String s[] = creator.split("@");
 								final String invitationcreator = s[0];
-								application.getUIHandler().post(new Runnable() {
-
-									@Override
-									public void run() {
-										Intent intent = new Intent();
-										Notifier.notifyInfo(context,
-												R.drawable.appicon,
-												Constants.ID_CHAT_NOTIFICATION,
-												invitationcreator,
-												invitationcreator + "邀请你加入群组"
-														+ invitationroomname,
-												intent);
-									}
-								});
+								ConversationMessage conversation = new ConversationMessage();
+								conversation.setLocalTime(System.currentTimeMillis());
+								conversation.setChater(roomId);
+								conversation.setFromWho(creator);
+								conversation.setFromType(SessionModel.SESSION_ROOM);
+								conversation.setContent(invitationcreator + "邀请你加入群组"
+										+ invitationroomname);
+								StaticReference.userMf.createOrUpdate(conversation);
 							}
 						}
 					} catch (Exception e) {

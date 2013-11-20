@@ -376,30 +376,30 @@ public class ChatMessageListener implements PacketListener {
 					String subjectType = message.getSubject();
 					//解散群组的通知
 					if ("quitgroup".equals(subjectType)){
-						
-						ChatGroupModel chatGroupModel = 
-								IMModelManager.instance().getChatRoomContainer().getStuff(roomJid);
-						if (chatGroupModel != null){
-							final String roomName = chatGroupModel.getGroupName();
-							application.getUIHandler().post(new Runnable() {
-
-								@Override
-								public void run() {
-									Intent intent = new Intent();
-									Notifier.notifyInfo(xmppManager.getNotificationService(),
-											R.drawable.appicon, Constants.ID_CHAT_NOTIFICATION,
-											roomName, roomName + "群组已被解散", intent);
-								}
-							});
-						}
-						//自己离开用户组
 						IMModelManager.instance().getChatRoomContainer().
 						leave(application ,roomJid);
 						// 发送消息通知界面已退出群组
+						List<ConversationMessage> list = ConversationMessage.findHistory(roomJid);
+						if (localTime != null && !"".equals(localTime)){
+							conversation.setLocalTime(TimeUnit.convert2long(localTime, TimeUnit.LONG_FORMAT));
+						} else {
+							conversation.setLocalTime(System.currentTimeMillis());
+						}
+						for(ConversationMessage conversationMessage : list){
+							if(conversationMessage.getLocalTime() == conversation.getLocalTime()){
+								return;
+							}
+						}
+						conversation.setChater(roomJid);
+						conversation.setFromWho(userJid);
+						conversation.setFromType(SessionModel.SESSION_ROOM);
+						String contentString = "用户群组被解散";
+						conversation.setContent(contentString);
+						StaticReference.userMf.createOrUpdate(conversation);
 						return;
 					}
 					
-					//解散群组的通知
+					//T出群组的通知
 					if ("killperson".equals(subjectType)){
 						//被踢出群
 						ChatGroupModel chatGroupModel = 
@@ -418,35 +418,29 @@ public class ChatMessageListener implements PacketListener {
 						conversation.setChater(roomJid);
 						conversation.setFromWho(userJid);
 						conversation.setFromType(SessionModel.SESSION_ROOM);
-						if (chatGroupModel != null){
-							final String roomName = chatGroupModel.getGroupName();
-							application.getUIHandler().post(new Runnable() {
-
-								@Override
-								public void run() {
-									Intent intent = new Intent();
-									Notifier.notifyInfo(xmppManager.getNotificationService(),
-											R.drawable.appicon, Constants.ID_CHAT_NOTIFICATION,
-											roomName, "您已被" + roomName + "群组踢出群组", intent);
-								}
-							});
-						}
-						conversation.setContent("您已被" + chatGroupModel.getGroupName() + "群组踢出群组");
-						StaticReference.userMf.createOrUpdate(conversation);
 						String content = message.getBody();
+						String contentString = null;
 						if (content.equals(XmppManager.getMeJid())){
 							IMModelManager.instance().getChatRoomContainer().
 							leave(application ,roomJid);
 							// 发送消息通知界面已退出群组
-							return;
+							contentString = "您已被" + chatGroupModel.getGroupName() + "群组踢出群组";
+						} else {
+							if (content.contains("@")){
+								String s1[] = content.split("@");
+								content = s1[0];
+							}
+							contentString = content + "被" + chatGroupModel.getGroupName() + "群组踢出群组";
 						}
+						conversation.setContent(contentString);
+						StaticReference.userMf.createOrUpdate(conversation);
+						return;
+
 					}
 					
 					//收到其他用户退出用户组的通知
 					if ("quitperson".equals(subjectType)){
 						String leaveUser = message.getBody();
-//						Toast.makeText(application.getApplicationContext(), leaveUser + 
-//								"离开用户组", Toast.LENGTH_SHORT).show();
 						//刷新chatgroupModel数据
 						if (IMModelManager.instance().containUserModel(leaveUser)){
 							UserModel userModel = IMModelManager.instance().getUserModel(leaveUser);
@@ -456,12 +450,29 @@ public class ChatMessageListener implements PacketListener {
 								chatGroupModel.getList().remove(userModel);
 							}
 						}
+						List<ConversationMessage> list = ConversationMessage.findHistory(roomJid);
+						if (localTime != null && !"".equals(localTime)){
+							conversation.setLocalTime(TimeUnit.convert2long(localTime, TimeUnit.LONG_FORMAT));
+						} else {
+							conversation.setLocalTime(System.currentTimeMillis());
+						}
+						for(ConversationMessage conversationMessage : list){
+							if(conversationMessage.getLocalTime() == conversation.getLocalTime()){
+								return;
+							}
+						}
+						conversation.setChater(roomJid);
+						conversation.setFromWho(userJid);
+						conversation.setFromType(SessionModel.SESSION_ROOM);
 						conversation.setType("text");
 						if (leaveUser.contains("@")){
 							String s1[] = leaveUser.split("@");
 							leaveUser = s1[0];
 						}
-						conversation.setContent(leaveUser + "离开用户组");
+						String contentString = leaveUser + "离开用户组";
+						conversation.setContent(contentString);
+						StaticReference.userMf.createOrUpdate(conversation);
+						return;
 					}
 //					//如果是陌生人
 //					if (!IMModelManager.instance().containUserModel(userJid)){

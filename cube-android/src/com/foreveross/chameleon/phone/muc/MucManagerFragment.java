@@ -284,6 +284,8 @@ public class MucManagerFragment extends Fragment {
 								.getChatRoomContainer()
 								.free(getAssocActivity(),
 										chatGroupModel.getRoomJid());
+						conversation.setContent("用户群组被解散");
+						StaticReference.userMf.createOrUpdate(conversation);
 						Toast.makeText(getAssocActivity(), "解散群组成功",
 								Toast.LENGTH_SHORT).show();
 						// IMModelManager.instance().getSessionContainer().removeSession(chatGroupModel.getRoomJid());
@@ -296,6 +298,13 @@ public class MucManagerFragment extends Fragment {
 								content, fromWho, toWho, "quitperson");
 						MucManager.getInstanse(getAssocActivity())
 								.sendMucMessage(conversation);
+						if (fromWho.contains("@")){
+							String s1[] = fromWho.split("@");
+							fromWho = s1[0];
+						}
+						String contentString = fromWho + "离开用户组";
+						conversation.setContent(contentString);
+						StaticReference.userMf.createOrUpdate(conversation);
 						// chatGroupModel.leave(getAssocActivity());
 						IMModelManager
 								.instance()
