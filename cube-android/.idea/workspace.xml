@@ -25,12 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d67c8581-01ea-42b3-89fa-856ee7c5b92c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/service/GeoService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/util/GeoManager.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/util/GeoManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/R.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cube-android 0515.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,11 +46,14 @@
     <file path="/a.xml" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384413507119" ignored="false" />
     <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/store/model/SystemInfoModel.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384425317014" ignored="false" />
     <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/MiltiSystemAdapter.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384425317014" ignored="false" />
-    <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/activity/FacadeActivity.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384740384185" ignored="false" />
     <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/store/model/IMModelManager.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384740384185" ignored="false" />
     <file path="/GeoService.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384745972119" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384743197552" ignored="false" />
     <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeApplication.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384753750666" ignored="false" />
+    <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/GroupFragment.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384855926150" ignored="false" />
+    <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/muc/MucManager.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384855926150" ignored="false" />
+    <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/ChatRoomFragment.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384855926150" ignored="false" />
+    <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/activity/FacadeActivity.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384855926150" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,23 +133,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConvertUtil.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ConvertUtil.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/ConvertUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="13" selection-start="784" selection-end="784" vertical-scroll-proportion="-6.1764708">
+            <state line="29" column="13" selection-start="784" selection-end="784" vertical-scroll-proportion="0.0">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GeoService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/service/GeoService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="17" selection-start="726" selection-end="732" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#3635#7634#0" expanded="true" />
-                <element signature="e#7599#7600#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -187,6 +173,15 @@
         <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/CommonUtils.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="13" column="13" selection-start="300" selection-end="300" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="31" selection-start="197" selection-end="197" vertical-scroll-proportion="0.16042781">
               <folding />
             </state>
           </provider>
@@ -255,10 +250,10 @@
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/update/DownloadUpdateActivity.java" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/update/ManualCheckUpdateListener.java" />
         <option value="$PROJECT_DIR$/src/common/extras/plugins/CubeLoginPlugin.java" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/util/GeoManager.java" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/service/GeoService.java" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/update/CheckUpdatableActivity.java" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
       </list>
     </option>
   </component>
@@ -439,7 +434,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="ExportedApkPath" value="$USER_HOME$/Desktop/cubeimpc20131117.apk" />
+    <property name="ExportedApkPath" value="$USER_HOME$/Desktop/cubeimpc20131119.apk" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="ExportedModule" value="cube-android" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../aaa" />
@@ -676,12 +671,12 @@
       <workItem from="1384221119013" duration="2957000" />
       <workItem from="1384332417759" duration="3813000" />
       <workItem from="1384509668867" duration="1324000" />
-      <workItem from="1384740970231" duration="6895000" />
+      <workItem from="1384740970231" duration="7059000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44981000" />
+    <option name="totallyTimeSpent" value="45145000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -704,7 +699,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="22" width="1276" height="778" extended-state="1" />
+    <frame x="4" y="22" width="1276" height="778" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Archetypes" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969433" sideWeight="0.67021275" order="5" side_tool="false" content_ui="tabs" />
@@ -826,13 +821,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/update/ManualCheckUpdateListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="38" selection-start="285" selection-end="310" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/update/CubeCheckUpdateListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="13" selection-start="247" selection-end="247" vertical-scroll-proportion="0.0">
@@ -934,7 +922,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/ConvertUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="13" selection-start="784" selection-end="784" vertical-scroll-proportion="-6.1764708">
+        <state line="29" column="13" selection-start="784" selection-end="784" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="31" selection-start="197" selection-end="197" vertical-scroll-proportion="0.16042781">
           <folding />
         </state>
       </provider>
