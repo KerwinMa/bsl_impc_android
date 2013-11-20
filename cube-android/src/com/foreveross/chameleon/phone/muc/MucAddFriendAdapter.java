@@ -62,7 +62,7 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 		if (null == convertView) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_muc_addfriends, null, false);
-			holder.layout= (RelativeLayout) convertView.findViewById(R.id.item_layout);;
+			holder.layout= (RelativeLayout) convertView.findViewById(R.id.item_layout);
 			holder.icon = (ImageView) convertView.findViewById(R.id.item_search_icon);
 			holder.name = (TextView) convertView.findViewById(R.id.item_search_name);
 			holder.checkBox = (CheckBox) convertView.findViewById(R.id.invite_checkbox);
@@ -77,11 +77,9 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 			@Override
 			public void onClick(View v) {
 				if(selectFriends.containsKey(friend.getJid())){
-					selectFriends.remove(friend.getJid());
 					mListener.onRemoveChoisedEvent(friend);
 				}else{
-					selectFriends.put(friend.getJid(), friend);
-					mListener.onAddChoisedEvent(friend);
+					mListener.onAddChoisedEvent(friend , false);
 				}
 				
 				MucAddFriendAdapter.this.notifyDataSetChanged();
@@ -135,18 +133,6 @@ public class MucAddFriendAdapter extends BaseAdapter  implements Filterable {
 		this.mListener = mListener;
 	}
 
-	public interface IChoisedEventListener {
-		/**
-		 * 发生了事件回调
-		 * 
-		 */
-		public void onAddChoisedEvent(UserModel model);
-		
-		public void onRemoveChoisedEvent(UserModel model);
-
-	}
-	
-	
 	public int getHeadIcon(UserModel userModel) {
 		String sex = userModel.getSex();
 		String status = userModel.getStatus();
