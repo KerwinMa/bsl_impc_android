@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageView;
@@ -36,13 +37,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.CubeConstants;
-import com.csair.impc.R;
 import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.phone.chat.search.SearchFriendAdapter;
+import com.foreveross.chameleon.phone.muc.IChoisedEventListener;
 import com.foreveross.chameleon.phone.muc.MucAddFriendAdapter;
 import com.foreveross.chameleon.phone.muc.MucBroadCastEvent;
 import com.foreveross.chameleon.push.client.XmppManager;
@@ -64,7 +66,7 @@ import com.squareup.otto.ThreadEnforcer;
  * @author 冯伟立
  * @version [CubeAndroid, 2013-9-17]
  */
-public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapter.IChoisedEventListener{
+public class MucAddFirendFragment extends Fragment implements IChoisedEventListener{
 	private MucAddFriendAdapter adapter;
 	private Button titlebar_left;
 	private Button titlebar_right;
@@ -216,22 +218,24 @@ public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapte
 		searchFriendAdapter = new SearchFriendAdapter(getAssocActivity(),
 				searchFriendList);
 		searchListView.setAdapter(searchFriendAdapter);
-		searchListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				
-				UserModel user = searchFriendList.get(position);
-				selectFriends.put(user.getJid(), user);
-				invitors.remove(user);
-				invitors.add(0, user);
-				adapter.notifyDataSetChanged();
-				commonMode();
-				app_search_edt.setText("");
-				addUsrModelItem(user);
-			}
-		});
+		searchFriendAdapter.setmListener(this);
+//		searchListView.setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View v,
+//					int position, long id) {
+//				CheckBox checkBox = (CheckBox) parent.getChildAt(position).findViewById(R.id.invite_checkbox);
+//				UserModel user = searchFriendList.get(position);
+//				
+//				invitors.remove(user);
+//				invitors.add(0, user);
+////				adapter.notifyDataSetChanged();
+////				commonMode();
+////				app_search_edt.setText("");
+//				addUsrModelItem(user);
+//				selectFriends.put(user.getJid(), user);
+//			}
+//		});
 		
 		
 		
@@ -268,6 +272,7 @@ public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapte
 						searchFriendList.clear();
 						searchFriendList
 								.addAll((List<UserModel>) results.values);
+						searchFriendList.removeAll(selectFriends.values());
 						searchFriendAdapter.notifyDataSetChanged();
 					};
 				});
@@ -348,7 +353,7 @@ public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapte
 					View dialogView= LayoutInflater.from(getAssocActivity()).inflate(R.layout.dialog_muc_createroom,null);
 					final EditText edt = (EditText) dialogView.findViewById(R.id.dialog_muc_edt);
 					new AlertDialog.Builder(getAssocActivity())
-					.setTitle("输入群组名称")
+					.setTitle("请为你的群组起个名字")
 					.setView(dialogView)
 					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 						
@@ -481,7 +486,11 @@ public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapte
 		return conversation;
 	}
 	
-	private void addUsrModelItem(final UserModel userModel) {
+	private void addUsrModelItem(final UserModel userModel ,boolean addmore) {
+		
+		if (selectFriends.containsValue(userModel)){
+			return;
+		}
 		RelativeLayout layout = (RelativeLayout) LayoutInflater.from(getAssocActivity())
 				.inflate(R.layout.new_friend_item, null);
 		int id = getHeadIcon(userModel);
@@ -489,6 +498,12 @@ public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapte
 		new_friend_icon.setImageResource(id);
 		mContentLayout.addView(layout, 0);
 		hashMap.put(userModel, layout);
+		selectFriends.put(userModel.getJid(), userModel);
+		if (addmore){
+			invitors.remove(userModel);
+			invitors.add(0, userModel);
+		}
+		adapter.notifyDataSetChanged();
 		if (selectFriends.size() > 0 ){
 //			add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_normal);
 //			add_friend_btn.setClickable(true);
@@ -542,16 +557,18 @@ public class MucAddFirendFragment extends Fragment implements MucAddFriendAdapte
 
 
 	@Override
-	public void onAddChoisedEvent(UserModel model) {
+	public void onAddChoisedEvent(UserModel model , boolean addmore) {
 		// TODO Auto-generated method stub
-		addUsrModelItem(model);
+		addUsrModelItem(model , addmore);
 	}
 
 	@Override
 	public void onRemoveChoisedEvent(UserModel model) {
 		// TODO Auto-generated method stub
+		selectFriends.remove(model.getJid());
 		RelativeLayout layout = hashMap.get(model);
 		mContentLayout.removeView(layout);
+		adapter.notifyDataSetChanged();
 		if (selectFriends.size() > 0 ){
 //			add_friend_btn.setBackgroundResource(R.drawable.mm_title_act_btn_normal);
 //			add_friend_btn.setClickable(true);

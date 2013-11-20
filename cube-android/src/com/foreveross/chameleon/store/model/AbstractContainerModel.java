@@ -91,7 +91,7 @@ public abstract class AbstractContainerModel<ID, V extends IDObject<ID>> {
 		return oldV != null && oldV == v;
 	}
 
-	protected void clear() {
+	public void clear() {
 		list.clear();
 		stuffMap.clear();
 		notifyContentChange();
