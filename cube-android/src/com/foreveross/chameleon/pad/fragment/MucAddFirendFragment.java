@@ -353,7 +353,7 @@ public class MucAddFirendFragment extends Fragment implements IChoisedEventListe
 					View dialogView= LayoutInflater.from(getAssocActivity()).inflate(R.layout.dialog_muc_createroom,null);
 					final EditText edt = (EditText) dialogView.findViewById(R.id.dialog_muc_edt);
 					new AlertDialog.Builder(getAssocActivity())
-					.setTitle("输入群组名称")
+					.setTitle("请为你的群组起个名字")
 					.setView(dialogView)
 					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 						

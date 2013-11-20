@@ -5,12 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#ffffffff"
     android:layout_margin="10dip"
-    android:orientation="horizontal" >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="请输入房间名：" />
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/dialog_muc_edt"
