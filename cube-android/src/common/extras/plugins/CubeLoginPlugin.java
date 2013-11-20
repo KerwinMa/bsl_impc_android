@@ -110,6 +110,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		boolean isremember = args.getBoolean(2);
 		boolean isoutline = args.getBoolean(3);
 		if (checkLogin(username, password)) {
+			//把用户表清除
+			ArrayList<MultiUserInfoModel> arrayList = new ArrayList<MultiUserInfoModel>();
+			arrayList.addAll(StaticReference.userMf.queryForAll(MultiUserInfoModel.class));
+			for (MultiUserInfoModel multiUserInfoModel : arrayList) {
+				StaticReference.userMf.delete(multiUserInfoModel);
+			}
 			processLogined(isremember, username, password,"", isoutline,
 					callbackContext);
 			callback = callbackContext;
