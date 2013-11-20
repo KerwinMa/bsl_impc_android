@@ -1,19 +1,19 @@
 package com.foreveross.chameleon.util;
 
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.location.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.push.mina.library.util.ThreadPool;
+import com.foreveross.chameleon.service.GeoService;
+import com.foreveross.chameleon.service.ModuleOperationService;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -36,8 +36,22 @@ public class GeoManager {
 
     private Context mContext;
     private boolean runFlag  = false;
+    private GeoService geoService;
+    private ServiceConnection geoServiceConnection = new ServiceConnection() {
 
-    public GeoManager(Context mContext) {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            geoServiceConnection = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            geoService = ((GeoService.GeoServiceBinder) service)
+                    .getService();
+
+        }
+    };
+    public GeoManager(final Context mContext) {
         this.mContext = mContext;
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.foss.geoReload");
@@ -47,119 +61,22 @@ public class GeoManager {
                 if (intent.getAction().equals("com.foss.geoReload"))
                 {
                     final Context ctx = context;
-
-                    new AsyncTask<Void,Void,Void>()
-                    {
-
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-                        	return null; /*
-                            // 获取位置管理服务
-                            runFlag = true;
-                            String serviceName = Context.LOCATION_SERVICE;
-                            final LocationManager locationManager = (LocationManager) ctx.getSystemService(serviceName);
-                            // 查找到服务信息
-                            Criteria criteria = new Criteria();
-                            criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
-                            criteria.setAltitudeRequired(false);
-                            criteria.setBearingRequired(false);
-                            criteria.setCostAllowed(true);
-                            criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-                            String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-//                            Looper.prepare();
-                            locationManager.requestLocationUpdates(provider, 30 * 1000, 0,
-                                    new LocationListener() {
-                                        @Override
-                                        public void onLocationChanged(Location location) {
-                                            if(location != null)
-                                            {
-                                                double longitude = location.getLongitude();
-                                                double latitude = location.getLatitude();
-                                                Application application = Application.class.cast(ctx);
-                                                String sessionKey = Preferences.getSESSION(Application.sharePref);
-                                                String deviceId = DeviceInfoUtil.getDeviceId(application);
-                                                JSONObject json = new JSONObject();
-                                                try {
-                                                    json.put("deviceId",deviceId);
-                                                    JSONArray tmpArray = new JSONArray();
-                                                    tmpArray.put(0,longitude);
-                                                    tmpArray.put(1,latitude);
-                                                    json.put("position",tmpArray);
-                                                    HttpPost post = new HttpPost(URL.GEOPOSITION_URL+"?sessionKey="+sessionKey);
-                                                    post.addHeader("Accept", "application/json");
-                                                    post.addHeader("Content-Type", "application/json");
-                                                    post.setEntity(new StringEntity(json.toString(),"utf-8"));
-                                                    HttpClient client = new DefaultHttpClient();
-                                                    HttpResponse response = client.execute(post);
-                                                    if(response.getStatusLine().getStatusCode() == 200)
-                                                    {
-                                                        Log.v("GEO_SUCCESS_TAG", json.toString());
-                                                        if (!GeolocationUtil.isGPSON)
-                                                        {
-                                                            Intent GPSIntent = new Intent();
-                                                            GPSIntent.setClassName("com.android.settings",
-                                                                    "com.android.settings.widget.SettingsAppWidgetProvider");
-                                                            GPSIntent.addCategory("android.intent.category.ALTERNATIVE");
-                                                            GPSIntent.setData(Uri.parse("custom:3"));
-                                                            try {
-                                                                PendingIntent.getBroadcast(ctx, 0, GPSIntent, 0).send();
-                                                            } catch (PendingIntent.CanceledException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-
-                                                    }
-                                                    else
-                                                    {
-                                                        BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                                                        String line="";
-                                                        StringBuffer stringBuffer = new StringBuffer();
-                                                        while((line= br.readLine())!= null)
-                                                        {
-                                                            stringBuffer.append(line);
-                                                        }
-                                                        Log.e("GEO_FAILD_PARAMS_TAG",json.toString());
-                                                        Log.e("GEO_URL",URL.GEOPOSITION_URL+"?sessionKey="+sessionKey);
-                                                        Log.e("GEO_FAILD_TAG",stringBuffer.toString());
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                } catch (UnsupportedEncodingException e) {
-                                                    e.printStackTrace();
-                                                } catch (ClientProtocolException e) {
-                                                    e.printStackTrace();
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                                        }
-
-                                        @Override
-                                        public void onProviderEnabled(String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onProviderDisabled(String s) {
-
-                                        }
-                                    });
-                            locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
-                            return null;
-                        */}
-                    }.execute();
-
+                    Intent newIntent = GeoService.getIntent(ctx);
+                    ctx.bindService(newIntent,geoServiceConnection,Context.BIND_AUTO_CREATE);
                 }
             }
+
+
         };
-        mContext.registerReceiver(receiver,filter);
+        this.mContext.registerReceiver(receiver,filter);
     }
 
+    public GeoService getGeoService() {
+        return geoService;
+    }
 
+    public void setGeoService(GeoService geoService) {
+        this.geoService = geoService;
+    }
 }
 
