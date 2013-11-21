@@ -94,6 +94,7 @@ import com.foreveross.chameleon.util.Pool;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
+
 import common.extras.plugins.CubeLoginPlugin;
 import common.extras.plugins.ExtroSystem;
 
@@ -1198,7 +1199,21 @@ public class FacadeActivity extends FragmentActivity implements
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && url != null
 		/* && !url.contains("login") */) {
-			if (event.getAction() == KeyEvent.ACTION_UP) {
+			if (event.getAction() == KeyEvent.ACTION_DOWN) {
+				if ("file:///android_asset/www/com.csair.deviceregist/index.html".equals(url)){
+					if (PadUtils.isPad(application)) {
+						Intent i = new Intent(this, FacadeActivity.class);
+						i.putExtra("value", URL.PAD_LOGIN_URL);
+						i.putExtra("isPad", true);
+						this.startActivity(i);
+					} else {// 手机
+						Intent i = new Intent(this, FacadeActivity.class);
+						i.putExtra("value", URL.PHONE_LOGIN_URL);
+						i.putExtra("isPad", false);
+						this.startActivity(i);
+					}
+					return true;
+				}
 				Dialog dialog = new AlertDialog.Builder(this)
 						.setTitle("提示")
 						.setMessage("确定退出 ？")

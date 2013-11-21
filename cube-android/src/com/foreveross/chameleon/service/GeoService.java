@@ -63,10 +63,11 @@ public class GeoService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startGeoLocation();
-        return super.onStartCommand(intent, flags, startId);
+    	// TODO Auto-generated method stub
+    	startGeoLocation();
+    	return super.onStartCommand(intent, flags, startId);
     }
-
+    
     public void startGeoLocation()
     {
         String serviceName = Context.LOCATION_SERVICE;

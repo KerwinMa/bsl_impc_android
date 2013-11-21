@@ -117,8 +117,10 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			}
 			ArrayList<MultiUserInfoModel> arrayList = new ArrayList<MultiUserInfoModel>();
 			arrayList.addAll(StaticReference.userMf.queryForAll(MultiUserInfoModel.class));
-			for (MultiUserInfoModel multiUserInfoModel : arrayList) {
-				StaticReference.userMf.delete(multiUserInfoModel);
+			if (arrayList.size() > 0){
+				for (MultiUserInfoModel multiUserInfoModel : arrayList) {
+					StaticReference.userMf.delete(multiUserInfoModel);
+				}
 			}
 			processLogined(isremember, username, password,"", isoutline,
 					callbackContext);

@@ -667,7 +667,7 @@ public class Application extends android.app.Application implements
 		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).register(
 				mdmSubsrcriber = new MdmSubsrcriber(this));
         //开启定位
-        new GeoManager(this);
+        new GeoManager(this.getApplicationContext());
 
 	}
 
