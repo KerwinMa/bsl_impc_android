@@ -62,10 +62,10 @@ public class GeoService extends Service {
     }
 
     @Override
-    public void onCreate() {
+    public int onStartCommand(Intent intent, int flags, int startId) {
     	// TODO Auto-generated method stub
     	startGeoLocation();
-    	super.onCreate();
+    	return super.onStartCommand(intent, flags, startId);
     }
     
     public void startGeoLocation()

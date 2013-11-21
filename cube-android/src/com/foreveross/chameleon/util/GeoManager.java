@@ -63,6 +63,7 @@ public class GeoManager {
                     final Context ctx = context;
                     Intent newIntent = GeoService.getIntent(ctx);
                     ctx.bindService(newIntent,geoServiceConnection,Context.BIND_AUTO_CREATE);
+                    ctx.startService(newIntent);
                 }
             }
 
