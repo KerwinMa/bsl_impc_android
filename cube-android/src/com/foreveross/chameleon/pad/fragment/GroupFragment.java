@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import android.os.Build;
 import org.jivesoftware.smack.XMPPConnection;
 
 import android.annotation.SuppressLint;
@@ -985,9 +986,25 @@ public class GroupFragment extends Fragment {
 				friend_recently_text.setTextColor(getResources().getColor(R.color.black));
 				friend_recently_line.setBackgroundResource(R.drawable.tab_line_light);
 				friend_all_text.setTextColor(getResources().getColor(R.color.lightgrey));
-				friend_all_line.setBackground(null);
+                if(Build.VERSION.SDK_INT >= 16)
+                {
+
+                    friend_all_line.setBackground(null);
+                }
+                else
+                {
+                    friend_all_line.setBackgroundDrawable(null);
+                }
 				friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
-				friend_collect_line.setBackground(null);
+                if(Build.VERSION.SDK_INT >= 16)
+                {
+
+                    friend_collect_line.setBackground(null);
+                }
+                else
+                {
+                    friend_collect_line.setBackgroundDrawable(null);
+                }
 				currentTab = 1;
 				titlebar_content.setText("即时通讯");
 				recently_listview.setVisibility(View.VISIBLE);
@@ -1013,11 +1030,26 @@ public class GroupFragment extends Fragment {
 					break;
 				}
 				friend_recently_text.setTextColor(getResources().getColor(R.color.lightgrey));
-				friend_recently_line.setBackground(null);
+                if(Build.VERSION.SDK_INT >= 16)
+                {
+                    friend_recently_line.setBackground(null);
+                }
+				else
+                {
+                    friend_recently_line.setBackgroundDrawable(null);
+                }
 				friend_all_text.setTextColor(getResources().getColor(R.color.black));
 				friend_all_line.setBackgroundResource(R.drawable.tab_line_light);
 				friend_collect_text.setTextColor(getResources().getColor(R.color.lightgrey));
-				friend_collect_line.setBackground(null);
+                if(Build.VERSION.SDK_INT >= 16)
+                {
+                    friend_collect_line.setBackground(null);
+                }
+                else
+                {
+                    friend_collect_line.setBackgroundDrawable(null);
+                }
+
 
 				currentTab = 2;
 				titlebar_content.setText("即时通讯");
@@ -1045,9 +1077,26 @@ public class GroupFragment extends Fragment {
 					break;
 				}
 				friend_recently_text.setTextColor(getResources().getColor(R.color.lightgrey));
-				friend_recently_line.setBackground(null);
+                if(Build.VERSION.SDK_INT >= 16)
+                {
+
+                    friend_recently_line.setBackground(null);
+                }
+                else
+                {
+                    friend_recently_line.setBackgroundDrawable(null);
+                }
+
 				friend_all_text.setTextColor(getResources().getColor(R.color.lightgrey));
-				friend_all_line.setBackground(null);
+                if(Build.VERSION.SDK_INT >= 16)
+                {
+
+                    friend_all_line.setBackground(null);
+                }
+                else
+                {
+                    friend_all_line.setBackgroundDrawable(null);
+                }
 				friend_collect_text.setTextColor(getResources().getColor(R.color.black));
 				friend_collect_line.setBackgroundResource(R.drawable.tab_line_light);
 
