@@ -1,7 +1,4 @@
 document.addEventListener("deviceready", function(){
-	//激活单选框
-	$("input[name=deviceSrc]").click();
-	//查询设备注册数据并填好
 	queryAndFillDeviceInfo();
 	$("#submitBtn").click(function(){
 		console.info("submit");
@@ -11,22 +8,8 @@ document.addEventListener("deviceready", function(){
 		console.info("cancel");
 		cancel();
 	});
-	
-
-	$(".btn").bind("touchstart",function(){
-		$(this).addClass("active");
-	})
-	$(".btn").bind("touchend",function(){
-		$(this).removeClass("active");
-	})
 	// testData();
 }, false);
-
-function testPhone(phoneNum){
-	var pat = /^([0-9-\s])+$/g;
-	var value = $(this).val();
-	return pat.test(phoneNum);
-}
 
 //测试用
 function testData(){
@@ -79,19 +62,11 @@ function submit(){
 		for(var i = 0; i < inputs.length; i++){
 			var value = inputs[i].value;
 			var key = inputs[i].name;
-			if(!value || value == ""){  //替换null或者undefined
-				alert(inputs[i].placeholder);
-				return;
+			if(!value){  //替换null或者undefined
+				value = "";
 			}
 			json[key] = value;//组装数据
 		}
-		
-		var value = $("input[name=telPhone]").val();
-		if(!testPhone(value)){
-			alert("请正确填写您的联系方式");
-			return;
-		}
-
 		cordova.exec(
 			function(){	
 				// alert("注册成功"); 
@@ -117,12 +92,12 @@ function cancel(){
 }
 
 function fillData(data){
+	alert("fill data: "+data);
 	if(data){
 		$("#registInfo").html("您的设备已注册");
 	}else{
 		$("#registInfo").html("您的设备未进行注册");
 	}
-	$("input[name=deviceSrc]").val("公司配发");
 	
 	data = JSON.parse(data);
 	var inputs = $("input");
