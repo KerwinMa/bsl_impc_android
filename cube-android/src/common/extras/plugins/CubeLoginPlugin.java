@@ -111,6 +111,10 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		boolean isoutline = args.getBoolean(3);
 		if (checkLogin(username, password)) {
 			//把用户表清除
+			if (StaticReference.userMf == null) {
+				StaticReference.userMC = ModelCreator.build(application, username);
+				StaticReference.userMf = ModelFinder.build(application, username);
+			}
 			ArrayList<MultiUserInfoModel> arrayList = new ArrayList<MultiUserInfoModel>();
 			arrayList.addAll(StaticReference.userMf.queryForAll(MultiUserInfoModel.class));
 			for (MultiUserInfoModel multiUserInfoModel : arrayList) {
