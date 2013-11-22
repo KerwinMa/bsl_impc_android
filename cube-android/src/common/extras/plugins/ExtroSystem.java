@@ -128,7 +128,25 @@ public class ExtroSystem extends CordovaPlugin {
 			cordova.getActivity().overridePendingTransition(R.anim.push_right_in,
 					R.anim.push_left_out);
 		} else if (action.equals("getCurrSystem")){
-			SystemInfoModel model = getCurrSystemInfo();
+			SystemInfoModel model = null;
+			boolean outline = Preferences.getOutLine(Application.sharePref);
+			if (outline) {
+				
+				String systemId = Preferences.getSystemId(Application.sharePref);
+				ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
+				try {
+					arrayList.addAll(StaticReference.userMf
+							.queryBuilder(SystemInfoModel.class).where()
+							.eq("sysId", systemId).query());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				model = arrayList.get(0);
+				model.setCurr(true);
+			} else {
+				model = getCurrSystemInfo();
+			}
 			Gson gson = new Gson();
 			callbackContext.success(gson.toJson(model));
 		}

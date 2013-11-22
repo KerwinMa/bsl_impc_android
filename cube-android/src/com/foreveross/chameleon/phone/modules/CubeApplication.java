@@ -187,6 +187,11 @@ public class CubeApplication implements Serializable {
 					path + "/" + context.getPackageName() , "Cube-" + username + "_"
 							+ systemId + ".json");
 			CubeApplication app = buildApplication(results);
+			// 同步前先显示ui
+			boolean outline = Preferences.getOutLine(Application.sharePref);
+			if (outline) {
+				CubeModuleManager.getInstance().init(app);
+			}
 			app.context = this.context;
 			// 同步预置模块
 			if (app.getBuild() != getVersionCode()) {

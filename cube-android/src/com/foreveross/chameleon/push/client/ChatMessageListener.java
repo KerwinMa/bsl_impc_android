@@ -426,9 +426,14 @@ public class ChatMessageListener implements PacketListener {
 							// 发送消息通知界面已退出群组
 							contentString = "您已被" + chatGroupModel.getGroupName() + "群组踢出群组";
 						} else {
-							if (content.contains("@")){
-								String s1[] = content.split("@");
-								content = s1[0];
+							UserModel userModel = IMModelManager.instance().getUserModel(content);
+							if (userModel != null){
+								content = userModel.getName();
+							} else {
+								if (content.contains("@")){
+									String s1[] = content.split("@");
+									content = s1[0];
+								}
 							}
 							contentString = content + "被" + chatGroupModel.getGroupName() + "群组踢出群组";
 						}
@@ -442,8 +447,9 @@ public class ChatMessageListener implements PacketListener {
 					if ("quitperson".equals(subjectType)){
 						String leaveUser = message.getBody();
 						//刷新chatgroupModel数据
+						UserModel userModel = null;
 						if (IMModelManager.instance().containUserModel(leaveUser)){
-							UserModel userModel = IMModelManager.instance().getUserModel(leaveUser);
+							userModel = IMModelManager.instance().getUserModel(leaveUser);
 							ChatGroupModel chatGroupModel = 
 									IMModelManager.instance().getChatRoomContainer().getStuff(roomJid);
 							if (chatGroupModel != null && userModel != null){
@@ -465,9 +471,13 @@ public class ChatMessageListener implements PacketListener {
 						conversation.setFromWho(userJid);
 						conversation.setFromType(SessionModel.SESSION_ROOM);
 						conversation.setType("text");
-						if (leaveUser.contains("@")){
-							String s1[] = leaveUser.split("@");
-							leaveUser = s1[0];
+						if (userModel != null){
+							leaveUser = userModel.getName();
+						} else {
+							if (leaveUser.contains("@")){
+								String s1[] = leaveUser.split("@");
+								leaveUser = s1[0];
+							}
 						}
 						String contentString = leaveUser + "离开用户组";
 						conversation.setContent(contentString);

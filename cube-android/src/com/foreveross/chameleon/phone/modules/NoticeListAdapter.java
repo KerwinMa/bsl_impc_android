@@ -529,10 +529,15 @@ public class NoticeListAdapter extends BaseAdapter {
 				}
 				is = connect.getInputStream();
 				output = new FileOutputStream(attachmentPath);
-				int ch = 0;
-				while ((ch = is.read()) != -1) {
-					output.write(ch);
-				}
+		         // 1K的数据缓冲   
+		         byte[] bs = new byte[1024];   
+		         // 读取到的数据长度   
+		         int len;   
+		         // 输出的文件流   
+		         // 开始读取   
+		         while ((len = is.read(bs)) != -1) {   
+		        	 output.write(bs, 0, len);   
+		         }  
 				output.flush();
 				File file1 = new File(attachmentPath);
 				File file2 = new File(fileName);

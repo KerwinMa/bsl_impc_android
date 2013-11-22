@@ -101,6 +101,14 @@ public class Preferences
     }
     
     /* 记住账户实现* */
+    public static void saveUserName(String username, SharedPreferences preference)
+    {
+        Editor editor = preference.edit();
+        editor.putString(USERNAME, username);
+        editor.commit();
+    }
+    
+    /* 记住账户实现* */
     public static void saveUserJid(String userJid, SharedPreferences preference)
     {
         Editor editor = preference.edit();
