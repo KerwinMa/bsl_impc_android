@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
@@ -17,3 +18,24 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="libs/asmack-level7-3.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ormlite-android-4.45.jar" sourcepath="H:/installedDevs/mavenRepository/com/j256/ormlite/ormlite-android/4.45/ormlite-android-4.45-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ormlite-core-4.45.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/otto-1.3.3.jar" sourcepath="H:/installedDevs/mavenRepository/com/squareup/otto/1.3.3/otto-1.3.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/protobuf-java-2.5.0.jar" sourcepath="H:/installedDevs/mavenRepository/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/netmodule.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-android-1.5.8.jar"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="lib" path="libs/mina-core-2.0.7.jar" sourcepath="H:/installedDevs/mavenRepository/org/apache/mina/mina-core/2.0.7/mina-core-2.0.7-sources.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="lib" path="libs/httpmime-4.2.2.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
+>>>>>>> branch 'master' of https://github.com/fywb251/bsl_impc_android.git

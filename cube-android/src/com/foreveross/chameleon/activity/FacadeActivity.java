@@ -1468,8 +1468,17 @@ public class FacadeActivity extends FragmentActivity implements
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == 0)
+		{
+			// 发送通知
+			Intent intent = new Intent(
+					"com.foss.geoReload");
+			sendBroadcast(
+					intent);
+		}
 		if (resultCode != android.app.Activity.RESULT_OK) {
 			return;
 		}
+		
 	}
 }
