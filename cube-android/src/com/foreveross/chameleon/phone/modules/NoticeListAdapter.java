@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -52,6 +54,8 @@ public class NoticeListAdapter extends BaseAdapter {
 
 	public NoticeListAdapter(Context context,
 			List<NoticeModuleMessage> noticeModules) {
+		NoticeModuleMessageComparator comparator = new NoticeModuleMessageComparator();
+		Collections.sort(noticeModules, comparator);
 		this.context = context;
 		this.noticeModules = noticeModules;
 	}
@@ -619,5 +623,23 @@ public class NoticeListAdapter extends BaseAdapter {
 			}
 		}
 
+	}
+	
+	private class NoticeModuleMessageComparator implements Comparator<NoticeModuleMessage> {
+		@Override
+		public int compare(NoticeModuleMessage object1, NoticeModuleMessage object2) {
+			if (object1.getSendTime() < object2.getSendTime()) {
+				return 1;
+			}
+			return -1;
+		}
+	}
+	
+	@Override
+	public void notifyDataSetChanged() {
+		// 对数据源进行排序
+		NoticeModuleMessageComparator comparator = new NoticeModuleMessageComparator();
+		Collections.sort(noticeModules, comparator);
+		super.notifyDataSetChanged();
 	}
 }

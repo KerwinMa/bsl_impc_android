@@ -33,7 +33,7 @@ public abstract class AbstractMessage<T> extends BaseModel<T, Long> {
 	}
 
 	@DatabaseField
-	private String userName;
+	protected String userName;
 	
 	public AbstractMessage() {
 		super();
