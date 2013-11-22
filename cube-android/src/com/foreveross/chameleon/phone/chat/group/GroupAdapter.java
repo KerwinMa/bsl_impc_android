@@ -354,7 +354,7 @@ public class GroupAdapter extends BaseExpandableListAdapter implements
 	
 	class PinyinSimpleComparator implements Comparator<FriendGroupModel> { 
 	    public int compare(FriendGroupModel o1, FriendGroupModel o2) { 
-	        return Collator.getInstance(Locale.CHINESE).compare(o1.getGroupName(), o2.getGroupName()); 
+	        return Collator.getInstance(Locale.ENGLISH).compare(o1.getGroupCode(), o2.getGroupCode()); 
 	    } 
 	} 
 
