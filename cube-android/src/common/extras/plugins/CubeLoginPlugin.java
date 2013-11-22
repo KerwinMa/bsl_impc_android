@@ -23,9 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.location.Location;
+import android.media.audiofx.BassBoost.Settings;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -353,99 +357,111 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							application.getCubeApplication().loadApplication();
 							cordova.getActivity().startActivity(successIntent);
 							application.setLoginType(TmpConstants.LOGIN_ONLINE);
-							if (!GeolocationUtil.isOpenGPSSettings(application)) {
-								Intent GPSIntent = new Intent();
-								GPSIntent
-										.setClassName("com.android.settings",
-												"com.android.settings.widget.SettingsAppWidgetProvider");
-								GPSIntent
-										.addCategory("android.intent.category.ALTERNATIVE");
-								GPSIntent.setData(Uri.parse("custom:3"));
-								try {
-									PendingIntent.getBroadcast(application, 0,
-											GPSIntent, 0).send();
-								} catch (PendingIntent.CanceledException e) {
-									e.printStackTrace();
-								}
-							} else {
-								GeolocationUtil.isGPSON = true;
-							}
-							new AsyncTask<String, Void, Void>() {
-								@Override
-								protected Void doInBackground(String... strings) {
-									Location location = GeolocationUtil
-											.getNewLocation(application);
-									if (location == null) {
-										// 发送通知
-										Intent intent = new Intent(
-												"com.foss.geoReload");
-										cordova.getActivity().sendBroadcast(
-												intent);
-										return null;
+							if (!GeolocationUtil.isOpenGPSSettings(cordova.getActivity().getApplicationContext())) {
+//								GeolocationUtil.turnGPSOn(cordova.getActivity().getApplicationContext());
+								AlertDialog.Builder builder = new AlertDialog.Builder(cordova.getActivity()).setTitle("提示").setMessage("你的GPS定位服务没有打开").setPositiveButton("去设置", new OnClickListener() {
+									
+									public void onClick(DialogInterface dialog, int which) {
+										Intent intent = new Intent();
+										try {
+											intent.setAction(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+											intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+											cordova.getActivity().startActivityForResult(intent,0);
+										} catch (Exception e) {
+											intent.setAction(android.provider.Settings.ACTION_SETTINGS);
+											cordova.getActivity().startActivityForResult(intent, 0);
+										}
+										
 									}
-									double longitude = location.getLongitude();
-									double latitude = location.getLatitude();
-									String sessionKey = strings[0];
-									String deviceId = DeviceInfoUtil
-											.getDeviceId(application);
-									JSONObject json = new JSONObject();
-									try {
-										json.put("deviceId", deviceId);
-										JSONArray tmpArray = new JSONArray();
-										tmpArray.put(0, longitude);
-										tmpArray.put(1, latitude);
-										// double[] arrays = new
-										// double[]{longitude,latitude};
-										json.put("position", tmpArray);
-										HttpPost post = new HttpPost(
-												URL.GEOPOSITION_URL
-														+ "?sessionKey="
-														+ sessionKey);
-										post.addHeader("Accept",
-												"application/json");
-										post.addHeader("Content-Type",
-												"application/json");
-										post.setEntity(new StringEntity(json
-												.toString(), "utf-8"));
-										HttpClient client = new DefaultHttpClient();
-										HttpResponse response = client
-												.execute(post);
-										if (response.getStatusLine()
-												.getStatusCode() == 200) {
-											Log.v("GEO_SUCCESS_TAG",
-													json.toString());
-										} else {
-											BufferedReader br = new BufferedReader(
-													new InputStreamReader(
-															response.getEntity()
-																	.getContent()));
-											String line = "";
-											StringBuffer stringBuffer = new StringBuffer();
-											while ((line = br.readLine()) != null) {
-												stringBuffer.append(line);
-											}
-											Log.e("GEO_FAILD_PARAMS_TAG",
-													json.toString());
-											Log.e("GEO_URL",
+								}).setNegativeButton("取消", new OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										
+									}
+								});
+								builder.create();
+								builder.show();
+							} else {
+								new AsyncTask<String, Void, Void>() {
+									@Override
+									protected Void doInBackground(String... strings) {
+										Location location = GeolocationUtil
+												.getNewLocation(application);
+										if (location == null) {
+											// 发送通知
+											Intent intent = new Intent(
+													"com.foss.geoReload");
+											cordova.getActivity().sendBroadcast(
+													intent);
+											return null;
+										}
+										double longitude = location.getLongitude();
+										double latitude = location.getLatitude();
+										String sessionKey = strings[0];
+										String deviceId = DeviceInfoUtil
+												.getDeviceId(application);
+										JSONObject json = new JSONObject();
+										try {
+											json.put("deviceId", deviceId);
+											JSONArray tmpArray = new JSONArray();
+											tmpArray.put(0, longitude);
+											tmpArray.put(1, latitude);
+											// double[] arrays = new
+											// double[]{longitude,latitude};
+											json.put("position", tmpArray);
+											HttpPost post = new HttpPost(
 													URL.GEOPOSITION_URL
 															+ "?sessionKey="
 															+ sessionKey);
-											Log.e("GEO_FAILD_TAG",
-													stringBuffer.toString());
+											post.addHeader("Accept",
+													"application/json");
+											post.addHeader("Content-Type",
+													"application/json");
+											post.setEntity(new StringEntity(json
+													.toString(), "utf-8"));
+											HttpClient client = new DefaultHttpClient();
+											HttpResponse response = client
+													.execute(post);
+											if (response.getStatusLine()
+													.getStatusCode() == 200) {
+												Log.v("GEO_SUCCESS_TAG",
+														json.toString());
+											} else {
+												BufferedReader br = new BufferedReader(
+														new InputStreamReader(
+																response.getEntity()
+																		.getContent()));
+												String line = "";
+												StringBuffer stringBuffer = new StringBuffer();
+												while ((line = br.readLine()) != null) {
+													stringBuffer.append(line);
+												}
+												Log.e("GEO_FAILD_PARAMS_TAG",
+														json.toString());
+												Log.e("GEO_URL",
+														URL.GEOPOSITION_URL
+																+ "?sessionKey="
+																+ sessionKey);
+												Log.e("GEO_FAILD_TAG",
+														stringBuffer.toString());
+											}
+										} catch (JSONException e) {
+											e.printStackTrace();
+										} catch (UnsupportedEncodingException e) {
+											e.printStackTrace();
+										} catch (ClientProtocolException e) {
+											e.printStackTrace();
+										} catch (IOException e) {
+											e.printStackTrace();
 										}
-									} catch (JSONException e) {
-										e.printStackTrace();
-									} catch (UnsupportedEncodingException e) {
-										e.printStackTrace();
-									} catch (ClientProtocolException e) {
-										e.printStackTrace();
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
 
-									return null;
-								}
-							}.execute(sessionKey);
+										return null;
+									}
+								}.execute(sessionKey);
+							}
+							
 
 							new AsyncTask<Void, Void, Void>() {
 
