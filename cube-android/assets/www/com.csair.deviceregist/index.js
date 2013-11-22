@@ -50,10 +50,12 @@ function queryAndFillDeviceInfo(){
 				console.log("查询成功");
 				if(data){
                     //安卓是在这里如,传入object,ios是直接调用fillData
+                    $("#registInfo").html("您的设备已注册");
                     data = JSON.stringify(data);
 					fillData(data);
 				    isUpdate = true;
 				}else{
+					$("#registInfo").html("您的设备未进行注册");
 					isUpdate = false;
 				}
 			}, 
@@ -72,45 +74,50 @@ function submit(){
 		// if(isUpdate){
 		// 	submitType = "updateDevice";
 		// }
-		var inputs = $("input");
+		
+		var inputs = $("input[type=text]");
 		var json = {};//传给客户端的参数是json
 		for(var i = 0; i < inputs.length; i++){
-			var value = inputs[i].value;
+			var value = $(inputs[i]).val();
 			var key = inputs[i].name;
 			if(inputs[i].type != "radio"){
 				if(!value || value == ""){  //替换null或者undefined
 					// alert(inputs[i].placeholder.split(",")[0]);
 					navigator.notification.alert( 
-			            inputs[i].placeholder.split(",")[0],  // 显示信息 
+			             inputs[i].placeholder.split(",")[0],  // 显示信息
+			            //"请填写" + $(labels[i]).html().split(":")[0], 
 			            null,         // 警告被忽视的回调函数 
 			            '提示',            // 标题 
 			            '确定'                  // 按钮名称 
 			        ); 
+			        
 					return;
 				}
 				json[key] = value;//组装数据
 			}
 		}
-
+		var id = $("#identifier").val();
+		if(id && id != ""){
+			json["id"]= id;
+		}
 		var radios = $("input[name=deviceSrc]");
 	    for(var i = 0; i <radios.length; i++){
 	    	if(radios[i].checked){
-	    		json[key] = radios[i].value;
+	    		json["deviceSrc"] = radios[i].value;
 	    	}
 	    }
-
 		var value = $("input[name=telPhone]").val();
 		if(!testPhone(value)){
 			alert("请正确填写您的联系方式");
 			return;
 		}
-
+		
 		cordova.exec(
 			function(){	
-				// alert("注册成功"); 
+				//alert("注册成功"); 
 			}, 
 			function(err) {
-				// alert("提交失败,请检查网络连接！");
+				//alert("提交失败,请检查网络连接！");
         	}
         , "DeviceRegister", submitType, [JSON.stringify(json)]);
 	}
