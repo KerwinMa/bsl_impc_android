@@ -42,6 +42,7 @@ import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.phone.activity.MultiSystemActivity;
 import com.foreveross.chameleon.phone.modules.LoginModel;
+import com.foreveross.chameleon.phone.modules.MessageFragmentModel;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.store.core.ModelCreator;
 import com.foreveross.chameleon.store.core.ModelFinder;
@@ -114,18 +115,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		boolean isremember = args.getBoolean(2);
 		boolean isoutline = args.getBoolean(3);
 		if (checkLogin(username, password)) {
-			//把用户表清除
-			if (StaticReference.userMf == null) {
-				StaticReference.userMC = ModelCreator.build(application, username);
-				StaticReference.userMf = ModelFinder.build(application, username);
-			}
-			ArrayList<MultiUserInfoModel> arrayList = new ArrayList<MultiUserInfoModel>();
-			arrayList.addAll(StaticReference.userMf.queryForAll(MultiUserInfoModel.class));
-			if (arrayList.size() > 0){
-				for (MultiUserInfoModel multiUserInfoModel : arrayList) {
-					StaticReference.userMf.delete(multiUserInfoModel);
-				}
-			}
 			processLogined(isremember, username, password,"", isoutline,
 					callbackContext);
 			callback = callbackContext;
@@ -263,20 +252,50 @@ public class CubeLoginPlugin extends CordovaPlugin {
 				multiUserInfoModel.setUserName(username);
 				multiUserInfoModel.setPassWord(password);
 				multiUserInfoModel.setSystemId(systemId);
+				Preferences.saveSytemId(systemId,
+						Application.sharePref);
+				Preferences.saveUserName(username, Application.sharePref);
 				List<MultiUserInfoModel> list = StaticReference.userMf
 						.queryForMatching(multiUserInfoModel);
 				if (list != null && list.size() == 1) {
-					callbackContext.success("登录成功");
-					Activity activity = cordova.getActivity();
-					if (activity instanceof FacadeActivity) {
-						FacadeActivity fActivity = (FacadeActivity) activity;
-						goInToMainOutLine(username);
-						if (PadUtils.isPad(application)) {
-							fActivity.doPadNewIntent(successIntent);
-						} else {
-							fActivity.doPhoneNewIntent(successIntent);
+					
+//					cordova.getActivity().startActivity(successIntent);
+//					Activity activity = cordova.getActivity();
+					new AsyncTask<Void, Void, Void>() {
+						@Override
+						protected Void doInBackground(Void... params) {
+							// 查询所有存储用户(没有用户组)
+							List<UserModel> userModels = StaticReference.userMf
+									.queryForAll(UserModel.class);
+							for (UserModel userModel : userModels) {
+								// 从json中恢复用户组,多个用户之前共用相用的用户组
+								if (!userModel.hasResoreGroup()) {
+									userModel.restoreGroups();
+								}
+								// 查找用户历史记录
+								userModel.findHistory(-1);
+								// 如果有相同
+								if (!IMModelManager.instance().containUserModel(
+										userModel.getJid())) {
+									IMModelManager.instance().addUserModel(userModel);
+								}
+
+							}
+
+							List<SessionModel> sessionModels = StaticReference.userMf
+									.queryForAll(SessionModel.class);
+							IMModelManager.instance().getSessionContainer()
+									.addStuffs(sessionModels);
+
+							return null;
 						}
-					}
+
+						protected void onPostExecute(Void result) {
+							callbackContext.success("登录成功");
+							cordova.getActivity().startActivity(successIntent);
+							MessageFragmentModel.instance().init();
+						};
+					}.execute();
 					return;
 				}
 			}
@@ -326,7 +345,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 									Application.sharePref);
 
 							JSONArray jay = jb.getJSONArray("authSysList");
-							
+							ArrayList<String> systemIds = 
+									new ArrayList<String>();
 							for (int i = 0; i < jay.length(); i++) {
 								JSONObject jsob = (JSONObject) jay.get(i);
 								boolean curr = jsob.getBoolean("curr");
@@ -336,6 +356,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 										.get("sysName");
 								SystemInfoModel infoModel = new SystemInfoModel(
 										alias, systemId, systemName, curr, username);
+								systemIds.add(systemId);
 								StaticReference.userMf.createOrUpdate(infoModel);
 								if (curr){
 									// 保存当前的系统ID
@@ -350,6 +371,18 @@ public class CubeLoginPlugin extends CordovaPlugin {
 									LoginModel.instance().putSysInfo(systemId, infoModel);
 									StaticReference.userMf
 											.createOrUpdate(multiUserInfoModel);
+								}
+							}
+							// 查询表MultiUserInfoModel里所有数据 对数据进行更新
+							ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
+							arrayList.addAll(StaticReference.userMf.queryForAll(SystemInfoModel.class));
+							if (arrayList.size() > 0){
+								for (SystemInfoModel systemModel : arrayList) {
+									if (systemIds.contains(systemModel.getSysId())){
+										continue;
+									} else {
+										StaticReference.userMf.delete(systemModel);
+									}
 								}
 							}
 							markLogined();
@@ -496,7 +529,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 									// 更新用户标签
 									application.refreshRegisrer();
-
+									// 获取系统信息，推送信息数据
+									MessageFragmentModel.instance().init();
 									return null;
 								}
 
@@ -606,38 +640,6 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 	public void goInToMainOutLine(String username) {
 
-		new AsyncTask<Void, Void, Void>() {
 
-			@Override
-			protected Void doInBackground(Void... params) {
-				// 查询所有存储用户(没有用户组)
-				List<UserModel> userModels = StaticReference.userMf
-						.queryForAll(UserModel.class);
-				for (UserModel userModel : userModels) {
-					// 从json中恢复用户组,多个用户之前共用相用的用户组
-					if (!userModel.hasResoreGroup()) {
-						userModel.restoreGroups();
-					}
-					// 查找用户历史记录
-					userModel.findHistory(-1);
-					// 如果有相同
-					if (!IMModelManager.instance().containUserModel(
-							userModel.getJid())) {
-						IMModelManager.instance().addUserModel(userModel);
-					}
-
-				}
-
-				List<SessionModel> sessionModels = StaticReference.userMf
-						.queryForAll(SessionModel.class);
-				IMModelManager.instance().getSessionContainer()
-						.addStuffs(sessionModels);
-
-				return null;
-			}
-
-			protected void onPostExecute(Void result) {
-			};
-		}.execute();
 	}
 }

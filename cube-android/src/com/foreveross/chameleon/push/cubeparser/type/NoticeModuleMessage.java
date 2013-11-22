@@ -140,6 +140,7 @@ public class NoticeModuleMessage extends ModuleMessage<NoticeModuleMessage> {
 		moduleMessageStub.setIdentifier(identifier);
 		moduleMessageStub.setAttachment(attachment);
 		moduleMessageStub.setLinkable(linkable);
+		moduleMessageStub.setUserName(userName);
 		return moduleMessageStub;
 	}
 

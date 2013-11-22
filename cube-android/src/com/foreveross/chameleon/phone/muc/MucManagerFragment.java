@@ -156,10 +156,10 @@ public class MucManagerFragment extends Fragment {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					chatGroupModel.clear();
 					for (String jid : jids) {
 						UserModel userModel = IMModelManager.instance()
 								.getUserModel(jid);
-						chatGroupModel.clear();
 						if (userModel != null) {
 							chatGroupModel.addStuff(userModel);
 						}

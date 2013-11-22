@@ -1,4 +1,7 @@
 document.addEventListener("deviceready", function(){
+	//激活单选框
+	$("input[name=deviceSrc]").click();
+	//查询设备注册数据并填好
 	queryAndFillDeviceInfo();
 	$("#submitBtn").click(function(){
 		console.info("submit");
@@ -8,8 +11,22 @@ document.addEventListener("deviceready", function(){
 		console.info("cancel");
 		cancel();
 	});
+	
+
+	$(".btn").bind("touchstart",function(){
+		$(this).addClass("active");
+	})
+	$(".btn").bind("touchend",function(){
+		$(this).removeClass("active");
+	})
 	// testData();
 }, false);
+
+function testPhone(phoneNum){
+	var pat = /^([0-9-\s])+$/g;
+	var value = $(this).val();
+	return pat.test(phoneNum);
+}
 
 //测试用
 function testData(){
@@ -32,12 +49,8 @@ function queryAndFillDeviceInfo(){
 			function(data){
 				console.log("查询成功");
 				if(data){
-					var inputs = $("input");
-					for(var i = 0; i < inputs.length; i++){//填充数据
-						var key = inputs[i].name;
-						inputs[i].value = data[key];
-					}
-					isUpdate = true;
+					fillData(data);
+				    isUpdate = true;
 				}else{
 					isUpdate = false;
 				}
@@ -62,11 +75,34 @@ function submit(){
 		for(var i = 0; i < inputs.length; i++){
 			var value = inputs[i].value;
 			var key = inputs[i].name;
-			if(!value){  //替换null或者undefined
-				value = "";
+			if(inputs[i].type != "radio"){
+				if(!value || value == ""){  //替换null或者undefined
+					// alert(inputs[i].placeholder.split(",")[0]);
+					navigator.notification.alert( 
+			            inputs[i].placeholder.split(",")[0],  // 显示信息 
+			            null,         // 警告被忽视的回调函数 
+			            '提示',            // 标题 
+			            '确定'                  // 按钮名称 
+			        ); 
+					return;
+				}
+				json[key] = value;//组装数据
 			}
-			json[key] = value;//组装数据
 		}
+
+		var radios = $("input[name=deviceSrc]");
+	    for(var i = 0; i <radios.length; i++){
+	    	if(radios[i].checked){
+	    		json[key] = radios[i].value;
+	    	}
+	    }
+
+		var value = $("input[name=telPhone]").val();
+		if(!testPhone(value)){
+			alert("请正确填写您的联系方式");
+			return;
+		}
+
 		cordova.exec(
 			function(){	
 				// alert("注册成功"); 
@@ -75,6 +111,7 @@ function submit(){
 				// alert("提交失败,请检查网络连接！");
         	}
         , "DeviceRegister", submitType, [JSON.stringify(json)]);
+        window.location.href="index.html?cube-action=pop";
 	}
 }
 
@@ -92,20 +129,27 @@ function cancel(){
 }
 
 function fillData(data){
-	alert("fill data: "+data);
 	if(data){
 		$("#registInfo").html("您的设备已注册");
 	}else{
 		$("#registInfo").html("您的设备未进行注册");
 	}
+	$("input[name=deviceSrc]")[0].checked=true
 	
 	data = JSON.parse(data);
 	var inputs = $("input");
 	for(var i = 0; i < inputs.length; i++){
 		var input = inputs[i];
-		if(data[input.name] && data[input.name] != null){
+		if(data[input.name] && data[input.name] != null && input.type != "radio"){
 			$(input).val(data[input.name]);
 		}
 	}
-	
+	var radios = $("input[name=deviceSrc]");
+    for(var i = 0; i <radios.length; i++){
+    	var radio = $(radios[i]);
+    	if(radio.val() == data.deviceSrc){
+    		console.log("匹配"+data.deviceSrc);
+    		radios[i].checked = true;
+    	}
+    }
 }

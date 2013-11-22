@@ -496,7 +496,6 @@ public class Application extends android.app.Application implements
 	 * [功能详细描述] 2013-7-16 上午11:53:16
 	 */
 	private void initServices() {
-		MessageFragmentModel.instance().init();
 		this.bindService(ModuleOperationService.getIntent(this),
 				moduleServiceConnection, Context.BIND_AUTO_CREATE);
 		this.bindService(NotificationService.getIntent(this),
