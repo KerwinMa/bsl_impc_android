@@ -171,7 +171,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 				}
 				
 			};
-			task.setNeedProgressDialog(true);
+			task.setNeedProgressDialog(false);
 			task.setShowProgressDialog(true);
 			StringBuffer buff = new StringBuffer();
 			buff.append("Form:name=").append(json.getString("name"))

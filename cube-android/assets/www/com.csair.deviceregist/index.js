@@ -49,6 +49,8 @@ function queryAndFillDeviceInfo(){
 			function(data){
 				console.log("查询成功");
 				if(data){
+                    //安卓是在这里如,传入object,ios是直接调用fillData
+                    data = JSON.stringify(data);
 					fillData(data);
 				    isUpdate = true;
 				}else{
@@ -111,7 +113,6 @@ function submit(){
 				// alert("提交失败,请检查网络连接！");
         	}
         , "DeviceRegister", submitType, [JSON.stringify(json)]);
-        window.location.href="index.html?cube-action=pop";
 	}
 }
 
@@ -135,7 +136,7 @@ function fillData(data){
 		$("#registInfo").html("您的设备未进行注册");
 	}
 	$("input[name=deviceSrc]")[0].checked=true
-	
+
 	data = JSON.parse(data);
 	var inputs = $("input");
 	for(var i = 0; i < inputs.length; i++){
