@@ -142,7 +142,7 @@ public class Preferences
          editor.commit();
     }
     
-    public static Boolean getAutoDownload(String UserName ,SharedPreferences preference)
+    public static boolean getAutoDownload(String UserName ,SharedPreferences preference)
     {
         return preference.getBoolean(UserName, true);
     }
