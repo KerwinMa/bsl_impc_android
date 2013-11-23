@@ -358,11 +358,11 @@ public class Preferences
     
     public static void saveZhongName(String userName ,String zhongName, SharedPreferences preference){
     	Editor editor = preference.edit();
-    	editor.putString(userName, zhongName);
+    	editor.putString(userName + "zhong", zhongName);
     	editor.commit();
     }
     
     public static String getZhongName(String userName , SharedPreferences preference){
-    	 return preference.getString(userName, "");
+    	 return preference.getString(userName + "zhong", "");
     }
 }

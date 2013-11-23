@@ -174,7 +174,7 @@ public class NoticeListAdapter extends BaseAdapter {
 				if (attachmentModel.getStatus().equals(AttachmentModel.downloaded)){
 					new_attach_download.setText("[已下载]");
 				} else {
-					new_attach_download.setText("[末下载]");
+					new_attach_download.setText("[未下载]");
 				}
 				new_attach_name.setText(attachmentModel.getFileName());
 				new_attach_size.setText(attachmentModel.getFileSize() + "Kb");

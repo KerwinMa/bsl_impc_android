@@ -120,7 +120,7 @@ public class MucManagerFragment extends Fragment {
 			}
 			String myJid = XmppManager.getMeJid();
 			if (!chatGroupModel.isCreator(getAssocActivity(), myJid)) {
-				titlebar_right.setVisibility(View.INVISIBLE);
+//				titlebar_right.setVisibility(View.INVISIBLE);
 			}
 			new AsyncTask<String, Integer, Boolean>() {
 
