@@ -166,12 +166,12 @@ public class ExtroSystem extends CordovaPlugin {
 	private ArrayList<SystemInfoModel> getSystemInfoList(){
 		String username = Preferences.getUserName(Application.sharePref);
 		ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
-		if (StaticReference.userMf == null) {
+/*		if (StaticReference.userMf == null) {
 			StaticReference.userMC = ModelCreator.build(
 					application, username);
 			StaticReference.userMf = ModelFinder.build(application,
 					username);
-		}
+		}*/
 		try {
 			arrayList.addAll(StaticReference.userMf
 					.queryBuilder(SystemInfoModel.class).where()

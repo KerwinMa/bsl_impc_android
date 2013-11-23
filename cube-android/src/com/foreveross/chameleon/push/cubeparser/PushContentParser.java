@@ -55,8 +55,8 @@ public class PushContentParser {
 			String deviceId = DeviceInfoUtil.getDeviceId(context);
 			String appId = URL.getAppKey();
 			String tokenid = Long.toString(Preferences.getSessionID(Application.sharePref));
-			getMessageUrl = URL.GETPUSHMESSAGE+tokenid+"/"+deviceId+"/"+appId;
-			
+//			getMessageUrl = URL.GETPUSHMESSAGE+tokenid+"/"+deviceId+"/"+appId;
+			getMessageUrl = URL.GETPUSHMESSAGE + deviceId + "/" + appId;
 					String sendid = "";
 					HttpGet getMethod = new HttpGet(getMessageUrl);
 					HttpClient httpClient = new DefaultHttpClient();
@@ -87,8 +87,9 @@ public class PushContentParser {
 								String title = jsonObject.getString("title");
 								String content = jsonObject.getString("content");
 								String messageType = jsonObject.getString("messageType");
-								String messsageId = jsonObject.getString("sendId");
-								long sendTime = jsonObject.getLong("sendTime");
+//								String messsageId = jsonObject.getString("sendId");
+								String messsageId = jsonObject.getString("id");
+								long sendTime = System.currentTimeMillis();
 								if(messsageId!=null&&!messsageId.equals("")) {
 									sendid += messsageId+",";
 								}
@@ -104,7 +105,8 @@ public class PushContentParser {
 									String moduleIdentifer =jsonObjects.getString("moduleIdentifer");
 									String moduleName = null;
 									if(!moduleIdentifer.equals("com.foss.announcement")) {
-										moduleName= jsonObjects.getString("moduleName");
+										if(jsonObjects.has("moduleName"))
+											moduleName= jsonObjects.getString("moduleName");
 									}
 									
 									boolean moduleBadgeBool = true;
@@ -214,7 +216,8 @@ public class PushContentParser {
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
 			list.add(new BasicNameValuePair("deviceId", DeviceInfoUtil
 					.getDeviceId(context)));
-			list.add(new BasicNameValuePair("sendId", t));
+//			list.add(new BasicNameValuePair("sendId", t));
+			list.add(new BasicNameValuePair("msgId", t));
 			list.add(new BasicNameValuePair("appId", appKey));
 			httpEntity = new UrlEncodedFormEntity(list);
 			httpPut.setEntity(httpEntity);

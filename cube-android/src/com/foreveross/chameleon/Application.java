@@ -696,7 +696,8 @@ public class Application extends android.app.Application implements
 				+ "csair-mam/api/mam/clients/update/appcount/android/";
 		URL.SNAPSHOT = URL.BASE_WS + "csair-mam/api/mam/clients/widget/";
 		URL.PUSH_BASE_URL = URL.BASE_WS + "csair-push/api/";
-		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"receipts/none-receipts/";
+//		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"receipts/none-receipts/";
+		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"push-msgs/none-receipts/";
 		URL.CHECKIN_URL = URL.PUSH_BASE_URL + "checkinservice/checkins";
 		URL.CHECKOUT_URL = URL.PUSH_BASE_URL + "checkinservice/checkout";
 		URL.FEEDBACK_URL = URL.PUSH_BASE_URL + "receipts";

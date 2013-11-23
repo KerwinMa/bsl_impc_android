@@ -355,4 +355,14 @@ public class Preferences
     public static Boolean getOutLine(SharedPreferences preference) {
    	 return preference.getBoolean(OUTLINE, false);
    }
+    
+    public static void saveZhongName(String userName ,String zhongName, SharedPreferences preference){
+    	Editor editor = preference.edit();
+    	editor.putString(userName, zhongName);
+    	editor.commit();
+    }
+    
+    public static String getZhongName(String userName , SharedPreferences preference){
+    	 return preference.getString(userName, "");
+    }
 }

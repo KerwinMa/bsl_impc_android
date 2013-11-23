@@ -124,7 +124,6 @@ public class GeoService extends Service {
         criteria.setCostAllowed(true);
         criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
         String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-        Log.e("GEO_TAG", provider);
         if(provider == null)
         {
         	provider = LocationManager.GPS_PROVIDER;

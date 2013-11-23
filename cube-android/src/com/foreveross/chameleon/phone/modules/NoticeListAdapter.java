@@ -256,6 +256,9 @@ public class NoticeListAdapter extends BaseAdapter {
 	}
 
 	public ArrayList<AttachmentModel> parseJson(String attachment) {
+		if(attachment == null){
+			return null;
+		}
 //		attachment = "[{fileId:T1hyJTByVT1RCvBVdK,fileName:steps.txt,fileSize:0} , {fileId:T1gtxTByZT1RCvBVdK,fileName:ormlite.pdf,fileSize:480} , {fileId:T1TRxTByZT1RCvBVdK,fileName:120.png,fileSize:22}]";
 		ArrayList<AttachmentModel> attachmentModels = new ArrayList<AttachmentModel>();
 		try {
