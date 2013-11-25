@@ -59,7 +59,8 @@ function queryAndFillDeviceInfo(){
 				}
 			}, 
 			function(err) {
-				console.log("查询失败");
+				console.log("查询失败或者无数据");
+                $("#registInfo").html("您的设备未进行注册");
         	}
         , "DeviceRegister", "queryDevcieInfo", []);
 	}
