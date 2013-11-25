@@ -96,7 +96,7 @@ public abstract class HttpRequestAsynTask extends GeneralAsynTask {
 			return;
 		}
 
-		if ((result == null || "".equals(result)) ) {
+		if (result == null ) {
 			if(needProgressDialog){
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle("提示");

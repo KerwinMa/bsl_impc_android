@@ -26,9 +26,7 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d67c8581-01ea-42b3-89fa-856ee7c5b92c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/R.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.js" afterPath="$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/HttpRequestAsynTask.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/HttpRequestAsynTask.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cube-android 0515.iws" />
@@ -167,8 +165,31 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="52" selection-start="1238" selection-end="1238" vertical-scroll-proportion="0.52380955">
+            <state line="3" column="28" selection-start="165" selection-end="165" vertical-scroll-proportion="0.071428575">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeviceRegisterPlugin.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="54" selection-start="1396" selection-end="1396" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HttpRequestAsynTask.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/HttpRequestAsynTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="98" column="26" selection-start="2640" selection-end="2640" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#3156#3366#0" expanded="true" />
+                <element signature="e#3359#3360#0" expanded="true" />
+                <element signature="e#3669#3881#0" expanded="true" />
+                <element signature="e#3874#3875#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -209,24 +230,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Pool.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/Pool.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="13" selection-start="309" selection-end="309" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TimeUnit.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/TimeUnit.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="13" selection-start="177" selection-end="177" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PushUtil.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/PushUtil.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -260,7 +263,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/assets/Cube.json" />
         <option value="$PROJECT_DIR$/res/layout/notice_item.xml" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/util/WifiInfoManager.java" />
@@ -275,6 +277,7 @@
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/GroupFragment.java" />
         <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/util/GeolocationUtil.java" />
         <option value="$PROJECT_DIR$/src/common/extras/plugins/CubeLoginPlugin.java" />
+        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/HttpRequestAsynTask.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
       </list>
     </option>
@@ -331,6 +334,78 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chameleon" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -592,15 +667,15 @@
       <workItem from="1384332417759" duration="3813000" />
       <workItem from="1384509668867" duration="1324000" />
       <workItem from="1384740970231" duration="12242000" />
-      <workItem from="1385341779256" duration="1450000" />
+      <workItem from="1385341779256" duration="1705000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51778000" />
+    <option name="totallyTimeSpent" value="52033000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="22" width="1276" height="778" extended-state="6" />
+    <frame x="4" y="22" width="1276" height="778" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Archetypes" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969433" sideWeight="0.67021275" order="5" side_tool="false" content_ui="tabs" />
@@ -722,20 +797,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/CubeAndroid.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="13" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="275" column="47" selection-start="9120" selection-end="9123" vertical-scroll-proportion="-4.4615383">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/CommonUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="13" selection-start="300" selection-end="300" vertical-scroll-proportion="0.0">
@@ -821,9 +882,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="54" selection-start="1396" selection-end="1396" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/HttpRequestAsynTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="26" selection-start="2640" selection-end="2640" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#3156#3366#0" expanded="true" />
+            <element signature="e#3359#3360#0" expanded="true" />
+            <element signature="e#3669#3881#0" expanded="true" />
+            <element signature="e#3874#3875#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="52" selection-start="1238" selection-end="1238" vertical-scroll-proportion="0.52380955">
+        <state line="3" column="28" selection-start="165" selection-end="165" vertical-scroll-proportion="0.071428575">
           <folding />
         </state>
       </provider>
