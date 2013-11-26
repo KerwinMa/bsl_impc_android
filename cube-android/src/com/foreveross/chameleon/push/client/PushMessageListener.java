@@ -211,9 +211,9 @@ public class PushMessageListener implements PacketListener {
 		// MessageFragmentModel.instance().addMessages(
 		// new ArrayList<AbstractMessage<?>>(patchNoticeModelEvent
 		// .getPatch()));
-		if (application.shouldSendNoticeNotification()) {
+//		if (application.shouldSendNoticeNotification()) {
 			sendNoticeNotification(patchNoticeModelEvent);
-		}
+//		}
 	}
 	//公告
 	public void sendNoticeNotification(
@@ -273,8 +273,8 @@ public class PushMessageListener implements PacketListener {
 		MessageFragmentModel.instance().addMessages(
 				new ArrayList<AbstractMessage<?>>(pathMessageModelEvent
 						.getPacked()));
-		if (!pathMessageModelEvent.lastIsNotice()
-				&& application.shouldSendMessageNotification()) {
+		if (!pathMessageModelEvent.lastIsNotice()){
+//				&& application.shouldSendMessageNotification()) {
 			sendMessageNotification(pathMessageModelEvent);
 		}
 
