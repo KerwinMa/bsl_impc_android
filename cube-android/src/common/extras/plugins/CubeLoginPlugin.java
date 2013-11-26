@@ -173,10 +173,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 
 	public void processLogined(boolean isremember, String name, String pass,String systId,
 			boolean isoutline, final CallbackContext callbackContext) {
-		if (StaticReference.userMf == null) {
-			StaticReference.userMC = ModelCreator.build(application, name);
-			StaticReference.userMf = ModelFinder.build(application, name);
-		}
+		StaticReference.userMC = ModelCreator.build(application, name);
+		StaticReference.userMf = ModelFinder.build(application, name);
 		final String username = name.trim();
 		final String password = pass.trim();
 		final String sysmId = systId.trim();
@@ -291,7 +289,14 @@ public class CubeLoginPlugin extends CordovaPlugin {
 						}
 
 						protected void onPostExecute(Void result) {
+							String zhName = Preferences.getZhongName(username ,Application.sharePref);
+							if ("".equals(zhName)){
+								zhName = username;
+							}
+							Preferences.saveZhName(zhName,
+									Application.sharePref);
 							callbackContext.success("登录成功");
+							// 更新用户标签
 							cordova.getActivity().startActivity(successIntent);
 							MessageFragmentModel.instance().init();
 						};
@@ -338,6 +343,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 									Application.sharePref);
 							Preferences.saveZhName(jb.getString("zhName"),
 									Application.sharePref);
+							Preferences.saveZhongName(username , jb.getString("zhName"),
+									Application.sharePref);
 							Preferences.savePhone(jb.getString("phone"),
 									Application.sharePref);
 							Preferences.savePrivileges(
@@ -375,7 +382,9 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							}
 							// 查询表MultiUserInfoModel里所有数据 对数据进行更新
 							ArrayList<SystemInfoModel> arrayList = new ArrayList<SystemInfoModel>();
-							arrayList.addAll(StaticReference.userMf.queryForAll(SystemInfoModel.class));
+							SystemInfoModel model = new SystemInfoModel();
+							model.setUsername(username);
+							arrayList.addAll(StaticReference.userMf.queryForMatching(model));
 							if (arrayList.size() > 0){
 								for (SystemInfoModel systemModel : arrayList) {
 									if (systemIds.contains(systemModel.getSysId())){

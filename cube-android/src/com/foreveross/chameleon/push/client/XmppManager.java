@@ -982,14 +982,14 @@ public class XmppManager {
 						}
 					}
 					syncMe(xmppConnection);
-					if (StaticReference.userMf == null) {
+/*					if (StaticReference.userMf == null) {
 						StaticReference.userMC = ModelCreator.build(xmppManager
 								.getNotificationService().getApplication(),
 								username);
 						StaticReference.userMf = ModelFinder.build(xmppManager
 								.getNotificationService().getApplication(),
 								username);
-					}
+					}*/
 					Collection<RosterEntry> c = xmppConnection.getRoster()
 							.getEntries();
 					if (c.isEmpty()) {

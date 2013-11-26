@@ -83,8 +83,8 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 				}
 				
 			};
-			task.setNeedProgressDialog(false);
-			task.setShowProgressDialog(false);
+			task.setNeedProgressDialog(true);
+			task.setShowProgressDialog(true);
 			StringBuffer buff = new StringBuffer();
 			buff.append("Form:id=").append(json.getString("id")).append(";name=").append(json.getString("name"))
 			.append(";staffCode=").append(json.getString("staffCode")).append(";dept=").append(json.getString("dept"))
@@ -171,7 +171,7 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 				}
 				
 			};
-			task.setNeedProgressDialog(false);
+			task.setNeedProgressDialog(true);
 			task.setShowProgressDialog(true);
 			StringBuffer buff = new StringBuffer();
 			buff.append("Form:name=").append(json.getString("name"))
@@ -201,6 +201,24 @@ public class DeviceRegisterPlugin extends CordovaPlugin {
 			}
 			cordova.getActivity().finish();
 		}
+		else if (action.equals("showdialog")){
+			String content = args.getString(0).toLowerCase();
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					cordova.getActivity());
+			builder.setTitle("提示");
+			builder.setMessage(content);
+			builder.setPositiveButton("确定",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(
+								DialogInterface dialog,
+								int which) {
+							dialog.dismiss();
+						}
+					});
+			Dialog dialog = builder.create();
+			dialog.show();
+	 }
 		return true;
 	}
 

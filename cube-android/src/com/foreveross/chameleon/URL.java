@@ -37,7 +37,8 @@ public class URL {
 	public static String UPDATE_RECORD = BASE_WS+ "csair-mam/api/mam/clients/update/appcount/android/";
 	public static String GEOPOSITION_URL=BASE_WS + "csair-mam/api/mam/device/position/add";
 //	public static String GETPUSHMESSAGE =PUSH_BASE_URL+"receipts/none-receipts/";
-	public static String GETPUSHMESSAGE =PUSH_BASE_URL+"push-msgs/none-receipts/";
+	public static String GETPUSHMESSAGE  =URL.PUSH_BASE_URL+"push-msgs/none-receipts/";
+
 
 
 	public static String MUC_ALLROOM = MUC_BASE + "csair-im/api/chat/queryAllRoom/"; // :jid/:status

@@ -150,7 +150,7 @@ public class Preferences
          editor.commit();
     }
     
-    public static Boolean getAutoDownload(String UserName ,SharedPreferences preference)
+    public static boolean getAutoDownload(String UserName ,SharedPreferences preference)
     {
         return preference.getBoolean(UserName, true);
     }
@@ -363,4 +363,14 @@ public class Preferences
     public static Boolean getOutLine(SharedPreferences preference) {
    	 return preference.getBoolean(OUTLINE, false);
    }
+    
+    public static void saveZhongName(String userName ,String zhongName, SharedPreferences preference){
+    	Editor editor = preference.edit();
+    	editor.putString(userName + "zhong", zhongName);
+    	editor.commit();
+    }
+    
+    public static String getZhongName(String userName , SharedPreferences preference){
+    	 return preference.getString(userName + "zhong", "");
+    }
 }

@@ -48,6 +48,7 @@ public class MuPDFActivity extends Activity implements OnClickListener
 	private SeekBar      mPageSlider;
 	private int          mPageSliderRes;
 	private ViewAnimator mTopBarSwitcher;
+	private RelativeLayout pdf_title_layout;
 	private boolean      mTopBarIsSearch;
 	private AlertDialog.Builder mAlertBuilder;
 	private boolean    mLinkHighlight = false;
@@ -359,6 +360,7 @@ public class MuPDFActivity extends Activity implements OnClickListener
 			@Override
 			protected void onTapMainDocArea() {
 				if (!mButtonsVisible) {
+					showButtons();
 				} else {
 					hideButtons();
 				}
@@ -513,6 +515,7 @@ public class MuPDFActivity extends Activity implements OnClickListener
 		if (!mButtonsVisible) {
 			mButtonsVisible = true;
 			// Update page number text and slider
+			pdf_title_layout.setVisibility(View.VISIBLE);
 			int index = mDocView.getDisplayedViewIndex();
 			updatePageNumView(index);
 			mPageSlider.setMax((core.countPages()-1)*mPageSliderRes);
@@ -550,7 +553,7 @@ public class MuPDFActivity extends Activity implements OnClickListener
 		if (mButtonsVisible) {
 			mButtonsVisible = false;
 			hideKeyboard();
-
+			pdf_title_layout.setVisibility(View.GONE);
 			Animation anim = new TranslateAnimation(0, 0, 0, -mTopBarSwitcher.getHeight());
 			anim.setDuration(200);
 			anim.setAnimationListener(new Animation.AnimationListener() {
@@ -606,6 +609,7 @@ public class MuPDFActivity extends Activity implements OnClickListener
 		mButtonsView = getLayoutInflater().inflate(R.layout.buttons,null);
 		mPageSlider = (SeekBar)mButtonsView.findViewById(R.id.pageSlider);
 		mTopBarSwitcher = (ViewAnimator)mButtonsView.findViewById(R.id.switcher);
+		pdf_title_layout = (RelativeLayout) mButtonsView.findViewById(R.id.pdf_title_layout);
 		mTopBarSwitcher.setVisibility(View.INVISIBLE);
 		mPageSlider.setVisibility(View.INVISIBLE);
 		Button pdf_back_btn = (Button) mButtonsView.findViewById(R.id.pdf_back_btn);

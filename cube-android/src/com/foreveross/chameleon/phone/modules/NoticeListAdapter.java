@@ -174,7 +174,7 @@ public class NoticeListAdapter extends BaseAdapter {
 				if (attachmentModel.getStatus().equals(AttachmentModel.downloaded)){
 					new_attach_download.setText("[已下载]");
 				} else {
-					new_attach_download.setText("[末下载]");
+					new_attach_download.setText("[未下载]");
 				}
 				new_attach_name.setText(attachmentModel.getFileName());
 				new_attach_size.setText(attachmentModel.getFileSize() + "Kb");
@@ -256,6 +256,9 @@ public class NoticeListAdapter extends BaseAdapter {
 	}
 
 	public ArrayList<AttachmentModel> parseJson(String attachment) {
+		if(attachment == null){
+			return null;
+		}
 //		attachment = "[{fileId:T1hyJTByVT1RCvBVdK,fileName:steps.txt,fileSize:0} , {fileId:T1gtxTByZT1RCvBVdK,fileName:ormlite.pdf,fileSize:480} , {fileId:T1TRxTByZT1RCvBVdK,fileName:120.png,fileSize:22}]";
 		ArrayList<AttachmentModel> attachmentModels = new ArrayList<AttachmentModel>();
 		try {

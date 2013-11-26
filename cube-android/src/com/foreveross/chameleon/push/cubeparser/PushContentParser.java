@@ -54,9 +54,9 @@ public class PushContentParser {
 		
 			String deviceId = DeviceInfoUtil.getDeviceId(context);
 			String appId = URL.getAppKey();
-//			String tokenid = Long.toString(Preferences.getSessionID(Application.sharePref));
-			getMessageUrl = URL.GETPUSHMESSAGE +"/"+deviceId+"/"+appId;
-			
+			String tokenid = Long.toString(Preferences.getSessionID(Application.sharePref));
+//			getMessageUrl = URL.GETPUSHMESSAGE+tokenid+"/"+deviceId+"/"+appId;
+			getMessageUrl = URL.GETPUSHMESSAGE + deviceId + "/" + appId;
 					String sendid = "";
 					HttpGet getMethod = new HttpGet(getMessageUrl);
 					HttpClient httpClient = new DefaultHttpClient();
@@ -89,11 +89,10 @@ public class PushContentParser {
 								String messageType = jsonObject.getString("messageType");
 //								String messsageId = jsonObject.getString("sendId");
 								String messsageId = jsonObject.getString("id");
-//								long sendTime = jsonObject.getLong("sendTime");
+								long sendTime = System.currentTimeMillis();
 								if(messsageId!=null&&!messsageId.equals("")) {
 									sendid += messsageId+",";
 								}
-								long sendTime = System.currentTimeMillis();
 								ChanmeleonMessage messageDelay = null;
 								String userName = Preferences.getUserName(Application.sharePref);
 								if (Constants.MESSAGE_TYPE_SYSTEM.equals(messageType)) {
@@ -106,7 +105,8 @@ public class PushContentParser {
 									String moduleIdentifer =jsonObjects.getString("moduleIdentifer");
 									String moduleName = null;
 									if(!moduleIdentifer.equals("com.foss.announcement")) {
-										moduleName= jsonObjects.getString("moduleName");
+										if(jsonObjects.has("moduleName"))
+											moduleName= jsonObjects.getString("moduleName");
 									}
 									
 									boolean moduleBadgeBool = true;
