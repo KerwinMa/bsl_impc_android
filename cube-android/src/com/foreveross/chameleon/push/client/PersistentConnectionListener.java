@@ -65,7 +65,7 @@ public class PersistentConnectionListener implements ConnectionListener {
 //			
 //			((Application)xmppManager.getNotificationService().getApplication()).caculateHeartBeartRemain();	
 //		}
-//		
+	
 
 	}
 
