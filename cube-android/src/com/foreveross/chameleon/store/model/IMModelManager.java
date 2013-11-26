@@ -325,11 +325,13 @@ public class IMModelManager {
 	public synchronized void addUserModel(UserModel userModel) {
 		// 强制同名用户使用同一对象
 		if (containUserModel(userModel.getJid())) {
-			throw new UnsupportedOperationException("已经存在,不能重复添加!");
+//			throw new UnsupportedOperationException("已经存在,不能重复添加!");
+			Log.e("addUserModel", "user已经存在,不能重复添加!");
 		}
 		// 强制用户与组必先相互有引用
 		if (!interRef(userModel)) {
-			throw new UnsupportedOperationException("group与userModel之前没有相互!");
+//			throw new UnsupportedOperationException("group与userModel之前没有相互!");
+			Log.e("addUserModel", "group与userModel之前没有相互!");
 		}
 		// 设置状态
 		String status = userStatuMap.get(userModel.getJid());

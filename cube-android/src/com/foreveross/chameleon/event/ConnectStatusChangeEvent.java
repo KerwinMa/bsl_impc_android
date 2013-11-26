@@ -12,8 +12,9 @@ package com.foreveross.chameleon.event;
  */
 public class ConnectStatusChangeEvent {
 
-	public static final String CONN_CHANNEL_XMPP = "CONN_CHANNEL_XMPP";
+	public static final String CONN_CHANNEL_CHAT = "CONN_CHANNEL_CHAT";
 	public static final String CONN_CHANNEL_MINA = "CONN_CHANNEL_MINA";
+	public static final String CONN_CHANNEL_OPENFIRE = "CONN_CHANNEL_OPENFIRE";
 	public static final String CONN_STATUS_OFFLINE = "CONN_STATUS_OFFLINE";
 	public static final String CONN_STATUS_ONLINE = "CONN_STATUS_ONLINE";
 	

@@ -90,6 +90,7 @@ import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.UserModel;
+import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.Pool;
 import com.foreveross.chameleon.util.Preferences;
@@ -159,6 +160,12 @@ public class XmppManager {
 	 */
 	private PacketListener notificationPacketListener;
 
+	
+	/**
+	 * [xmppManager类型，推送/聊天]
+	 */
+	private Type type;
+	
 	/**
 	 * [Presence状态监听]
 	 */
@@ -171,7 +178,7 @@ public class XmppManager {
 	/**
 	 * [重连线程]
 	 */
-	private Thread reconnection;
+	private ReconnectionThread reconnection;
 
 	private static String meJid;
 
@@ -193,24 +200,30 @@ public class XmppManager {
 	 */
 	private ExecutorService pool;
 
-	public XmppManager(NotificationService notificationService, int resourceId) {
+	public XmppManager(NotificationService notificationService, int resourceId,Type type) {
 		this.notificationService = notificationService;
 		this.sharedPrefs = notificationService.getSharedPreferences(
 				Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-		PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
-				notificationService, resourceId);
-		this.xmppHost = propertiesUtil.getString("xmppHost", "127.0.0.1");
-		this.xmppPort = propertiesUtil.getInteger("xmppPort", 5222);
-		this.usernameStore = sharedPrefs.getString(Constants.XMPP_USERNAME,
-				null);
-		this.passwordStore = sharedPrefs.getString(Constants.XMPP_PASSWORD,
-				null);
-		log.info(
-				"read configuration xmppHost={} xmppPort={},usernameStore={} passwordStore={}",
-				new Object[] { xmppHost, xmppPort, usernameStore, passwordStore });
+		PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(notificationService, resourceId);
+		this.setType(type);
+		
+		if(type==Type.CHAT){
+			this.usernameStore = sharedPrefs.getString(Constants.XMPP_USERNAME,null);
+			this.passwordStore = sharedPrefs.getString(Constants.XMPP_PASSWORD,null);
+			notificationPacketListener = new ChatMessageListener(this);
+			this.xmppHost = propertiesUtil.getString("chatHost", "127.0.0.1");
+			this.xmppPort = propertiesUtil.getInteger("chatPort", 5222);
+			rosterListener = new MyRosterListener(notificationService);
+		}else if(type==Type.PUSH){
+			String deviceId = DeviceInfoUtil.getDeviceId(notificationService);
+			this.usernameStore = deviceId ;
+			this.passwordStore = deviceId ;
+			notificationPacketListener = new PushMessageListener(this.getNotificationService().getApplicationContext(),this);
+			this.xmppHost = propertiesUtil.getString("pushHost", "127.0.0.1");
+			this.xmppPort = propertiesUtil.getInteger("pushPort", 5222);
+		}
+		
 		connectionListener = new PersistentConnectionListener(this);
-		notificationPacketListener = new ChatMessageListener(this);
-		rosterListener = new MyRosterListener(notificationService);
 		reconnection = new ReconnectionThread(this);
 		pool = Executors.newCachedThreadPool();
 		addProviders();
@@ -446,7 +459,7 @@ public class XmppManager {
 	 * @param password
 	 * @return 2013-8-6 下午4:20:55
 	 */
-	private boolean connect(String username, String password) {
+	private synchronized boolean connect(String username, String password) {
 		boolean result = false;
 		if (connection != null) {
 			boolean isAuth = connection.isAuthenticated();
@@ -466,6 +479,7 @@ public class XmppManager {
 			usernameStore = username;
 			passwordStore = password;
 		}
+		
 		try {
 			log.debug(
 					"create a xmpp connection... for username:{} password:{}",
@@ -484,14 +498,28 @@ public class XmppManager {
 			log.error("connect() ExecutionException", e);
 			result = false;
 		}
+		
 		if (result) {
-			// 设置当前的usermodel
-			meJid = username + "@" + this.getConnection().getServiceName();
-			sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
-					ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+			
+			if(getType()==Type.CHAT){
+				// 设置当前的usermodel
+				meJid = username + "@" + this.getConnection().getServiceName();
+				sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
+						ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+			}else{
+				sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+						ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+			}
 		} else {
-			sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
-					ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+			
+			if(getType()==Type.CHAT){
+				sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
+						ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+			}else{
+				sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+						ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+			}
+			
 		}
 		return result;
 	}
@@ -505,7 +533,7 @@ public class XmppManager {
 	 * @param password
 	 * @return 2013-8-6 下午4:22:28
 	 */
-	private boolean connect(XMPPConnection xmppConnection, String username,
+	private synchronized boolean connect(XMPPConnection xmppConnection, String username,
 			String password) {
 		log.debug(" {} is authenticating...", username);
 		try {
@@ -633,12 +661,28 @@ public class XmppManager {
 	public PacketListener getNotificationPacketListener() {
 		return notificationPacketListener;
 	}
-
+	
+	public void stopReconnectionThread(){
+		log.info("xmpp manager stopReconnectionThread... ");
+		synchronized (reconnection) {
+			
+			if(reconnection!=null){
+				reconnection.stopReconnect();
+			}
+		}
+	}
+	
 	public void startReconnectionThread() {
 		log.info("xmpp manager startReconnectionThread... ");
 		synchronized (reconnection) {
-			if (!reconnection.isAlive()) {
+//			if (!reconnection.isAlive()) {
+//				reconnection.setName("Xmpp Reconnection Thread");
+//				reconnection = new ReconnectionThread(this);
+//				reconnection.start();
+//			}
+			if (!reconnection.isThreadAlive()) {
 				reconnection.setName("Xmpp Reconnection Thread");
+				reconnection = new ReconnectionThread(this);
 				reconnection.start();
 			}
 		}
@@ -801,36 +845,43 @@ public class XmppManager {
 			log.info(username + " LoginTask.run()...");
 			if (!xmppConnection.isAuthenticated()) {
 				try {
-					xmppConnection
-							.login(username, password, XMPP_RESOURCE_NAME);
-
-					MucManager mucManager = MucManager
-							.getInstanse(notificationService
-									.getApplicationContext());
-					mucManager.init(xmppConnection);
-					String hostName = "mobile.app";
-					Monitor monitor = new Monitor();
-					mucManager.obtainRooms(username + "@" + hostName, monitor);
-					sync(xmppConnection, monitor);
-					log.debug(username + " Loggedn in successfully");
-					// 记录成功登陆的连接
+					xmppConnection.login(username, password, XMPP_RESOURCE_NAME);
 					xmppManager.setConnection(xmppConnection);
-					collectedFriend();
 					// 记住账号密码
 					xmppManager.setUsernameStore(username);
 					xmppManager.setPasswordStore(password);
-					registerLogin(username, password);
-					MucInvitationListener mucInvitationListener = new MucInvitationListener(
-							notificationService.getApplicationContext(),
-							xmppManager);
-					MultiUserChat.addInvitationListener(xmppConnection,
-							mucInvitationListener);
+					if(type==Type.CHAT){
+						MucManager mucManager = MucManager
+								.getInstanse(notificationService
+										.getApplicationContext());
+						mucManager.init(xmppConnection);
+						String hostName = "mobile.app";
+						Monitor monitor = new Monitor();
+						mucManager.obtainRooms(username + "@" + hostName, monitor);
+						sync(xmppConnection, monitor);
+						log.debug(username + " Loggedn in successfully");
+						// 记录成功登陆的连接
+						collectedFriend();
+						registerLogin(username, password);
+						MucInvitationListener mucInvitationListener = new MucInvitationListener(
+								notificationService.getApplicationContext(),
+								xmppManager);
+						MultiUserChat.addInvitationListener(xmppConnection,
+								mucInvitationListener);
+						sendBroadcastWithStatus(
+								ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
+								ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+					}else if(type == Type.PUSH){
+						Application.class.cast(notificationService.getApplicationContext())
+							.getUIHandler().sendEmptyMessage(0);
+						sendBroadcastWithStatus(
+								ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+								ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+					}
 					// 注册监听器
 					registerListeners();
 					// 发消息通知登录成功
-					sendBroadcastWithStatus(
-							ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
-							ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+					
 
 					return "";
 
@@ -857,14 +908,15 @@ public class XmppManager {
 
 		public void registerListeners() {
 
+			if(type==Type.CHAT){
+				RosterListener rosterListener = xmppManager.getRosterListener();
+				xmppConnection.getRoster().addRosterListener(rosterListener);
+			}
+			
 			PacketFilter messageFilter = new PacketTypeFilter(Message.class);
-			PacketListener packetListener = xmppManager
-					.getNotificationPacketListener();
-			RosterListener rosterListener = xmppManager.getRosterListener();
+			PacketListener packetListener = xmppManager.getNotificationPacketListener();
 			xmppConnection.addPacketListener(packetListener, messageFilter);
-			xmppConnection.getRoster().addRosterListener(rosterListener);
-			xmppConnection.addConnectionListener(xmppManager
-					.getConnectionListener());
+			xmppConnection.addConnectionListener(xmppManager.getConnectionListener());
 		}
 
 		public void syncMe(XMPPConnection xmppConnection) {
@@ -1029,11 +1081,22 @@ public class XmppManager {
 				connection.removePacketListener(notificationPacketListener);
 
 				connection.getRoster().removeRosterListener(rosterListener);
-
+				
 				try {
 					connection.disconnect();
 					connection = null;
 					result = true;
+					if(getType()==Type.CHAT){
+						
+						sendBroadcastWithStatus(
+								ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
+								ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+					}else{
+						sendBroadcastWithStatus(
+								ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+								ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+					}
+					
 				} catch (Exception e) {
 					log.error("close xmpp connection error!", e);
 					result = false;
@@ -1070,7 +1133,7 @@ public class XmppManager {
 				}
 				connection.sendPacket(presence);
 				sendBroadcastWithStatus(
-						ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
+						ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
 						ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
 			}
 		}
@@ -1084,7 +1147,7 @@ public class XmppManager {
 						1, null);
 				connection.sendPacket(presence);
 				sendBroadcastWithStatus(
-						ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
+						ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
 						ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
 			}
 		}
@@ -1513,5 +1576,17 @@ public class XmppManager {
 				}
 			}
 		});
+	}
+	
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public enum Type{
+		PUSH, CHAT
 	}
 }

@@ -416,7 +416,7 @@ public class ChatRoomFragment extends Fragment {
 		flowview.setOnClickListener(mClickListener);
 		if (application.getNotificationService() != null){
 			currentAccount = Preferences.getUserName(Application.sharePref) + "@"
-					+ application.getNotificationService().getXmppServiceName();
+					+ application.getNotificationService().getManagerServiceName(application.getChatManager());
 		}
 
 		PreferencesUtil.setValue(getAssocActivity(), "currentAccount",
@@ -461,7 +461,7 @@ public class ChatRoomFragment extends Fragment {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (application.getNotificationService() != null 
-						&& !application.getNotificationService().isOnline()) {
+						&& !application.getNotificationService().isOnline(application.getChatManager()) ) {
 					
 					if (!roomIsNoExit){
 						flowview.setVisibility(View.VISIBLE);
@@ -612,7 +612,7 @@ public class ChatRoomFragment extends Fragment {
 		dialog = createDialog();
 		NotificationService notificationService = Application.class.cast(
 				getAssocActivity().getApplication()).getNotificationService();
-		if (notificationService != null && notificationService.isOnline()) {
+		if (notificationService != null && notificationService.isOnline(application.getChatManager())) {
 			if (!roomIsNoExit){
 				flowview.setVisibility(View.GONE);
 				chat_net_exception.setVisibility(View.GONE);
@@ -732,7 +732,7 @@ public class ChatRoomFragment extends Fragment {
 				break;
 			case R.id.chat_btn_sendcontent:
 				if (application.getNotificationService() != null &&
-				!application.getNotificationService().isOnline()) {
+				!application.getNotificationService().isOnline(application.getChatManager())) {
 					if (!roomIsNoExit){
 						flowview.setVisibility(View.VISIBLE);
 						chat_net_exception.setVisibility(View.VISIBLE);
@@ -844,7 +844,7 @@ public class ChatRoomFragment extends Fragment {
 		    	break;
 			case R.id.title_barright:
 				if (application.getNotificationService() != null && 
-						!application.getNotificationService().isOnline()) {
+						!application.getNotificationService().isOnline(application.getChatManager())) {
 					if (!roomIsNoExit){
 						flowview.setVisibility(View.VISIBLE);
 						chat_net_exception.setVisibility(View.VISIBLE);
@@ -871,7 +871,7 @@ public class ChatRoomFragment extends Fragment {
 				break;
 			case R.id.chatroom_collect_friend_icon:
 				if (application.getNotificationService() != null && 
-						!application.getNotificationService().isOnline()) {
+						!application.getNotificationService().isOnline(application.getChatManager())) {
 					if (!roomIsNoExit){
 						flowview.setVisibility(View.VISIBLE);
 						chat_net_exception.setVisibility(View.VISIBLE);
@@ -970,7 +970,7 @@ public class ChatRoomFragment extends Fragment {
 	private void sendMessage(ConversationMessage conversation) {
 
 		if (application.getNotificationService() != null && 
-				application.getNotificationService().isOnline()) {
+				application.getNotificationService().isOnline(application.getChatManager())) {
 			
 			if (conversation.getType().equals("voice")) {
 				String filePath = conversation.getContent();
@@ -1480,7 +1480,7 @@ public class ChatRoomFragment extends Fragment {
 				final ConversationMessage conversation = createConversation(path,
 						fromWho, toWho, "image");
 				if (application.getNotificationService() != null && 
-						!application.getNotificationService().isOnline()) {
+						!application.getNotificationService().isOnline(application.getChatManager())) {
 					Toast.makeText(ChatRoomFragment.this.getAssocActivity(), "网络连接出现错误", Toast.LENGTH_SHORT).show();
 					if (!roomIsNoExit){
 						flowview.setVisibility(View.VISIBLE);

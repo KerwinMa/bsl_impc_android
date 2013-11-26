@@ -54,8 +54,8 @@ public class PushContentParser {
 		
 			String deviceId = DeviceInfoUtil.getDeviceId(context);
 			String appId = URL.getAppKey();
-			String tokenid = Long.toString(Preferences.getSessionID(Application.sharePref));
-			getMessageUrl = URL.GETPUSHMESSAGE+tokenid+"/"+deviceId+"/"+appId;
+//			String tokenid = Long.toString(Preferences.getSessionID(Application.sharePref));
+			getMessageUrl = URL.GETPUSHMESSAGE +"/"+deviceId+"/"+appId;
 			
 					String sendid = "";
 					HttpGet getMethod = new HttpGet(getMessageUrl);
@@ -87,11 +87,13 @@ public class PushContentParser {
 								String title = jsonObject.getString("title");
 								String content = jsonObject.getString("content");
 								String messageType = jsonObject.getString("messageType");
-								String messsageId = jsonObject.getString("sendId");
-								long sendTime = jsonObject.getLong("sendTime");
+//								String messsageId = jsonObject.getString("sendId");
+								String messsageId = jsonObject.getString("id");
+//								long sendTime = jsonObject.getLong("sendTime");
 								if(messsageId!=null&&!messsageId.equals("")) {
 									sendid += messsageId+",";
 								}
+								long sendTime = System.currentTimeMillis();
 								ChanmeleonMessage messageDelay = null;
 								String userName = Preferences.getUserName(Application.sharePref);
 								if (Constants.MESSAGE_TYPE_SYSTEM.equals(messageType)) {
@@ -214,7 +216,8 @@ public class PushContentParser {
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
 			list.add(new BasicNameValuePair("deviceId", DeviceInfoUtil
 					.getDeviceId(context)));
-			list.add(new BasicNameValuePair("sendId", t));
+//			list.add(new BasicNameValuePair("sendId", t));
+			list.add(new BasicNameValuePair("msgId", t));
 			list.add(new BasicNameValuePair("appId", appKey));
 			httpEntity = new UrlEncodedFormEntity(list);
 			httpPut.setEntity(httpEntity);

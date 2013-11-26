@@ -1,8 +1,16 @@
 package com.foreveross.chameleon.util;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +32,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csair.impc.R;
+import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
+import com.foreveross.chameleon.push.mina.library.inf.vo.DeviceCheckinVo;
+import com.foreveross.chameleon.push.mina.library.inf.vo.TagEntryVo;
+import com.foreveross.chameleon.push.mina.library.util.ThreadPool;
+import com.google.gson.Gson;
 
 public class PushUtil {
 	
@@ -37,44 +50,88 @@ public class PushUtil {
 		}
 		return pool;
 	}
-	
-	public static void regisrerPush(Context context ,String tokenId) {
-		HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
-			
+
+	public static void registerPush(final Application application){
+		ThreadPool.run(new Runnable() {
 			@Override
-			protected void doPostExecute(String result) {
-				super.doPostExecute(result);
-				if(result!=null){
-					Log.v("registerPush", "registe openfire success");
-							
-					//{"tokenId":"chenshaomou@chens-macbook-pro.local","applicationId":"cube_app",
-					//"deviceChannel":"Openfire","deviceId":"chenshaomou-openfire-tester"}
-					PreferencesUtil.setBoolean(context,"isRegisterPush", true);
-					
+			public void run() {
+				HttpClient httpClient = new DefaultHttpClient();
+				HttpPut httpPut = new HttpPut(URL.CHECKIN_URL);
+//				HttpPut httpPut = new HttpPut("http://10.108.1.36:18860/push/api/checkinservice/checkins");
+				try {
+					String token = 
+							DeviceInfoUtil.getDeviceId(application) 
+							+ "@" + application.getPushManager().getConnection().getServiceName();
+					httpPut.addHeader("Accept", "application/json");
+					httpPut.addHeader("Content-Type", "application/json");
+					DeviceCheckinVo checkinVo = new DeviceCheckinVo();
+					checkinVo.setDeviceId(DeviceInfoUtil.getDeviceId(application));
+					// checkinVo.setAppId("51f787228314bd3f4de8f98e");
+					checkinVo.setAppId(application.getCubeApplication().getAppKey());
+					// checkinVo.setAlias(alias);
+					checkinVo.setChannelId("openfire");
+					checkinVo.setDeviceName(android.os.Build.MODEL);
+					// checkinVo.setGis("128,68");
+					checkinVo.setOsName("android");
+					checkinVo.setOsVersion(android.os.Build.VERSION.RELEASE);
+					checkinVo.setPushToken(token);
+					checkinVo.setTags(new TagEntryVo[] { new TagEntryVo("platform", "Android") });
+
+					httpPut.setEntity(new StringEntity(new Gson().toJson(checkinVo), "utf-8"));
+
+					HttpResponse httpResponse = httpClient.execute(httpPut);
+					int statusCode = httpResponse.getStatusLine()
+							.getStatusCode();
+					Log.d("openfire Client", "签到 code == " + statusCode);
+					if (statusCode == HttpStatus.SC_OK) {
+						Log.d("openfire Client", "openfire 签到成功");
+					}
+				} catch (ClientProtocolException e) {
+					Log.e("openfire Handler", "MessageContentHandler", e);
+				} catch (IOException e) {
+					Log.e("openfire Handler", "MessageContentHandler", e);
 				}
 			}
-			
-		};
-		task.setShowProgressDialog(false);
-		task.setNeedProgressDialog(false);
-		StringBuilder sb = new StringBuilder();
-		String applicationId = context.getPackageName();
-		if(applicationId.endsWith(".android")){
-			int strIndex = applicationId.lastIndexOf(".");
-			applicationId = applicationId.substring(0,strIndex);
-		}
-//		int strIndex = applicationId.length()-8;
-//		applicationId = applicationId.substring(0,strIndex);
-		sb=sb.append("{\"tokenId\":").append("\""+tokenId+"\",")
-			 .append("\"applicationId\":").append("\"" +applicationId +"\",")
-//			 .append("\"applicationId\":").append("\"com.foreveross.cube\",")
-			 .append("\"deviceChannel\":").append("\"Openfire\",")
-			 .append("\"deviceId\":").append("\""+DeviceInfoUtil.getDeviceId(context)+"\"}");
-		String s = sb.toString();
-		String url=URL.BASE_WEB+"push/token";
-		
-		task.execute(url,s, HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_POST);
+		});
 	}
+	
+//	public static void regisrerPush(Context context ,String tokenId) {
+//		HttpRequestAsynTask task = new HttpRequestAsynTask(context) {
+//			
+//			@Override
+//			protected void doPostExecute(String result) {
+//				super.doPostExecute(result);
+//				if(result!=null){
+//					Log.v("registerPush", "registe openfire success");
+//							
+//					//{"tokenId":"chenshaomou@chens-macbook-pro.local","applicationId":"cube_app",
+//					//"deviceChannel":"Openfire","deviceId":"chenshaomou-openfire-tester"}
+//					PreferencesUtil.setBoolean(context,"isRegisterPush", true);
+//					
+//				}
+//			}
+//			
+//		};
+//		task.setShowProgressDialog(false);
+//		task.setNeedProgressDialog(false);
+//		StringBuilder sb = new StringBuilder();
+//		String applicationId = context.getPackageName();
+//		if(applicationId.endsWith(".android")){
+//			int strIndex = applicationId.lastIndexOf(".");
+//			applicationId = applicationId.substring(0,strIndex);
+//		}
+////		int strIndex = applicationId.length()-8;
+////		applicationId = applicationId.substring(0,strIndex);
+//		sb=sb.append("{\"tokenId\":").append("\""+tokenId+"\",")
+//			 .append("\"applicationId\":").append("\"" +applicationId +"\",")
+////			 .append("\"applicationId\":").append("\"com.foreveross.cube\",")
+//			 .append("\"deviceChannel\":").append("\"Openfire\",")
+//			 .append("\"deviceId\":").append("\""+DeviceInfoUtil.getDeviceId(context)+"\"}");
+//		String s = sb.toString();
+//		String url=URL.BASE_WEB+"push/token";
+//		
+//		task.execute(url,s, HttpUtil.UTF8_ENCODING,HttpUtil.HTTP_POST);
+//	}
 	
 	
 	/**

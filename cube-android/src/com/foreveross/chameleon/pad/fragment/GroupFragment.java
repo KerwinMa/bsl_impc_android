@@ -224,7 +224,7 @@ public class GroupFragment extends Fragment {
 		flowview.setVisibility(View.GONE);
 		NotificationService notificationService = Application.class.cast(
 				getAssocActivity().getApplication()).getNotificationService();
-		if (notificationService != null && notificationService.isOnline()) {
+		if (notificationService != null && notificationService.isOnline(application.getChatManager())) {
 			flowview.setVisibility(View.GONE);
 		} else {
 			flowview.setVisibility(View.VISIBLE);
@@ -263,7 +263,7 @@ public class GroupFragment extends Fragment {
 				
 				NotificationService notificationService = Application.class.cast(
 						getAssocActivity().getApplication()).getNotificationService();
-				if (notificationService != null && !notificationService.isOnline()) {
+				if (notificationService != null && !notificationService.isOnline(application.getChatManager())) {
 					flowview.setVisibility(View.VISIBLE);
 				}
 				List<SessionModel> modelList = sessionContainer.getList();
@@ -479,7 +479,7 @@ public class GroupFragment extends Fragment {
 					int position, long id) {
 				NotificationService notificationService = Application.class.cast(
 						getAssocActivity().getApplication()).getNotificationService();
-				if (notificationService != null && !notificationService.isOnline()) {
+				if (notificationService != null && !notificationService.isOnline(application.getChatManager())) {
 					flowview.setVisibility(View.VISIBLE);
 				}
 				List<UserModel> ulist = favorContainer.getList();
@@ -612,7 +612,7 @@ public class GroupFragment extends Fragment {
 					int position, long id) {
 				NotificationService notificationService = Application.class.cast(
 						getAssocActivity().getApplication()).getNotificationService();
-				if (notificationService != null && !notificationService.isOnline()) {
+				if (notificationService != null && !notificationService.isOnline(application.getChatManager())) {
 					flowview.setVisibility(View.VISIBLE);
 				}
 				List<ChatGroupModel> ulist = chatRoomContainer.getList();
@@ -727,7 +727,7 @@ public class GroupFragment extends Fragment {
 				app_search_edt.setText("");
 				NotificationService notificationService = Application.class.cast(
 						getAssocActivity().getApplication()).getNotificationService();
-				if (notificationService != null && !notificationService.isOnline()) {
+				if (notificationService != null && !notificationService.isOnline(application.getChatManager())) {
 					flowview.setVisibility(View.VISIBLE);
 				}
 				UserModel user = searchFriendList.get(position);
@@ -774,7 +774,7 @@ public class GroupFragment extends Fragment {
 						app_search_edt.setText("");
 						NotificationService notificationService = Application.class.cast(
 								getAssocActivity().getApplication()).getNotificationService();
-						if (notificationService != null && !notificationService.isOnline()) {
+						if (notificationService != null && !notificationService.isOnline(application.getChatManager())) {
 							flowview.setVisibility(View.VISIBLE);
 						}
 						SessionModel model = searchSessionList.get(position);

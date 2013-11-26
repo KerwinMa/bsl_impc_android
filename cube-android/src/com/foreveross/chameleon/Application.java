@@ -81,6 +81,7 @@ import com.foreveross.chameleon.push.client.NotificationService;
 import com.foreveross.chameleon.push.client.NotificationService.NotificationServiceBinder;
 import com.foreveross.chameleon.push.client.Notifier;
 import com.foreveross.chameleon.push.client.XmppManager;
+import com.foreveross.chameleon.push.client.XmppManager.Type;
 import com.foreveross.chameleon.push.cubeparser.type.NoticeModuleMessage;
 import com.foreveross.chameleon.push.mina.library.api.MinaMobileClient;
 import com.foreveross.chameleon.push.mina.library.api.SessionIdAware;
@@ -500,8 +501,8 @@ public class Application extends android.app.Application implements
 				moduleServiceConnection, Context.BIND_AUTO_CREATE);
 		this.bindService(NotificationService.getIntent(this),
 				notificationServiceConnection, Context.BIND_AUTO_CREATE);
-		this.bindService(new Intent(this, MinaPushService.class),
-				minaServiceConnection, Context.BIND_AUTO_CREATE);
+//		this.bindService(new Intent(this, MinaPushService.class),
+//				minaServiceConnection, Context.BIND_AUTO_CREATE);
 
 	}
 
@@ -696,7 +697,8 @@ public class Application extends android.app.Application implements
 				+ "csair-mam/api/mam/clients/update/appcount/android/";
 		URL.SNAPSHOT = URL.BASE_WS + "csair-mam/api/mam/clients/widget/";
 		URL.PUSH_BASE_URL = URL.BASE_WS + "csair-push/api/";
-		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"receipts/none-receipts/";
+//		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"receipts/none-receipts/";
+		URL.GETPUSHMESSAGE =URL.PUSH_BASE_URL+"push-msgs/none-receipts/";
 		URL.CHECKIN_URL = URL.PUSH_BASE_URL + "checkinservice/checkins";
 		URL.CHECKOUT_URL = URL.PUSH_BASE_URL + "checkinservice/checkout";
 		URL.FEEDBACK_URL = URL.PUSH_BASE_URL + "receipts";
@@ -736,7 +738,7 @@ public class Application extends android.app.Application implements
 		try {
 			log.debug("exit app and disconnect xmpp..");
 			hasLogined = false;
-			notificationService.disconnect();
+			notificationService.disconnect(getChatManager());
 		} catch (Exception e) {
 			log.error("disconnect xmpp error!", e);
 		}
@@ -797,7 +799,7 @@ public class Application extends android.app.Application implements
 		try {
 			log.debug("exit app and disconnect xmpp..");
 			hasLogined = false;
-			notificationService.disconnect();
+			notificationService.disconnect(getChatManager());
 		} catch (Exception e) {
 			log.error("disconnect xmpp error!", e);
 		}
@@ -873,7 +875,7 @@ public class Application extends android.app.Application implements
 		return "";
 	}
 
-	public void loginChatClient(final String username, final String password) {
+	public void loginXmppClient(final String username, final String password,final XmppManager manager) {
 		if (notificationService == null) {
 			this.bindService(NotificationService.getIntent(this),
 					notificationServiceConnection, Context.BIND_AUTO_CREATE);
@@ -881,21 +883,21 @@ public class Application extends android.app.Application implements
 
 				@Override
 				public void doStuff() {
-					notificationService.connect(username, password);
+					notificationService.connect(username, password,manager);
 				}
 			};
 		} else {
-			notificationService.connect(username, password);
+			notificationService.connect(username, password,manager);
 		}
 
 	}
 
-	public void disconnect() {
+	public void disconnect(XmppManager manager) {
 		if (notificationService == null) {
 			Toast.makeText(this, "服务未启动成功!", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		notificationService.disconnect();
+		notificationService.disconnect(manager);
 	}
 
 	public int getLoginType() {
@@ -985,6 +987,8 @@ public class Application extends android.app.Application implements
 			if (notificationCallback != null) {
 				notificationCallback.doStuff();
 			}
+			String deviceId = DeviceInfoUtil.getDeviceId(Application.this);
+			loginXmppClient(deviceId,deviceId,notificationService.getPushManager());
 		}
 	};
 
@@ -1010,49 +1014,49 @@ public class Application extends android.app.Application implements
 		this.minaMobileClient = minaMobileClient;
 		Preferences.saveSessionID(sessionId, Application.sharePref);
 
-		ThreadPool.run(new Runnable() {
-			@Override
-			public void run() {
-				HttpClient httpClient = new DefaultHttpClient();
-				HttpPut httpPut = new HttpPut(URL.CHECKIN_URL);
+//		ThreadPool.run(new Runnable() {
+//			@Override
+//			public void run() {
+//				HttpClient httpClient = new DefaultHttpClient();
+//				HttpPut httpPut = new HttpPut(URL.CHECKIN_URL);
+//
+//				try {
+//					httpPut.addHeader("Accept", "application/json");
+//					httpPut.addHeader("Content-Type", "application/json");
+//					DeviceCheckinVo checkinVo = new DeviceCheckinVo();
+//					checkinVo.setDeviceId(DeviceInfoUtil
+//							.getDeviceId(Application.this));
+//					// checkinVo.setAppId("51f787228314bd3f4de8f98e");
+//					checkinVo.setAppId(getCubeApplication().getAppKey());
+//					// checkinVo.setAlias(alias);
+//					checkinVo.setChannelId("mina");
+//					checkinVo.setDeviceName(android.os.Build.MODEL);
+//					// checkinVo.setGis("128,68");
+//					checkinVo.setOsName("android");
+//					checkinVo.setOsVersion(android.os.Build.VERSION.RELEASE);
+//					checkinVo.setPushToken(sessionId + "");
+//					checkinVo.setTags(new TagEntryVo[] { new TagEntryVo(
+//							"platform", "Android") });
+//
+//					httpPut.setEntity(new StringEntity(new Gson()
+//							.toJson(checkinVo), "utf-8"));
+//
+//					HttpResponse httpResponse = httpClient.execute(httpPut);
+//					int statusCode = httpResponse.getStatusLine()
+//							.getStatusCode();
+//					Log.d("MinaMobileClient", "签到 code == " + statusCode);
+//					if (statusCode == HttpStatus.SC_OK) {
+//						Log.d("MinaMobileClient", "Application 签到成功");
+//					}
+//				} catch (ClientProtocolException e) {
+//					Log.e("MessageContentHandler", "MessageContentHandler", e);
+//				} catch (IOException e) {
+//					Log.e("MessageContentHandler", "MessageContentHandler", e);
+//				}
+//			}
+//		});
 
-				try {
-					httpPut.addHeader("Accept", "application/json");
-					httpPut.addHeader("Content-Type", "application/json");
-					DeviceCheckinVo checkinVo = new DeviceCheckinVo();
-					checkinVo.setDeviceId(DeviceInfoUtil
-							.getDeviceId(Application.this));
-					// checkinVo.setAppId("51f787228314bd3f4de8f98e");
-					checkinVo.setAppId(getCubeApplication().getAppKey());
-					// checkinVo.setAlias(alias);
-					checkinVo.setChannelId("mina");
-					checkinVo.setDeviceName(android.os.Build.MODEL);
-					// checkinVo.setGis("128,68");
-					checkinVo.setOsName("android");
-					checkinVo.setOsVersion(android.os.Build.VERSION.RELEASE);
-					checkinVo.setPushToken(sessionId + "");
-					checkinVo.setTags(new TagEntryVo[] { new TagEntryVo(
-							"platform", "Android") });
-
-					httpPut.setEntity(new StringEntity(new Gson()
-							.toJson(checkinVo), "utf-8"));
-
-					HttpResponse httpResponse = httpClient.execute(httpPut);
-					int statusCode = httpResponse.getStatusLine()
-							.getStatusCode();
-					Log.d("MinaMobileClient", "签到 code == " + statusCode);
-					if (statusCode == HttpStatus.SC_OK) {
-						Log.d("MinaMobileClient", "Application 签到成功");
-					}
-				} catch (ClientProtocolException e) {
-					Log.e("MessageContentHandler", "MessageContentHandler", e);
-				} catch (IOException e) {
-					Log.e("MessageContentHandler", "MessageContentHandler", e);
-				}
-			}
-		});
-
-		Log.i("ApplicationEx", "session authenticated " + sessionId);
+//		Log.i("ApplicationEx", "session authenticated " + sessionId);
 
 	}
 
@@ -1083,8 +1087,9 @@ public class Application extends android.app.Application implements
 				@Override
 				public void handleMessage(Message msg) {
 					super.handleMessage(msg);
-					PushUtil.regisrerPush(Application.this, msg.getData()
-							.getString("tokenId"));
+//					PushUtil.regisrerPush(Application.this, msg.getData()
+//							.getString("tokenId"));
+					PushUtil.registerPush(Application.this);
 				}
 			};
 		}
@@ -1093,7 +1098,8 @@ public class Application extends android.app.Application implements
 	public Handler getUIHandler() {
 		return uiHandler;
 	}
-
+	
+	
 	// public boolean isForegroundApp(){
 	//
 	// }
@@ -1145,7 +1151,7 @@ public class Application extends android.app.Application implements
 					log.debug(
 							"network disconnected excceed in {} seconds,disconnect connection really!",
 							heartBeatInterval);
-					notificationService.disconnect();
+					notificationService.disconnect(getChatManager());
 				} else {
 					log.debug(
 							"network connection restore in {} senconds,ignore disconnect connnection op really!",
@@ -1316,7 +1322,9 @@ public class Application extends android.app.Application implements
 
 	public XmppManager getChatManager() {
 		if (null != notificationService) {
-			return notificationService.getXmppManager();
+			return notificationService.getChatManager();
+			
+				
 		} else {
 			// String username = Preferences.getUserName(Application.sharePref);
 			// loginChatClient(username, username);
@@ -1327,17 +1335,43 @@ public class Application extends android.app.Application implements
 
 			this.bindService(NotificationService.getIntent(this),
 					notificationServiceConnection, Context.BIND_AUTO_CREATE);
-			loginChatClient(Preferences.getUserName(Application.sharePref),
-					Preferences.getUserName(Application.sharePref));
+			loginXmppClient(Preferences.getUserName(Application.sharePref),
+					Preferences.getUserName(Application.sharePref),notificationService.getChatManager());
 			Log.e("notificationService====", "AffterBindnotificationService="
 					+ notificationService);
 			if (notificationService != null) {
-				return notificationService.getXmppManager();
+				return notificationService.getChatManager();
 			}
 			return null;
 		}
 	}
 
+	public XmppManager getPushManager() {
+		if (null != notificationService) {
+			return notificationService.getPushManager();
+			
+				
+		} else {
+			// String username = Preferences.getUserName(Application.sharePref);
+			// loginChatClient(username, username);
+			Log.e("notificationService====", "notificationServiceConnection="
+					+ notificationServiceConnection);
+			Log.e("notificationService====", "BeforeBindnotificationService="
+					+ notificationService);
+
+			this.bindService(NotificationService.getIntent(this),
+					notificationServiceConnection, Context.BIND_AUTO_CREATE);
+			loginXmppClient(Preferences.getUserName(Application.sharePref),
+					Preferences.getUserName(Application.sharePref),notificationService.getPushManager());
+			Log.e("notificationService====", "AffterBindnotificationService="
+					+ notificationService);
+			if (notificationService != null) {
+				return notificationService.getPushManager();
+			}
+			return null;
+		}
+	}
+	
 	/**
 	 * 更新用户标签
 	 */
@@ -1404,4 +1438,8 @@ public class Application extends android.app.Application implements
 
 	}
 
+	public static String moduleName = null;
+	public static void setModuleName(String moduleName) {
+		Application.moduleName = moduleName;
+	}
 }

@@ -33,7 +33,7 @@ public class PhoneStateChangeListener extends PhoneStateListener {
 		boolean hasLogined=Application.class.cast(notificationService.getApplication()).isHasLogined();
 		if (state == TelephonyManager.DATA_CONNECTED&&hasLogined) {
 			log.debug("reconnect notification service...");
-			notificationService.reconnect();
+//			notificationService.reconnect();
 		} else {
 			log.debug("disconnect notification service...");
 			notificationService.virtualDisconnect();

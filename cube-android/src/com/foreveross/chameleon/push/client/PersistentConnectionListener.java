@@ -25,6 +25,7 @@ import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.event.ConnectStatusChangeEvent;
 import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.event.MultiAccountEvent;
+import com.foreveross.chameleon.push.client.XmppManager.Type;
 import com.squareup.otto.ThreadEnforcer;
 
 /**
@@ -52,8 +53,14 @@ public class PersistentConnectionListener implements ConnectionListener {
 	@Override
 	public void connectionClosed() {
 		log.info("xmpp connectionClosed()...");
-		sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
-				ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+		if(xmppManager.getType()==Type.CHAT){
+			sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
+					ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+			
+		}else{
+			sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+					ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+		}
 //		if(!NetworkUtil.isNetworkConnected(xmppManager.getNotificationService())){
 //			
 //			((Application)xmppManager.getNotificationService().getApplication()).caculateHeartBeartRemain();	
@@ -96,6 +103,7 @@ public class PersistentConnectionListener implements ConnectionListener {
 			if (xmppManager.isConnected()) {
 				log.debug("xmpp manager is connecting,disconnect it!");
 				xmppManager.disconnect();
+				xmppManager.stopReconnectionThread();
 			}
 			log.debug("start reconnect thread to connect...");
 			xmppManager.startReconnectionThread();
@@ -116,8 +124,14 @@ public class PersistentConnectionListener implements ConnectionListener {
 	@Override
 	public void reconnectionSuccessful() {
 		log.info("xmpp reconnectionSuccessful()...");
-		sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
-				ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+		if(xmppManager.getType()==Type.CHAT){
+			sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
+					ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+		}else{
+			sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+					ConnectStatusChangeEvent.CONN_STATUS_ONLINE);
+		}
+		
 	}
 
 }
