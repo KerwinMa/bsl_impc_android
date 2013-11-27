@@ -768,10 +768,10 @@ public class XmppManager {
 								+ response.getError().getCondition());
 						log.info("register failed");
 					}
-					return true;
+					return false;
 				} else if (response.getType() == IQ.Type.RESULT) {
 					log.info("register success");
-					return false;
+					return true;
 				}
 			} catch (Exception e) {
 				log.info("register failed");
