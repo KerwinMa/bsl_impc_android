@@ -83,17 +83,15 @@ import com.foreveross.chameleon.phone.muc.MucInvitationListener;
 import com.foreveross.chameleon.phone.muc.MucManager;
 import com.foreveross.chameleon.push.mina.library.util.NetworkUtil;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
-import com.foreveross.chameleon.store.core.ModelCreator;
-import com.foreveross.chameleon.store.core.ModelFinder;
 import com.foreveross.chameleon.store.core.StaticReference;
 import com.foreveross.chameleon.store.model.ChatGroupModel;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.store.model.IMModelManager;
 import com.foreveross.chameleon.store.model.UserModel;
-import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.HttpUtil;
 import com.foreveross.chameleon.util.Pool;
 import com.foreveross.chameleon.util.Preferences;
+import com.foreveross.chameleon.util.PushUtil;
 import com.squareup.otto.ThreadEnforcer;
 
 /**
@@ -215,9 +213,10 @@ public class XmppManager {
 			this.xmppPort = propertiesUtil.getInteger("chatPort", 5222);
 			rosterListener = new MyRosterListener(notificationService);
 		}else if(type==Type.PUSH){
-			String deviceId = DeviceInfoUtil.getDeviceId(notificationService);
-			this.usernameStore = deviceId ;
-			this.passwordStore = deviceId ;
+			String token = PushUtil.createMD5Token(Application.class.cast(this.getNotificationService()
+						.getApplicationContext()));
+			this.usernameStore =  token;
+			this.passwordStore =  token;
 			notificationPacketListener = new PushMessageListener(this.getNotificationService().getApplicationContext(),this);
 			this.xmppHost = propertiesUtil.getString("pushHost", "127.0.0.1");
 			this.xmppPort = propertiesUtil.getInteger("pushPort", 5222);
@@ -487,6 +486,7 @@ public class XmppManager {
 			XMPPConnection xmppConnection = pool.submit(new ConnectTask(null))
 					.get();
 			log.debug("authenticated the xmpp connection created by previous!");
+			this.connection = xmppConnection;
 			result = connect(xmppConnection, username, password);
 		} catch (InterruptedException e) {
 			log.error("connect() InterruptedException", e);
@@ -756,20 +756,26 @@ public class XmppManager {
 					registration.getPacketID()), new PacketTypeFilter(IQ.class));
 			PacketCollector packetCollector = connection
 					.createPacketCollector(packetFilter);
-
-			connection.sendPacket(registration);
-
-			Packet packet = packetCollector.nextResult();
-			Log.d("RegisterTask.PacketListener", "processPacket().....");
-			IQ response = (IQ) packet;
-			if (response.getType() == IQ.Type.ERROR) {
-				if (response.getError().toString().contains("409")) {
-					log.error("Unknown error while registering XMPP account! "
-							+ response.getError().getCondition());
+			try {
+				connection.sendPacket(registration);
+	
+				Packet packet = packetCollector.nextResult();
+				Log.d("RegisterTask.PacketListener", "processPacket().....");
+				IQ response = (IQ) packet;
+				if (response.getType() == IQ.Type.ERROR) {
+					if (response.getError().toString().contains("409")) {
+						log.error("Unknown error while registering XMPP account! "
+								+ response.getError().getCondition());
+						log.info("register failed");
+					}
+					return true;
+				} else if (response.getType() == IQ.Type.RESULT) {
+					log.info("register success");
+					return false;
 				}
-				return true;
-			} else if (response.getType() == IQ.Type.RESULT) {
-				log.error("register success");
+			} catch (Exception e) {
+				log.info("register failed");
+				e.printStackTrace();
 				return false;
 			}
 			return null;

@@ -139,16 +139,10 @@ public class PushMessageListener implements PacketListener {
 								.getPackedMessage();
 						StaticReference.defMf.createOrUpdate(baseModel);
 						if (baseModel instanceof NoticeModuleMessage) {
-							StaticReference.defMf
-									.createOrUpdate(NoticeModuleMessage.class
-											.cast(baseModel).stub());
-							NoticeModuleMessage noticeModuleMessage = NoticeModuleMessage.class
-									.cast(baseModel);
-							noticModelEvent
-									.addNoticeModuleMessage(noticeModuleMessage);
-							messageModelEvent
-									.addChanmeleonMessage(new ChanmeleonMessage(
-											noticeModuleMessage.stub()));
+							StaticReference.defMf.createOrUpdate(NoticeModuleMessage.class.cast(baseModel).stub());
+							NoticeModuleMessage noticeModuleMessage = NoticeModuleMessage.class.cast(baseModel);
+							noticModelEvent.addNoticeModuleMessage(noticeModuleMessage);
+							messageModelEvent.addChanmeleonMessage(new ChanmeleonMessage(noticeModuleMessage.stub()));
 							++messageCount;
 						} else if (!(baseModel instanceof MDMMessage)) {
 							messageModelEvent

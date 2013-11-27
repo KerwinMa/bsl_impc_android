@@ -1,6 +1,7 @@
 package com.foreveross.chameleon.util;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -60,7 +61,8 @@ public class PushUtil {
 //				HttpPut httpPut = new HttpPut("http://10.108.1.36:18860/push/api/checkinservice/checkins");
 				try {
 					String token = 
-							DeviceInfoUtil.getDeviceId(application) 
+							createMD5Token(application)
+//							DeviceInfoUtil.getDeviceId(application) 
 							+ "@" + application.getPushManager().getConnection().getServiceName();
 					httpPut.addHeader("Accept", "application/json");
 					httpPut.addHeader("Content-Type", "application/json");
@@ -94,6 +96,17 @@ public class PushUtil {
 			}
 		});
 	}
+	
+	
+	public  static String createMD5Token(Application application){
+		String token = DeviceInfoUtil.getDeviceId(application)
+				+ "_" + URL.getAppKey()
+				;
+//				+ "@" + application.getPushManager().getConnection().getServiceName();
+		return MD5Util.toMD5(token);
+	}
+
+
 	
 //	public static void regisrerPush(Context context ,String tokenId) {
 //		HttpRequestAsynTask task = new HttpRequestAsynTask(context) {

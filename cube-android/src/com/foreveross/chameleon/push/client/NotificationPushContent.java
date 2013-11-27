@@ -84,7 +84,7 @@ public class NotificationPushContent {
 						if(result == null||result.equals("[]")) {
 							return null;
 						}
-						
+						String userName = Preferences.getUserName(Application.sharePref);
 						try
 						{
 							JSONArray jsonArray = new JSONArray(result);
@@ -111,7 +111,7 @@ public class NotificationPushContent {
 								ChanmeleonMessage messageDelay = null;
 								if (Constants.MESSAGE_TYPE_SYSTEM.equals(messageType)) {
 									messageDelay = new ChanmeleonMessage(new SystemMessage(sendTime,
-											messsageId, title, content));
+											messsageId, title, content),userName);
 								} else if (Constants.MESSAGE_TYPE_MODULE.equals(messageType)) {
 									
 									JSONObject jsonObjects = new JSONObject(jsonObject.getString("extras"));
@@ -148,16 +148,18 @@ public class NotificationPushContent {
 									if (cubeModule != null) {
 										cubeModule.setDisplayBadge(moduleBadgeBool);
 									}
-									if (moduleIdentifer != null
-											&& moduleIdentifer.equals("com.foss.announcement")) {
+									if (moduleIdentifer != null	&& moduleIdentifer.equals("com.foss.announcement")) {
 										// 公告消息
-										
 										String noticeId = jsonObjects.getString("announceId");
 										NoticeModuleMessage noticeModuleMessage = new NoticeModuleMessage(
 												sendTime, messsageId, title, content);
 										noticeModuleMessage.setIdentifier(moduleIdentifer);
 										noticeModuleMessage.setNoticeId(noticeId);
-										messageDelay = new ChanmeleonMessage(noticeModuleMessage);
+										if(jsonObjects.has("noticeFiles"))
+										{
+											noticeModuleMessage.setAttachment(jsonObjects.getString("noticeFiles"));
+										}
+										messageDelay = new ChanmeleonMessage(noticeModuleMessage , userName);
 									} else if(cubeModule !=null&&cubeModule.getModuleType()!=CubeModule.UNINSTALL){
 										// 模块消息
 										CommonModuleMessage commonModuleMessage = new CommonModuleMessage(
@@ -166,7 +168,7 @@ public class NotificationPushContent {
 										commonModuleMessage
 										.setGroupBelong(moduleName == null ? moduleIdentifer
 												: moduleName);
-										messageDelay = new ChanmeleonMessage(commonModuleMessage);
+										messageDelay = new ChanmeleonMessage(commonModuleMessage,userName);
 									}
 									ModuleMessage.class.cast(messageDelay.getPackedMessage())
 									.setLinkable(busiDetailBool);
@@ -177,7 +179,7 @@ public class NotificationPushContent {
 									// 设备消息
 									JSONObject jsonObjectMdm = new JSONObject(jsonObject.getString("extras"));
 									messageDelay = new ChanmeleonMessage(new MDMMessage(sendTime,
-											messsageId, title, content, jsonObjectMdm.getString("mdm")));
+											messsageId, title, content, jsonObjectMdm.getString("mdm")),userName);
 								}
 								
 								if (messageDelay != null) {
