@@ -987,8 +987,9 @@ public class Application extends android.app.Application implements
 			if (notificationCallback != null) {
 				notificationCallback.doStuff();
 			}
-			String deviceId = DeviceInfoUtil.getDeviceId(Application.this);
-			loginXmppClient(deviceId,deviceId,notificationService.getPushManager());
+//			String deviceId = DeviceInfoUtil.getDeviceId(Application.this);
+			String token = PushUtil.createMD5Token(Application.this);
+			loginXmppClient(token,token,notificationService.getPushManager());
 		}
 	};
 

@@ -139,16 +139,10 @@ public class PushMessageListener implements PacketListener {
 								.getPackedMessage();
 						StaticReference.defMf.createOrUpdate(baseModel);
 						if (baseModel instanceof NoticeModuleMessage) {
-							StaticReference.defMf
-									.createOrUpdate(NoticeModuleMessage.class
-											.cast(baseModel).stub());
-							NoticeModuleMessage noticeModuleMessage = NoticeModuleMessage.class
-									.cast(baseModel);
-							noticModelEvent
-									.addNoticeModuleMessage(noticeModuleMessage);
-							messageModelEvent
-									.addChanmeleonMessage(new ChanmeleonMessage(
-											noticeModuleMessage.stub()));
+							StaticReference.defMf.createOrUpdate(NoticeModuleMessage.class.cast(baseModel).stub());
+							NoticeModuleMessage noticeModuleMessage = NoticeModuleMessage.class.cast(baseModel);
+							noticModelEvent.addNoticeModuleMessage(noticeModuleMessage);
+							messageModelEvent.addChanmeleonMessage(new ChanmeleonMessage(noticeModuleMessage.stub()));
 							++messageCount;
 						} else if (!(baseModel instanceof MDMMessage)) {
 							messageModelEvent
@@ -211,9 +205,9 @@ public class PushMessageListener implements PacketListener {
 		// MessageFragmentModel.instance().addMessages(
 		// new ArrayList<AbstractMessage<?>>(patchNoticeModelEvent
 		// .getPatch()));
-		if (application.shouldSendNoticeNotification()) {
+//		if (application.shouldSendNoticeNotification()) {
 			sendNoticeNotification(patchNoticeModelEvent);
-		}
+//		}
 	}
 	//公告
 	public void sendNoticeNotification(
@@ -273,8 +267,8 @@ public class PushMessageListener implements PacketListener {
 		MessageFragmentModel.instance().addMessages(
 				new ArrayList<AbstractMessage<?>>(pathMessageModelEvent
 						.getPacked()));
-		if (!pathMessageModelEvent.lastIsNotice()
-				&& application.shouldSendMessageNotification()) {
+		if (!pathMessageModelEvent.lastIsNotice()){
+//				&& application.shouldSendMessageNotification()) {
 			sendMessageNotification(pathMessageModelEvent);
 		}
 
