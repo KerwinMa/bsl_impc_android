@@ -24,11 +24,7 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="d67c8581-01ea-42b3-89fa-856ee7c5b92c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/R.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" readonly="true" id="d67c8581-01ea-42b3-89fa-856ee7c5b92c" name="Default" comment="" />
     <ignored path="cube-android 0515.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/CubeApplication.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384239862844" ignored="false" />
@@ -200,7 +196,7 @@
       <file leaf-file-name="CubeModuleListPlugin.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/CubeModuleListPlugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="37" selection-start="2414" selection-end="2414" vertical-scroll-proportion="0.9285714">
+            <state line="76" column="37" selection-start="2414" selection-end="2414" vertical-scroll-proportion="1.6810344">
               <folding />
             </state>
           </provider>
@@ -576,16 +572,16 @@
       <workItem from="1384509668867" duration="1324000" />
       <workItem from="1384740970231" duration="12242000" />
       <workItem from="1385341779256" duration="2047000" />
-      <workItem from="1385449731980" duration="15933000" />
+      <workItem from="1385449731980" duration="16192000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68308000" />
+    <option name="totallyTimeSpent" value="68567000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="49" y="22" width="1276" height="778" extended-state="0" />
-    <editor active="true" />
+    <frame x="49" y="22" width="1276" height="778" extended-state="1" />
+    <editor active="false" />
     <layout>
       <window_info id="Archetypes" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969433" sideWeight="0.67021275" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -604,8 +600,8 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.44715446" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.6306991" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.6306991" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2788618" sideWeight="0.674772" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42857143" sideWeight="0.27723578" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2788618" sideWeight="0.5714286" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42857143" sideWeight="0.27723578" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284553" sideWeight="0.6474164" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -826,7 +822,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/CubeModuleListPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="37" selection-start="2414" selection-end="2414" vertical-scroll-proportion="0.9285714">
+        <state line="76" column="37" selection-start="2414" selection-end="2414" vertical-scroll-proportion="1.6810344">
           <folding />
         </state>
       </provider>
