@@ -1,4 +1,5 @@
 document.addEventListener("deviceready", function(){
+    console.log("ready");
 	//激活单选框
 	$("input[name=deviceSrc]").click();
 	//查询设备注册数据并填好
@@ -42,12 +43,13 @@ function fillId(id){
 }
 
 function queryAndFillDeviceInfo(){
-	console.log("查询注册信息");
+    console.log("查询注册信息");
 	if(cordova && cordova.exec){
 		cordova.exec(
 			function(data){
-				console.log("查询成功");
+                console.log("查询成功");
 				if(data){
+                    console.log("data不为空");
                     //安卓是在这里如,传入object,ios是直接调用fillData
                     data = JSON.stringify(data);
                     $("#registInfo").html("您的设备已注册");
@@ -55,12 +57,14 @@ function queryAndFillDeviceInfo(){
 				    isUpdate = true;
 				}else{
 					$("#registInfo").html("您的设备未进行注册");
+                    console.log("data为空");
 					isUpdate = false;
 				}
 			}, 
 			function(err) {
-				console.log("查询失败");
-				$("#registInfo").html("您的设备未进行注册")
+                console.log("查询失败或者无数据");
+                $("#registInfo").html("您的设备未进行注册");
+
         	}
         , "DeviceRegister", "queryDevcieInfo", []);
 	}
