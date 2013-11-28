@@ -93,7 +93,7 @@ public class ModuleOperationService extends Service {
 				sendModuleBroadcast(module);
 				sendProcessBroadcast(module, -1);
 				ThreadPlatformUtils.addAutodownLoadTaskCout();
-				System.out.println("这是下载模块doPreExecuteWithoutDialog方法调用");
+//				System.out.println("这是下载模块doPreExecuteWithoutDialog方法调用");
 				sentModuleDownloadCount();
 			}
 
@@ -104,7 +104,7 @@ public class ModuleOperationService extends Service {
 				super.onProgressUpdate(progress);
 				int p = progress[0];
 				module.setProgress(p);
-				System.out.println("当前下载的模块是:"+module+"进度为:"+p);
+//				System.out.println("当前下载的模块是:"+module+"进度为:"+p);
 				// Log.v("downloadTask", " module "+module.getIdentifier()
 				// +" is download :" +p);
 				if (p == 0 || p == 100 || (p - preProgress) >= 5) {

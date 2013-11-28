@@ -1,6 +1,5 @@
 package com.foreveross.chameleon.push.client;
 
-import org.jivesoftware.smack.packet.Message.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +23,7 @@ import com.foreveross.chameleon.event.MultiAccountEvent;
 import com.foreveross.chameleon.event.XmppConnectEvent;
 import com.foreveross.chameleon.phone.activity.MultiAccountActivity;
 import com.foreveross.chameleon.push.client.XmppManager.RosterManager;
+import com.foreveross.chameleon.push.client.XmppManager.Type;
 import com.foreveross.chameleon.store.model.ConversationMessage;
 import com.foreveross.chameleon.util.Pool;
 import com.foreveross.chameleon.util.TimeUnit;
@@ -48,9 +48,9 @@ public class NotificationService extends Service {
 
 	private PhoneStateListener phoneStateListener;
 
-	private XmppManager xmppManager;
+	private XmppManager chatManager;
 
-
+	private XmppManager pushManager;
 
 	public class NotificationServiceBinder extends Binder {
 		public NotificationService getService() {
@@ -69,9 +69,10 @@ public class NotificationService extends Service {
 	public void onCreate() {
 		log.debug("NotificationService  onCreate()...");
 		telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		xmppManager = new XmppManager(this,CubeConstants.CUBE_CONFIG);
+		chatManager = new XmppManager(this,CubeConstants.CUBE_CONFIG,XmppManager.Type.CHAT);
+		pushManager = new XmppManager(this,CubeConstants.CUBE_CONFIG,XmppManager.Type.PUSH);
 
-		rosterManager = xmppManager.new RosterManager(new Handler() {
+		rosterManager = chatManager.new RosterManager(new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
 				super.handleMessage(msg);
@@ -84,7 +85,8 @@ public class NotificationService extends Service {
 
 		});
 		log.debug("prepair connect for xmpp...");
-		xmppManager.prepairConnect();
+		chatManager.prepairConnect();
+		pushManager.prepairConnect();
 		registerConnectivityReceiver();
 	}
 
@@ -105,14 +107,21 @@ public class NotificationService extends Service {
 		return new Intent(context, NotificationService.class);
 	}
 
-	public XmppManager getXmppManager() {
-		if (xmppManager == null) {
-			xmppManager = new XmppManager(this,CubeConstants.CUBE_CONFIG);
+	public XmppManager getChatManager() {
+		if (chatManager == null) {
+			chatManager = new XmppManager(this,CubeConstants.CUBE_CONFIG, Type.CHAT);
 		}
-		return xmppManager;
+		return chatManager;
 	}
-
-	public void connect(final String username, final String password) {
+	
+	public XmppManager getPushManager() {
+		if (pushManager == null) {
+			pushManager = new XmppManager(this,CubeConstants.CUBE_CONFIG,Type.PUSH);
+		}
+		return pushManager;
+	}
+	
+	public void connect(final String username, final String password, final XmppManager xmppManager) {
 
 		// timer.schedule(new TimerTask() {
 		//
@@ -131,7 +140,7 @@ public class NotificationService extends Service {
 
 	}
 
-	public void disconnect() {
+	public void disconnect(final XmppManager xmppManager) {
 		log.debug("start disconnect to xmpp");
 
 		Pool.run(new Runnable() {
@@ -145,9 +154,12 @@ public class NotificationService extends Service {
 	}
 
 	public void virtualDisconnect() {
-		sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_XMPP,
+		sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_CHAT,
 				ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
-		// xmppManager.disconnectNow();
+		sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE,
+				ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
+		sendBroadcastWithStatus(ConnectStatusChangeEvent.CONN_CHANNEL_MINA,
+				ConnectStatusChangeEvent.CONN_STATUS_OFFLINE);
 	}
 
 	private void sendBroadcastWithStatus(String channel, String status) {
@@ -165,7 +177,7 @@ public class NotificationService extends Service {
 		}
 	}
 
-	public boolean isConnected() {
+	public boolean isConnected(XmppManager xmppManager) {
 		return xmppManager.isConnected();
 	}
 
@@ -185,7 +197,7 @@ public class NotificationService extends Service {
 		unregisterReceiver(connectivityReceiver);
 	}
 
-	public void reconnect() {
+	public void reconnect(XmppManager xmppManager) {
 		// timer.schedule(new TimerTask() {
 		//
 		// @Override
@@ -200,26 +212,27 @@ public class NotificationService extends Service {
 	private void stop() {
 		log.debug("notification stop()...");
 		unregisterConnectivityReceiver();
-		xmppManager.disconnect();
+		getChatManager().disconnect();
+		getPushManager().disconnect();
 	}
 
-	public void online() {
+	public void online(XmppManager xmppManager) {
 		xmppManager.online();
 	}
 
-	public void offline() {
+	public void offline(XmppManager xmppManager) {
 		xmppManager.offline();
 	}
 
-	public boolean isOnline() {
+	public boolean isOnline(XmppManager xmppManager) {
 		return xmppManager.isOnline();
 	}
 
 	private String previousServiceName = null;
 
-	public String getXmppServiceName() {
+	public String getManagerServiceName(XmppManager xmppManager) {
 
-		if (isOnline()) {
+		if (isOnline(xmppManager)) {
 			return previousServiceName = xmppManager.getXmppServiceName();
 		} else {
 			return previousServiceName == null ? "" : previousServiceName;
@@ -240,14 +253,14 @@ public class NotificationService extends Service {
 		log.debug("send message content is {}", conversation.toString());
 		org.jivesoftware.smack.packet.Message message = new org.jivesoftware.smack.packet.Message();
 		message.setFrom(conversation.getFromWho());
-		message.setType(Type.chat);
+		message.setType(org.jivesoftware.smack.packet.Message.Type.chat);
 		message.setTo(conversation.getToWho());
 		message.setBody(conversation.getContent());
 		message.setSubject(conversation.getType());
 		message.setProperty("sendDate", TimeUnit.LongToStr
 				(conversation.getLocalTime(), TimeUnit.LONG_FORMAT));
 		message.setProperty("uqID", conversation.getLocalTime());
-		getXmppManager().sendPacket(message);
+		getChatManager().sendPacket(message);
 	}
 
 	@Subscribe
