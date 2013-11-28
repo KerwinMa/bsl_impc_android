@@ -154,7 +154,7 @@ public class MessageFragment extends Fragment {
 								// changeMessageRecordCount(unreadCount);
 								// expendFirstMsgModel();
 								synchronized (messageFragmentModel) {
-									messageAdapter.notifyDataSetChanged();	
+									messageAdapter.notifyDataSetChanged();
 								}
 							}
 						});
@@ -276,6 +276,13 @@ public class MessageFragment extends Fragment {
 				new PresenceEvent(TmpConstants.VIEW_MESSAGE_PRESENCE, true));
 		// * 如果当前牌resume阶段，不应该发送message通知
 		application.setShouldSendMessageNotification(false);
+
+		application.getUIHandler().post(new Runnable() {
+			@Override
+			public void run() {
+				messageAdapter.notifyDataSetChanged();
+			}
+		});
 	}
 
 	/**
