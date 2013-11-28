@@ -31,11 +31,14 @@ public class ReconnectionThread extends Thread {
 	 * 重连接请求队列
 	 */
 	private BlockingQueue<Byte> flags = new ArrayBlockingQueue<Byte>(10, true);
-
+	
+	private boolean isStop = false; 
+	
+	
 	public void addRequest(Byte flag) {
 		flags.add(flag);
 	}
-
+	
 	ReconnectionThread(XmppManager xmppManager) {
 		this.xmppManager = xmppManager;
 		this.waiting = 0;
@@ -46,6 +49,13 @@ public class ReconnectionThread extends Thread {
 		try {
 			// 循环获取请求
 			for (;;) {
+				
+				if(isStop){
+					//关掉这个线程
+					break;
+				}
+				
+				
 				flags.take();
 				log.debug("take a xmpp reconnect req!");
 				// 如果已经连接状态，则忽略
@@ -70,7 +80,15 @@ public class ReconnectionThread extends Thread {
 			xmppManager.getConnectionListener().reconnectionFailed(e);
 		}
 	}
-
+	
+	public void stopReconnect(){
+		isStop = true;
+	}
+	
+	public boolean isThreadAlive(){
+		return !isStop;
+	}
+	
 	/**
 	 * 
 	 * [等待时间设置]<BR>
@@ -90,4 +108,6 @@ public class ReconnectionThread extends Thread {
 		}
 		return waiting <= 7 ? 10 : 60;
 	}
+	
+	
 }

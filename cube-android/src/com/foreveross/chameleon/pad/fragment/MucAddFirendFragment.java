@@ -217,8 +217,9 @@ public class MucAddFirendFragment extends Fragment implements IChoisedEventListe
 		searchFriendList = new ArrayList<UserModel>();
 		searchFriendAdapter = new SearchFriendAdapter(getAssocActivity(),
 				searchFriendList);
-		searchListView.setAdapter(searchFriendAdapter);
 		searchFriendAdapter.setmListener(this);
+		searchListView.setAdapter(searchFriendAdapter);
+		
 //		searchListView.setOnItemClickListener(new OnItemClickListener() {
 //
 //			@Override

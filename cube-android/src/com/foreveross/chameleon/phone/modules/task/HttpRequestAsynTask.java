@@ -96,9 +96,13 @@ public abstract class HttpRequestAsynTask extends GeneralAsynTask {
 			return;
 		}
 
+<<<<<<< HEAD
         //由于设备注册返回为空,直接过滤了
 //		if ((result == null || "".equals(result)) ) {
         if (result == null) {
+=======
+		if (result == null ) {
+>>>>>>> ec38a2040da11f70f5ddf3bc42ebd06553510278
 			if(needProgressDialog){
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle("提示");

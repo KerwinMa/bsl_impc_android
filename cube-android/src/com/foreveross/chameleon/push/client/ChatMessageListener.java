@@ -285,7 +285,7 @@ public class ChatMessageListener implements PacketListener {
 				intent.putExtra("isPad", true);
 			} else {
 				String chatroom = propertiesUtil.getString("chatroom", "");
-				intent.putExtra("jid", conversationMessage.getFromWho());
+				intent.putExtra("jid", conversationMessage.getChater());
 				intent.putExtra("direction", 2);
 				intent.putExtra("type", "fragment");
 				intent.putExtra("value", chatroom);
@@ -309,7 +309,7 @@ public class ChatMessageListener implements PacketListener {
 				intent.putExtra("isPad", false);
 			} else {
 				intent.setClass(application, ChatRoomActivity.class);
-				intent.putExtra("jid", conversationMessage.getFromWho());
+				intent.putExtra("jid", conversationMessage.getChater());
 				//如果不是用户聊天
 				if(!IMModelManager.instance().containUserModel
 						(conversationMessage.getChater())){

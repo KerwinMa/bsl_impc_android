@@ -27,8 +27,8 @@ public class Preferences
     public static final String PASSWORD_BAK = "passwordbak";
     
     public static final String ISREMEMBER = "isremember";
-//    /** 存储于SP文件中的密码TOKEN值 */
-//    public static final String TOKEN = "token";
+    /** 存储于SP文件中的密码TOKEN值 */
+    public static final String TOKEN = "token";
     /** 存储于SP文件中的密码SESSION值 */
     public static final String SESSION = "session";
     
@@ -67,7 +67,15 @@ public class Preferences
     	return preference.getLong(SESSIONID, 0);
     }
     
+    public static void saveToken(String token,SharedPreferences preference) {
+    	Editor editor = preference.edit();
+        editor.putString(TOKEN, token);
+        editor.commit();
+    }
     
+    public static String getToken(SharedPreferences preference){
+    	return preference.getString(TOKEN, "");
+    }
     public static void saveAppMainView(Boolean isView,SharedPreferences preference) {
     	Editor editor = preference.edit();
         editor.putBoolean(APPMAINVIEW, isView);

@@ -31,12 +31,16 @@ public class PushSettingActivity extends BaseActivity {
 	private Button titlebar_right;
 	private TextView titlebar_content;
 
-	private TextView cbStatusXmpp;
-	private CheckBox xmppCheckBox;
-
+	private TextView cbStatusChat;
+	private CheckBox chatCheckBox;
+	
+	
 	private TextView cbStatusMina;
 	private CheckBox minaCheckBox;
-
+	
+	private TextView cbStatusOpenfire;
+	private CheckBox openfireCheckBox;
+	
 	private NotificationService notificationService = null;
 	private MinaPushService minaPushService = null;
 
@@ -54,19 +58,20 @@ public class PushSettingActivity extends BaseActivity {
 			ConnectStatusChangeEvent connectStatusChangeEvent) {
 		log.debug("receive connection status changed Event...");
 		if (connectStatusChangeEvent.getChannel().equals(
-				ConnectStatusChangeEvent.CONN_CHANNEL_XMPP)) {
+				ConnectStatusChangeEvent.CONN_CHANNEL_CHAT)) {
 			log.debug("xmpp connection status changed...");
 			if (connectStatusChangeEvent.getStatus().equals(
 					ConnectStatusChangeEvent.CONN_STATUS_ONLINE)) {
 				log.debug("xmpp connection online...");
-				cbStatusXmpp.setText("已连接");
-				xmppCheckBox.setChecked(true);
+				cbStatusChat.setText("已连接");
+				chatCheckBox.setChecked(true);
 			} else {
 				log.debug("xmpp connection offline...");
-				cbStatusXmpp.setText("未连接");
-				xmppCheckBox.setChecked(false);
+				cbStatusChat.setText("未连接");
+				chatCheckBox.setChecked(false);
 			}
-		} else {
+		} else if(connectStatusChangeEvent.getChannel().equals(
+				ConnectStatusChangeEvent.CONN_CHANNEL_MINA)){
 			log.debug("mina connection status changed...");
 			if (connectStatusChangeEvent.getStatus().equals(
 					ConnectStatusChangeEvent.CONN_STATUS_ONLINE)) {
@@ -78,16 +83,29 @@ public class PushSettingActivity extends BaseActivity {
 				cbStatusMina.setText("未连接");
 				minaCheckBox.setChecked(false);
 			}
+		} else if(connectStatusChangeEvent.getChannel().equals(
+				ConnectStatusChangeEvent.CONN_CHANNEL_OPENFIRE)){
+			log.debug("openfire connection status changed...");
+			if (connectStatusChangeEvent.getStatus().equals(
+					ConnectStatusChangeEvent.CONN_STATUS_ONLINE)) {
+				log.debug("mina connection online...");
+				cbStatusOpenfire.setText("已连接");
+				openfireCheckBox.setChecked(true);
+			} else {
+				log.debug("mina connection offline...");
+				cbStatusOpenfire.setText("未连接");
+				openfireCheckBox.setChecked(false);
+			}
 		}
 	}
 
 	private void initValue() {
 		notificationService = application.getNotificationService();
-
 		minaPushService = application.getMinaPushService();
+		
 		EventBus.getEventBus(TmpConstants.EVENTBUS_PUSH, ThreadEnforcer.MAIN)
 				.register(this);
-		// PadUtils.setSceenSize(this);
+
 		titlebar_left = (Button) findViewById(R.id.title_barleft);
 		titlebar_left.setOnClickListener(clickListener);
 		titlebar_right = (Button) findViewById(R.id.title_barright);
@@ -95,51 +113,75 @@ public class PushSettingActivity extends BaseActivity {
 		titlebar_content = (TextView) findViewById(R.id.title_barcontent);
 		titlebar_content.setText("即时通讯设置");
 
-		cbStatusMina = (TextView) findViewById(R.id.pushsetting_cbstatus_mina);
-		cbStatusXmpp = (TextView) findViewById(R.id.pushsetting_cbstatus_xmpp);
-		xmppCheckBox = (CheckBox) findViewById(R.id.pushsetting_cb_xmpp);
-		xmppCheckBox.setClickable(true);
-		xmppCheckBox.setOnClickListener(new OnClickListener() {
+		
+		/** --------------------------------- 即时通信界面控制 ---------------------------------------*/
+		cbStatusChat = (TextView) findViewById(R.id.pushsetting_cbstatus_xmpp);
+		chatCheckBox = (CheckBox) findViewById(R.id.pushsetting_cb_xmpp);
+		if(notificationService==null){
+			chatCheckBox.setClickable(false);
+		}else{
+			chatCheckBox.setClickable(true);
+		}
+		chatCheckBox.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				if (notificationService != null
-						&& !NetworkUtil
-								.isNetworkConnected(PushSettingActivity.this)) {
+				if (notificationService == null){
+					return;
+				}
+				if(!NetworkUtil.isNetworkConnected(PushSettingActivity.this)) {
 					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！",
 							Toast.LENGTH_SHORT).show();
 					cbStatusMina.setText("未连接");
 					minaCheckBox.setChecked(false);
-					cbStatusXmpp.setText("未连接");
-					xmppCheckBox.setChecked(false);
+					cbStatusChat.setText("未连接");
+					chatCheckBox.setChecked(false);
 					return;
 				}
 
-				if (xmppCheckBox.isChecked()) {
-					cbStatusXmpp.setText("正在打开...");
-					notificationService.reconnect();
+				if (chatCheckBox.isChecked()) {
+					cbStatusChat.setText("正在打开...");
+					notificationService.reconnect(application.getChatManager());
 				} else {
-					cbStatusXmpp.setText("正在关闭...");
-					notificationService.disconnect();
+					cbStatusChat.setText("正在关闭...");
+					notificationService.disconnect(application.getChatManager());
 				}
 			}
 		});
+		
+		if(notificationService!=null){
+			if (application.getNotificationService().isOnline(application.getChatManager())) {
+				cbStatusChat.setText("已连接");
+				chatCheckBox.setChecked(true);
+			} else {
+				cbStatusChat.setText("未连接");
+				chatCheckBox.setChecked(false);
+			}
+		}
+		
+		/** --------------------------------- Mina界面控制 ---------------------------------------*/
+		cbStatusMina = (TextView) findViewById(R.id.pushsetting_cbstatus_mina);
 		minaCheckBox = (CheckBox) findViewById(R.id.pushsetting_cb_mina);
-		minaCheckBox.setClickable(true);
+		if(minaPushService==null){
+			minaCheckBox.setClickable(false);
+		}else{
+			minaCheckBox.setClickable(true);
+		}
 		minaCheckBox.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (notificationService != null
-						&& !NetworkUtil
-								.isNetworkConnected(PushSettingActivity.this)) {
+				if (minaPushService == null){
+					return;
+				}
+				if(!NetworkUtil.isNetworkConnected(PushSettingActivity.this)) {
 					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！",
 							Toast.LENGTH_SHORT).show();
 					cbStatusMina.setText("未连接");
 					minaCheckBox.setChecked(false);
-					cbStatusXmpp.setText("未连接");
-					xmppCheckBox.setChecked(false);
+					cbStatusChat.setText("未连接");
+					chatCheckBox.setChecked(false);
 					return;
 				}
 				if (minaCheckBox.isChecked()) {
@@ -157,23 +199,74 @@ public class PushSettingActivity extends BaseActivity {
 			}
 		});
 
-		if (application.getNotificationService().isOnline()) {
-			cbStatusXmpp.setText("已连接");
-			xmppCheckBox.setChecked(true);
-		} else {
-			cbStatusXmpp.setText("未连接");
-			xmppCheckBox.setChecked(false);
+		if(minaPushService!=null){
+			if (application.getMinaPushService().isOnline()) {
+				cbStatusMina.setText("已连接");
+				minaCheckBox.setChecked(true);
+			} else {
+				cbStatusMina.setText("未连接");
+				minaCheckBox.setChecked(false);
+			}
 		}
+		
+		
+		
+		/** --------------------------------- openfire界面控制 ---------------------------------------*/
+		
+		cbStatusOpenfire = (TextView) findViewById(R.id.pushsetting_cbstatus_openfire);
+		openfireCheckBox = (CheckBox) findViewById(R.id.pushsetting_cb_openfire);
+		if(notificationService==null){
+			openfireCheckBox.setClickable(false);
+		}else{
+			openfireCheckBox.setClickable(true);
+		}
+		openfireCheckBox.setOnClickListener(new OnClickListener() {
 
-		if (application.getMinaPushService().isOnline()) {
-			cbStatusMina.setText("已连接");
-			minaCheckBox.setChecked(true);
-		} else {
-			cbStatusMina.setText("未连接");
-			minaCheckBox.setChecked(false);
+			@Override
+			public void onClick(View v) {
+				if (notificationService == null){
+					return;
+				}
+				if(!NetworkUtil.isNetworkConnected(PushSettingActivity.this)) {
+					Toast.makeText(PushSettingActivity.this, "网络异常，请检查设置！",
+							Toast.LENGTH_SHORT).show();
+					cbStatusOpenfire.setText("未连接");
+					openfireCheckBox.setChecked(false);
+					cbStatusChat.setText("未连接");
+					openfireCheckBox.setChecked(false);
+					return;
+				}
+				if (openfireCheckBox.isChecked()) {
+					cbStatusOpenfire.setText("正在打开...");
+					notificationService.reconnect(application.getPushManager());
+					SharedPreferencesUtil.getInstance(PushSettingActivity.this)
+							.saveBoolean(TmpConstants.SELECT_OPEN, true);
+				} else {
+
+					cbStatusOpenfire.setText("正在关闭...");
+					notificationService.disconnect(application.getPushManager());
+					SharedPreferencesUtil.getInstance(PushSettingActivity.this)
+							.saveBoolean(TmpConstants.SELECT_OPEN, false);
+				}
+			}
+		});
+
+		if(notificationService!=null){
+			if (application.getNotificationService().isOnline(application.getPushManager())) {
+				cbStatusOpenfire.setText("已连接");
+				openfireCheckBox.setChecked(true);
+			} else {
+				cbStatusOpenfire.setText("未连接");
+				openfireCheckBox.setChecked(false);
+			}
 		}
+		
+		
 	}
 
+	
+	
+	
 	OnClickListener clickListener = new View.OnClickListener() {
 
 		@Override
@@ -218,8 +311,10 @@ public class PushSettingActivity extends BaseActivity {
 			Toast.makeText(this, "网络异常，请检查设置！", Toast.LENGTH_SHORT).show();
 			cbStatusMina.setText("未连接");
 			minaCheckBox.setChecked(false);
-			cbStatusXmpp.setText("未连接");
-			xmppCheckBox.setChecked(false);
+			cbStatusChat.setText("未连接");
+			chatCheckBox.setChecked(false);
+			cbStatusOpenfire.setText("未连接");
+			openfireCheckBox.setChecked(false);
 		}
 	}
 }

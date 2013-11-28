@@ -39,16 +39,29 @@ public class ConnectivityReceiver extends BroadcastReceiver {
 
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		Application application = (Application) context.getApplicationContext();
-
+		
+		
+		
 		if (networkInfo != null && networkInfo.isConnected()
 				&& application.isHasLogined() && notificationService != null) {
-			if (!notificationService.isConnected()) {
-				log.info("Network connected,begin reconnect to xmpp");
-				notificationService.reconnect();
-			} else {
-				log.info("Network unavailable,begin to close xmpp");
-				notificationService.virtualDisconnect();
-			}
+			
+//			if (!notificationService.isConnected(application.getChatManager())) {
+//				log.info("Network connected,begin reconnect to xmpp");
+//				notificationService.reconnect(application.getChatManager());
+//			} else {
+//				log.info("Network unavailable,begin to close xmpp");
+//				notificationService.virtualDisconnect();
+//			}
+			
+//			if (!notificationService.isConnected(application.getPushManager())) {
+//				log.info("Network connected,begin reconnect to xmpp");
+//				notificationService.reconnect(application.getPushManager());
+//			} else {
+//				log.info("Network unavailable,begin to close xmpp");
+//				notificationService.virtualDisconnect();
+//			}
+			
+			
 		} else {
 
 			if (notificationService != null) {

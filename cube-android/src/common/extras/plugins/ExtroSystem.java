@@ -444,8 +444,7 @@ public class ExtroSystem extends CordovaPlugin {
 								}
 
 								protected void onPostExecute(Void result) {
-									application.loginChatClient(username,
-											username);
+									application.loginXmppClient(username,username,application.getChatManager());
 
 								};
 							}.execute();

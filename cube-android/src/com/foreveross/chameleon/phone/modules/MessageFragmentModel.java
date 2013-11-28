@@ -202,7 +202,7 @@ public class MessageFragmentModel {
 		if (msgModel != null) {
 			msgModel.removeMessages(messageIds);
 			coupMsgInfo();
-			if (msgModel.isEmpty()) {
+			if (!msgModel.isEmpty()) {
 				msgSortMap.remove(msgModel.getGroupName());
 				cacheList.remove(msgModel);
 			}
