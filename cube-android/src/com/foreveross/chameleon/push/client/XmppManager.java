@@ -416,16 +416,18 @@ public class XmppManager {
 							.post(ConnectStatusChangeEvent.SHOW_TOAST);
 							continue;
 						}
-						connect(entry.getName(), entry.getPassword());
+						if(entry!=null)
+							if(!connect(entry.getName(), entry.getPassword())){
+								reconnect();
+							}
 					} catch (InterruptedException e) {
-						log.error("connect xmpp server error!", e);
-					} catch (Exception e) {
 						log.error("connect xmpp server error!", e);
 					}
 				}
 			}
 		}).start();
 	}
+
 
 	/**
 	 * [请求连接]<BR>

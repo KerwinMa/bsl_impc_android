@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import android.os.Build;
 import org.jivesoftware.smack.XMPPConnection;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -48,7 +48,8 @@ import com.foreveross.chameleon.phone.chat.chatroom.MucRoomAdapter;
 import com.foreveross.chameleon.phone.chat.collect.CollectedAdapter;
 import com.foreveross.chameleon.phone.chat.group.GroupAdapter;
 import com.foreveross.chameleon.phone.chat.recently.HistoryAdapter;
-import com.foreveross.chameleon.phone.chat.search.SearchFriendAdapter;
+import com.foreveross.chameleon.phone.chat.search.SearchGroupFriendAdapter;
+import com.foreveross.chameleon.phone.chat.search.SearchGroupRecentlyAdapter;
 import com.foreveross.chameleon.phone.chat.search.SearchRecentlyAdapter;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
@@ -98,8 +99,8 @@ public class GroupFragment extends Fragment {
 	private ImageView app_search_close;
 	private ListView searchListView;
 	private ListView recently_searchListView;
-	private SearchFriendAdapter searchFriendAdapter;
-	private SearchRecentlyAdapter searchRecentlyAdapter;
+	private SearchGroupFriendAdapter searchFriendAdapter;
+	private SearchGroupRecentlyAdapter searchRecentlyAdapter;
 
 	private List<UserModel> searchFriendList;
 	private List<SessionModel> searchSessionList;
@@ -715,7 +716,7 @@ public class GroupFragment extends Fragment {
 		});
 
 		searchFriendList = new ArrayList<UserModel>();
-		searchFriendAdapter = new SearchFriendAdapter(getAssocActivity(),
+		searchFriendAdapter = new SearchGroupFriendAdapter(getAssocActivity(),
 				searchFriendList);
 		searchListView.setAdapter(searchFriendAdapter);
 		searchListView.setOnItemClickListener(new OnItemClickListener() {
@@ -761,7 +762,7 @@ public class GroupFragment extends Fragment {
 		});
 
 		searchSessionList = new ArrayList<SessionModel>();
-		searchRecentlyAdapter = new SearchRecentlyAdapter(getAssocActivity(),
+		searchRecentlyAdapter = new SearchGroupRecentlyAdapter(getAssocActivity(),
 				searchSessionList);
 		recently_searchListView.setAdapter(searchRecentlyAdapter);
 		recently_searchListView
