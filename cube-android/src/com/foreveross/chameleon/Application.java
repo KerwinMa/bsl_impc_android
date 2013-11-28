@@ -1443,4 +1443,5 @@ public class Application extends android.app.Application implements
 	public static void setModuleName(String moduleName) {
 		Application.moduleName = moduleName;
 	}
+
 }

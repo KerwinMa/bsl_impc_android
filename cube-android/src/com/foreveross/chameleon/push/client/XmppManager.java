@@ -438,7 +438,14 @@ public class XmppManager {
 	public void submitConnectReq(String username, String password) {
 		log.debug("submitConnectReq for username:{},password:{}", username,
 				password);
-		reqConnectQueue.add(new Entry(username, password));
+        try {
+            reqConnectQueue.add(new Entry(username, password));
+        }
+        catch (Exception e)
+        {
+            reqConnectQueue.clear();
+            reqConnectQueue.add(new Entry(username, password));
+        }
 	}
 
 	/**
@@ -448,7 +455,14 @@ public class XmppManager {
 	public void submitReconnectReq() {
 		log.debug("submitReconnectReq for username:{},password:{}",
 				usernameStore, passwordStore);
-		reqConnectQueue.add(new Entry(usernameStore, passwordStore));
+        try {
+            reqConnectQueue.add(new Entry(usernameStore, passwordStore));
+        }catch (Exception e)
+        {
+            reqConnectQueue.clear();
+            reqConnectQueue.add(new Entry(usernameStore, passwordStore));
+        }
+
 	}
 
 	/**
