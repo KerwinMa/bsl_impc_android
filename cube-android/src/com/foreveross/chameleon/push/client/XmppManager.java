@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.foreveross.chameleon.CubeConstants;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.ConnectionListener;
@@ -214,7 +215,7 @@ public class XmppManager {
 			rosterListener = new MyRosterListener(notificationService);
 		}else if(type==Type.PUSH){
 			String token = PushUtil.createMD5Token(Application.class.cast(this.getNotificationService()
-						.getApplicationContext()));
+                    .getApplicationContext()));
 			this.usernameStore =  token;
 			this.passwordStore =  token;
 			notificationPacketListener = new PushMessageListener(this.getNotificationService().getApplicationContext(),this);
@@ -861,7 +862,16 @@ public class XmppManager {
 								.getInstanse(notificationService
 										.getApplicationContext());
 						mucManager.init(xmppConnection);
-						String hostName = "mobile.app";
+                        String servicenName = xmppConnection.getServiceName();
+                        if(null == servicenName || "".equals(servicenName))
+                        {
+                            PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(notificationService
+                                    .getApplicationContext(),
+                                CubeConstants.CUBE_CONFIG);
+                            servicenName = propertiesUtil.getString("ChatServiceName","istation.csair.com");
+                        }
+
+						String hostName =  servicenName;
 						Monitor monitor = new Monitor();
 						mucManager.obtainRooms(username + "@" + hostName, monitor);
 						sync(xmppConnection, monitor);
@@ -1543,8 +1553,30 @@ public class XmppManager {
 			@Override
 			public void run() {
 				String result = null;
+                String servicenName="";
+                if(null == connection)
+                {
+                    if(null == servicenName || "".equals(servicenName))
+                    {
+                        PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(notificationService
+                                .getApplicationContext(),
+                                CubeConstants.CUBE_CONFIG);
+                        servicenName = propertiesUtil.getString("ChatServiceName","istation.csair.com");
+                    }
+                }
+                else
+                {
+                    servicenName = connection.getServiceName();
+                }
+                if(null == servicenName || !"".equals(servicenName))
+                {
+                    PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(notificationService
+                            .getApplicationContext(),
+                            CubeConstants.CUBE_CONFIG);
+                    servicenName = propertiesUtil.getString("ChatServiceName","istation.csair.com");
+                }
 				String url = URL.CHATSHOW + "/" + usernameStore + "@"
-						+ connection.getServiceName()
+						+ servicenName
 						+ URL.getSessionKeyappKey();
 				try {
 					result = HttpUtil.doWrapedHttp(

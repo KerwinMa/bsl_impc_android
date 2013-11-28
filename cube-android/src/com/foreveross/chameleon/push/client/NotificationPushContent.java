@@ -120,7 +120,7 @@ public class NotificationPushContent {
 									String moduleName = null;
 									if(!moduleIdentifer.equals("com.foss.announcement")) {
 										if(!jsonObjects.isNull("moduleName")){
-											moduleName= jsonObject.getString("moduleName");
+											moduleName= jsonObjects.getString("moduleName");
 										}
 									}
 									
