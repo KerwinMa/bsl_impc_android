@@ -59,7 +59,15 @@ public class CubeModuleManager {
 		identifier_old_version_map.clear();
 
 		all_map.clear();
+		Map<CubeModule, Integer> main_maptemp = new HashMap<CubeModule, Integer>();
+		for (String key : main_map.keySet()) {
+			List<CubeModule> list = main_map.get(key);
+			for (CubeModule cubeModule : list) {
+				main_maptemp.put(cubeModule, cubeModule.getMsgCount());
+			}
+		}
 		main_map.clear();
+
 		installed_map.clear();
 		uninstalled_map.clear();
 		updatable_map.clear();
@@ -126,6 +134,15 @@ public class CubeModuleManager {
 
 				}
 
+			}
+		}
+
+		for (String key : main_map.keySet()) {
+			List<CubeModule> list = main_map.get(key);
+			for (CubeModule module : list) {
+				if (main_maptemp.containsKey(module)){
+					module.setMsgCount(main_maptemp.get(module));
+				}
 			}
 		}
 
