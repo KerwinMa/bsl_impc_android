@@ -1012,7 +1012,9 @@ var app = {
 					}
 				});
 			}
-
+            //系统切换
+            changesys.target= "body";
+            changesys.initialize();
 
 
 		});
