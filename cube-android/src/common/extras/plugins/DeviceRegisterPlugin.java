@@ -16,7 +16,7 @@ import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.phone.activity.AdminActivity;
-import com.foreveross.chameleon.phone.activity.SettingsActivity;
+import com.foreveross.chameleon.phone.activity.SettingsbakActivity;
 import com.foreveross.chameleon.phone.modules.task.HttpRequestAsynTask;
 import com.foreveross.chameleon.util.DeviceInfoUtil;
 import com.foreveross.chameleon.util.HttpUtil;

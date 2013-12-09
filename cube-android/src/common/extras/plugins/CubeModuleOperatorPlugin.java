@@ -40,7 +40,6 @@ import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.Pool;
 import com.foreveross.chameleon.util.Preferences;
-import com.google.gson.Gson;
 
 /**
  * <BR>
@@ -273,9 +272,27 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 			}
 
 		} else if (action.equals("setting")) {
-			Intent i = new Intent();
-			i.setClass(cordova.getActivity(), SettingsActivity.class);
-			cordova.getActivity().startActivity(i);
+			if (PadUtils.isPad(cordova.getActivity())) {
+				PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
+						CubeModuleOperatorPlugin.this.cordova.getActivity(),
+						CubeConstants.CUBE_CONFIG);
+				String className = propertiesUtil.getString(
+						"settings", "");
+				Intent intent = new Intent();
+				if (!TextUtils.isEmpty(className)) {
+					intent.putExtra("direction", 2);
+					intent.putExtra("type", "fragment");
+					intent.putExtra("value", className);
+					intent.setClass(cordova.getActivity(), FacadeActivity.class);
+					cordova.getActivity().startActivity(intent);
+				}
+			}
+			else
+			{
+				Intent i = new Intent();
+				i.setClass(cordova.getActivity(), SettingsActivity.class);
+				cordova.getActivity().startActivity(i);
+			}
 		} else if (action.equals("manager")) {
 			cordova.getActivity().sendBroadcast(
 					new Intent(BroadcastConstans.JumpToCubeManager));
@@ -530,7 +547,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 					intent.setClass(cordova.getActivity(), FacadeActivity.class);
 					intent.putExtra("direction", 2);
 					intent.putExtra("type", "web");
-					intent.putExtra("value", "file:/" + url + "/index.html");
+					intent.putExtra("value", "file://" + url + "/index.html");
 				} else {
 					// TODO
 					// intent.setClass(cordova.getActivity(),

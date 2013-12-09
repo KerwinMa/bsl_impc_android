@@ -602,7 +602,7 @@ public abstract class DroidGapFragment extends Fragment implements
 		}
 
 		if (getIsVisible() == View.VISIBLE) {
-			addzoomView(appView);
+//			addzoomView(appView);
 		}
 
 		this.root.addView(appView);
