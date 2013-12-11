@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.foreveross.chameleon.CubeAndroid;
 import com.csair.impc.R;
+import com.foreveross.chameleon.activity.FacadeActivity;
+import com.foreveross.chameleon.util.PadUtils;
 import com.foreveross.chameleon.util.imageTool.CubeAsyncImage;
 
 /**
@@ -75,12 +77,24 @@ public class CubeModelItemView extends RelativeLayout
 			{
 				String path = Environment.getExternalStorageDirectory()
 						.getPath() + "/" + mContext.getPackageName();
+				
 				Intent intent = new Intent();
-				intent.putExtra("from", "set");
-				intent.putExtra("identify", module.getIdentifier());
-				intent.putExtra("path", path);
-				intent.setClass(mContext, CubeAndroid.class);
+				if (PadUtils.isPad(mContext)) {
+					intent.setClass(mContext, FacadeActivity.class);
+					intent.putExtra("direction", 2);
+					intent.putExtra("type", "web");
+					intent.putExtra("value", "file://" + path +"/www/"+ module.getIdentifier()+ "/index.html#"+module.getIdentifier()+"/settings");
+				} else {
+					intent.putExtra("from", "set");
+					intent.putExtra("identify", module.getIdentifier());
+					intent.putExtra("path", path);
+					intent.setClass(mContext, CubeAndroid.class);
+					
+				}
+
 				mContext.startActivity(intent);
+
+				
 			}
 		});
 		setImageIcon(mContext,module.getInstallIcon(),img_update,this);

@@ -24,10 +24,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d67c8581-01ea-42b3-89fa-856ee7c5b92c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/AboutActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/AboutActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/CubeConstants.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/CubeConstants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CubeImpc.iml" afterPath="$PROJECT_DIR$/CubeImpc.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/extras/plugins/CubeLoginPlugin.java" afterPath="$PROJECT_DIR$/src/common/extras/plugins/CubeLoginPlugin.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeModelItemView.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeModelItemView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/extras/plugins/CubeModuleOperatorPlugin.java" afterPath="$PROJECT_DIR$/src/common/extras/plugins/CubeModuleOperatorPlugin.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java" afterPath="$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/DroidGapFragment.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/DroidGapFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/activity/FacadeActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/activity/FacadeActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/PushSettingActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/PushSettingActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/R.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/www/css/changesyslogin.css" afterPath="$PROJECT_DIR$/assets/www/css/changesyslogin.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/SettingsActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/SettingsActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/raw/cube.properties" afterPath="$PROJECT_DIR$/res/raw/cube.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/raw/cube1.properties" afterPath="$PROJECT_DIR$/res/raw/cube1.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/www/pad/main.html" afterPath="$PROJECT_DIR$/assets/www/pad/main.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cube-android 0515.iws" />
@@ -35,8 +47,8 @@
     <file path="/CubeApplication.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384239862844" ignored="false" />
     <file path="/cube.properties" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385608684351" ignored="false" />
     <file path="/cube1.properties" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385609206678" ignored="false" />
-    <file path="/fragment.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386312778944" ignored="false" />
-    <file path="/Dummy.txt" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386499070679" ignored="false" />
+    <file path="/fragment.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386729013004" ignored="false" />
+    <file path="/Dummy.txt" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386727915410" ignored="false" />
     <file path="/Application.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385609389420" ignored="false" />
     <file path="/notice_item.xml" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1383747327778" ignored="false" />
     <file path="/CubeLoginPlugin.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385027013943" ignored="false" />
@@ -82,6 +94,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -119,7 +132,6 @@
       </breakpoint>
     </breakpoint_any>
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" />
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -136,7 +148,7 @@
       <file leaf-file-name="cube1.properties" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/raw/cube1.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="3" column="0" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -169,10 +181,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="changesys.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="0" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeviceRegisterPlugin.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="66" selection-start="611" selection-end="630" vertical-scroll-proportion="0.21931818">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="changesys.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/www/js/changesys.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="29" selection-start="241" selection-end="241" vertical-scroll-proportion="-0.08522727">
+            <state line="10" column="29" selection-start="241" selection-end="241" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -181,7 +211,7 @@
       <file leaf-file-name="cube.properties" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/raw/cube.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="92" selection-start="2632" selection-end="2632" vertical-scroll-proportion="0.0">
+            <state line="51" column="92" selection-start="2769" selection-end="2769" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -233,9 +263,9 @@
         <option value="$PROJECT_DIR$/assets/www/phone/index.html" />
         <option value="$PROJECT_DIR$/assets/www/pad/js/main.js" />
         <option value="$PROJECT_DIR$/assets/www/pad/main.html" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/assets/www/js/changesys.js" />
         <option value="$PROJECT_DIR$/assets/www/css/changesyslogin.css" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
       </list>
     </option>
   </component>
@@ -276,8 +306,8 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -296,66 +326,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cube-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cube-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cube-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cube-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cube-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cube-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -367,11 +343,11 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -396,24 +372,6 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -434,6 +392,24 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="GriffonRunConfigurationType" factoryName="Griffon">
@@ -625,8 +601,8 @@
     <option name="totallyTimeSpent" value="69905000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="22" width="1676" height="1028" extended-state="6" />
-    <editor active="false" />
+    <frame x="4" y="22" width="1676" height="1028" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -639,6 +615,7 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2496361" sideWeight="0.2857143" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2967033" sideWeight="0.6437948" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -646,7 +623,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.6306991" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.44715446" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1582822" sideWeight="0.70264316" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1582822" sideWeight="0.67070484" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2967033" sideWeight="0.35620525" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284553" sideWeight="0.6474164" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2788618" sideWeight="0.14285715" order="3" side_tool="true" content_ui="tabs" />
@@ -659,7 +636,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32522798" sideWeight="0.2512195" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Runner" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -728,11 +704,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="979" column="22" selection-start="29795" selection-end="29795" vertical-scroll-proportion="0.017045455" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/push/client/XmppManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="493" column="73" selection-start="15328" selection-end="15328" vertical-scroll-proportion="0.017045455" />
@@ -753,13 +724,6 @@
         <state line="1016" column="36" selection-start="26623" selection-end="26703" vertical-scroll-proportion="0.71022725" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="22" selection-start="291" selection-end="291" vertical-scroll-proportion="0.22131148">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/www/pad/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="532" column="59" selection-start="17598" selection-end="17598" vertical-scroll-proportion="1.590164" />
@@ -772,7 +736,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res/raw/cube1.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="3" column="0" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -791,7 +755,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res/raw/cube.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="92" selection-start="2632" selection-end="2632" vertical-scroll-proportion="0.0">
+        <state line="51" column="92" selection-start="2769" selection-end="2769" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -810,6 +774,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/assets/www/js/changesys.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="29" selection-start="241" selection-end="241" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/assets/www/css/changesyslogin.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="34" column="32" selection-start="545" selection-end="545" vertical-scroll-proportion="0.0">
@@ -817,9 +788,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/js/changesys.js">
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="29" selection-start="241" selection-end="241" vertical-scroll-proportion="-0.08522727">
+        <state line="2" column="0" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="66" selection-start="611" selection-end="630" vertical-scroll-proportion="0.21931818">
           <folding />
         </state>
       </provider>
@@ -881,7 +859,6 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>

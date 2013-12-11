@@ -68,6 +68,7 @@ import com.foreveross.chameleon.event.EventBus;
 import com.foreveross.chameleon.event.MessageCountChangeEvent;
 import com.foreveross.chameleon.event.PresenceEvent;
 import com.foreveross.chameleon.pad.component.NativeViewFragment;
+import com.foreveross.chameleon.pad.fragment.AboutFragment;
 import com.foreveross.chameleon.pad.fragment.ChatRoomFragment;
 import com.foreveross.chameleon.pad.fragment.DroidGapFragment;
 import com.foreveross.chameleon.pad.fragment.GroupFragment;
@@ -76,6 +77,8 @@ import com.foreveross.chameleon.pad.fragment.MucAddFirendFragment;
 import com.foreveross.chameleon.pad.fragment.PageFinishListener;
 import com.foreveross.chameleon.pad.fragment.PageStartListener;
 import com.foreveross.chameleon.pad.fragment.ParentDroidFragment;
+import com.foreveross.chameleon.pad.fragment.PushSettingFragment;
+import com.foreveross.chameleon.pad.fragment.SettingsFragment;
 import com.foreveross.chameleon.pad.fragment.ViewCreateCallBack;
 import com.foreveross.chameleon.pad.modle.SkinModel;
 import com.foreveross.chameleon.phone.modules.CubeModule;
@@ -748,6 +751,8 @@ public class FacadeActivity extends FragmentActivity implements
 				new ViewTreeObserver.OnPreDrawListener() {
 					public boolean onPreDraw() {
 						int contentViewWidth = contentView.getWidth();
+						int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+//						Log.d("contentViewWidth---------width", contentViewWidth+""+width);
 						parentFragment.setWidth(contentViewWidth);
 						RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
 								contentViewWidth / 2 + 24,
@@ -827,6 +832,9 @@ public class FacadeActivity extends FragmentActivity implements
 				new ViewTreeObserver.OnPreDrawListener() {
 					public boolean onPreDraw() {
 						int contentViewWidth = contentView.getWidth();
+						int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+						
+//						Log.d("contentViewWidthAAA---------width", contentViewWidth+""+width);
 						RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
 								contentViewWidth / 2 + 24,
 								LayoutParams.MATCH_PARENT);
@@ -848,7 +856,7 @@ public class FacadeActivity extends FragmentActivity implements
 	}
 
 	public void sentKeyboardShow(Boolean b) {
-		parentFragment.sendJavascript("isKeyboardShow('" + b + "')");
+		//parentFragment.sendJavascript("isKeyboardShow('" + b + "')");
 	}
 
 	/**
@@ -906,7 +914,7 @@ public class FacadeActivity extends FragmentActivity implements
 			}
 		}
 		if ((!(fragment instanceof ChatRoomFragment)
-				&& !(fragment instanceof MucAddFirendFragment) && !(fragment instanceof MucManagerFragment))) {
+				&& !(fragment instanceof MucAddFirendFragment) && !(fragment instanceof MucManagerFragment))&&isSpecialFragment(fragment)) {
 			popRight();
 		} else {
 
@@ -940,6 +948,14 @@ public class FacadeActivity extends FragmentActivity implements
 		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.commit();
 	}
+	private boolean isSpecialFragment(Fragment fragment)
+	{
+		if(!(fragment instanceof AboutFragment) && !(fragment instanceof PushSettingFragment))
+		{
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -968,6 +984,9 @@ public class FacadeActivity extends FragmentActivity implements
 			// 1.表示父层,2表示子层
 			if (1 == direction) {
 				this.url = url;
+//				int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+//				Log.d("parentFragment---------width", contentView.getWidth()+""+width);
+//				
 				parentFragment.setWidth(contentView.getWidth());
 				parentFragment.loadUrl(url);
 			} else if (2 == direction) {

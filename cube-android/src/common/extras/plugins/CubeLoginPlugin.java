@@ -113,7 +113,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		String username = args.getString(0).toLowerCase();
 		String password = args.getString(1).toLowerCase();
 		boolean isremember = args.getBoolean(2);
-		boolean isoutline = args.getBoolean(3);
+		boolean isoutline = false;//args.getBoolean(3);
 		if (checkLogin(username, password)) {
 			processLogined(isremember, username, password,"", isoutline,
 					callbackContext);
