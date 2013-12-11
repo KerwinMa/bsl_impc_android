@@ -373,7 +373,7 @@ public abstract class DroidGapFragment extends Fragment implements
 				@Override
 				public boolean shouldOverrideUrlLoading(WebView webview,
 						String url) {
-					if ("cube://exit".equals(url)) {
+					if (url.contains("cube://exit") || url.contains("cube-action=pop")) {
 
 						if (getAssocActivity() instanceof FacadeActivity) {
 							((FacadeActivity) getAssocActivity()).popRight();
@@ -385,6 +385,7 @@ public abstract class DroidGapFragment extends Fragment implements
 						detailContainer.setPadding(21, 0, 0, 0);
 						return true;
 					}
+					
 					return super.shouldOverrideUrlLoading(webview, url);
 				}
 

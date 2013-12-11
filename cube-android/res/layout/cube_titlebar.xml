@@ -42,6 +42,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dip"
         android:text="创建"
+        android:visibility="gone"
         android:background="@drawable/normal_button_clickbg"
         android:textColor="#ffffff"
         android:textStyle="bold" />
@@ -56,7 +57,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dip"
         android:background="@drawable/collect_button_clickbg"
-        android:text=""
+        android:text="222"
         android:textColor="#ffffff"
         android:textStyle="bold" 
         android:visibility="gone"
