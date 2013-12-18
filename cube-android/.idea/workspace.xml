@@ -24,38 +24,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d67c8581-01ea-42b3-89fa-856ee7c5b92c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/AboutActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/AboutActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/util/AESUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/BuildConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CubeImpc.iml" afterPath="$PROJECT_DIR$/CubeImpc.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/extras/plugins/CubeLoginPlugin.java" afterPath="$PROJECT_DIR$/src/common/extras/plugins/CubeLoginPlugin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeModelItemView.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeModelItemView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/extras/plugins/CubeModuleOperatorPlugin.java" afterPath="$PROJECT_DIR$/src/common/extras/plugins/CubeModuleOperatorPlugin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java" afterPath="$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/DroidGapFragment.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/pad/fragment/DroidGapFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/activity/FacadeActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/activity/FacadeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/PushSettingActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/PushSettingActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/csair/impc/R.java" afterPath="$PROJECT_DIR$/gen/com/csair/impc/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/SettingsActivity.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/activity/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/raw/cube.properties" afterPath="$PROJECT_DIR$/res/raw/cube.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/DownloadFileAsyncTask.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/DownloadFileAsyncTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java" afterPath="$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/raw/cube1.properties" afterPath="$PROJECT_DIR$/res/raw/cube1.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/www/pad/main.html" afterPath="$PROJECT_DIR$/assets/www/pad/main.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cube-android 0515.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/CubeApplication.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384239862844" ignored="false" />
     <file path="/cube.properties" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385608684351" ignored="false" />
-    <file path="/cube1.properties" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385609206678" ignored="false" />
+    <file path="/cube1.properties" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1387187008564" ignored="false" />
     <file path="/fragment.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386729013004" ignored="false" />
-    <file path="/Dummy.txt" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386727915410" ignored="false" />
+    <file path="/Dummy.txt" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386926841772" ignored="false" />
     <file path="/Application.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385609389420" ignored="false" />
     <file path="/notice_item.xml" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1383747327778" ignored="false" />
     <file path="/CubeLoginPlugin.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385027013943" ignored="false" />
     <file path="/URL.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1383792223648" ignored="false" />
     <file path="/GeolocationUtil.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385026998676" ignored="false" />
     <file path="/GeoManager.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384745611797" ignored="false" />
-    <file path="/a.dummy" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1385609361560" ignored="false" />
+    <file path="/a.dummy" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1387186179034" ignored="false" />
     <file path="/ThreadPool.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1383894587628" ignored="false" />
     <file path="/a.xml" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384413507119" ignored="false" />
     <file path="$PROJECT_DIR$/src/com/foreveross/chameleon/store/model/SystemInfoModel.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1384425317014" ignored="false" />
@@ -75,6 +66,8 @@
     <file path="/main.js" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386311980685" ignored="false" />
     <file path="/changesys.js" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386313739603" ignored="false" />
     <file path="/changesyslogin.css" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1386317582655" ignored="false" />
+    <file path="/AESUtils.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1387185389560" ignored="false" />
+    <file path="/DownloadFileAsyncTask.java" changelist="d67c8581-01ea-42b3-89fa-856ee7c5b92c" time="1387185979106" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,79 +141,93 @@
       <file leaf-file-name="cube1.properties" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/raw/cube1.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="0" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
+            <state line="75" column="16" selection-start="4084" selection-end="4084" vertical-scroll-proportion="-10.269231">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/www/phone/index.html">
+      <file leaf-file-name="DESEncrypt.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/DESEncrypt.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="161" selection-start="1105" selection-end="1105" vertical-scroll-proportion="0.0">
+            <state line="32" column="13" selection-start="874" selection-end="874" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/www/pad/main.html">
+      <file leaf-file-name="AESUtils.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/AESUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="39" selection-start="1646" selection-end="1651" vertical-scroll-proportion="0.0">
+            <state line="62" column="77" selection-start="2482" selection-end="2551" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CubeModule.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeModule.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="195" column="30" selection-start="4142" selection-end="4156" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="changesyslogin.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/www/css/changesyslogin.css">
+      <file leaf-file-name="CubeApplication.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="32" selection-start="545" selection-end="545" vertical-scroll-proportion="0.0">
+            <state line="589" column="58" selection-start="16912" selection-end="16926" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <file leaf-file-name="URL.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+            <state line="45" column="18" selection-start="2095" selection-end="2095" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DeviceRegisterPlugin.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java">
+      <file leaf-file-name="CubeConstants.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/CubeConstants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="66" selection-start="611" selection-end="630" vertical-scroll-proportion="0.21931818">
+            <state line="20" column="13" selection-start="564" selection-end="564" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="changesys.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/www/js/changesys.js">
+      <file leaf-file-name="ModuleOperationListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/ModuleOperationListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="29" selection-start="241" selection-end="241" vertical-scroll-proportion="0.0">
+            <state line="3" column="17" selection-start="67" selection-end="67" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cube.properties" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/raw/cube.properties">
+      <file leaf-file-name="ModuleOperationService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/service/ModuleOperationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="92" selection-start="2769" selection-end="2769" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="263" column="42" selection-start="9490" selection-end="9497" vertical-scroll-proportion="-13.269231">
+              <folding>
+                <element signature="e#6375#7465#0" expanded="true" />
+                <element signature="e#7455#7456#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.js">
+      <file leaf-file-name="DownloadFileAsyncTask.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/DownloadFileAsyncTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="36" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
+            <state line="254" column="29" selection-start="7013" selection-end="7028" vertical-scroll-proportion="0.48892674">
               <folding />
             </state>
           </provider>
@@ -250,11 +257,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/MessageFragmentModel.java" />
-        <option value="$PROJECT_DIR$/res/raw/cube1.properties" />
-        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/push/client/NotificationPushContent.java" />
-        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/Application.java" />
-        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/push/client/XmppManager.java" />
         <option value="$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.js" />
         <option value="$PROJECT_DIR$/res/raw/cube.properties" />
         <option value="$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.html" />
@@ -265,7 +267,12 @@
         <option value="$PROJECT_DIR$/assets/www/pad/main.html" />
         <option value="$PROJECT_DIR$/assets/www/js/changesys.js" />
         <option value="$PROJECT_DIR$/assets/www/css/changesyslogin.css" />
+        <option value="$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/util/AESUtils.java" />
+        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/DownloadFileAsyncTask.java" />
+        <option value="$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java" />
+        <option value="$PROJECT_DIR$/res/raw/cube1.properties" />
       </list>
     </option>
   </component>
@@ -273,10 +280,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
+    <option name="x" value="39" />
     <option name="y" value="22" />
-    <option name="width" value="1676" />
-    <option name="height" value="1028" />
+    <option name="width" value="1222" />
+    <option name="height" value="774" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -306,8 +313,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -326,8 +331,178 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chameleon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chameleon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chameleon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="phone" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chameleon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="phone" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cube-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="raw" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -335,19 +510,22 @@
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="ExportedApkPath" value="$PROJECT_DIR$/CubeImpc.apk" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="ExportedModule" value="CubeImpc" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="AndroidRunProguardForReleaseBuild" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -372,6 +550,24 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -392,24 +588,6 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
-      <method />
-    </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="GriffonRunConfigurationType" factoryName="Griffon">
@@ -594,48 +772,49 @@
       <workItem from="1385449731980" duration="16192000" />
       <workItem from="1385971085016" duration="414000" />
       <workItem from="1385971510758" duration="924000" />
+      <workItem from="1386926840874" duration="6901000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69905000" />
+    <option name="totallyTimeSpent" value="76806000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="22" width="1676" height="1028" extended-state="0" />
+    <frame x="39" y="22" width="1222" height="774" extended-state="0" />
     <editor active="true" />
     <layout>
+      <window_info id="Archetypes" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969433" sideWeight="0.67021275" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32415903" sideWeight="0.2512195" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36013216" sideWeight="0.39674798" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Mongo Runner" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42621145" sideWeight="0.64355826" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2496361" sideWeight="0.2857143" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2788618" sideWeight="0.14285715" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2967033" sideWeight="0.6437948" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24907975" sideWeight="0.674772" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.6306991" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.44715446" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1582822" sideWeight="0.67070484" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2967033" sideWeight="0.35620525" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284553" sideWeight="0.6474164" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2788618" sideWeight="0.14285715" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.6306991" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.6306991" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23384354" sideWeight="0.7033639" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29663607" sideWeight="0.35620525" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284553" sideWeight="0.6474164" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Archetypes" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969433" sideWeight="0.67021275" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32491857" sideWeight="0.6474164" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4359534" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32522798" sideWeight="0.2512195" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Mongo Runner" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -704,100 +883,117 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/push/client/XmppManager.java">
+    <entry file="file://$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="493" column="73" selection-start="15328" selection-end="15328" vertical-scroll-proportion="0.017045455" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/push/client/NotificationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="35" selection-start="2603" selection-end="2603" vertical-scroll-proportion="0.017045455" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="16" selection-start="2655" selection-end="2655" vertical-scroll-proportion="1.7523365" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/phone/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1016" column="36" selection-start="26623" selection-end="26703" vertical-scroll-proportion="0.71022725" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/pad/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="532" column="59" selection-start="17598" selection-end="17598" vertical-scroll-proportion="1.590164" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/CubeConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="50" selection-start="628" selection-end="628" vertical-scroll-proportion="0.22613065" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/raw/cube1.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="226" selection-end="229" vertical-scroll-proportion="0.09836066" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/phone/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="161" selection-start="1105" selection-end="1105" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/raw/cube.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="92" selection-start="2769" selection-end="2769" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="36" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/www/pad/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="39" selection-start="1646" selection-end="1651" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/com.csair.deviceregist/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="36" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/js/changesys.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="29" selection-start="241" selection-end="241" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/www/css/changesyslogin.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="32" selection-start="545" selection-end="545" vertical-scroll-proportion="0.0">
+        <state line="47" column="30" selection-start="2073" selection-end="2073" vertical-scroll-proportion="-8.75">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+        <state line="15" column="53" selection-start="706" selection-end="716" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/common/extras/plugins/DeviceRegisterPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="66" selection-start="611" selection-end="630" vertical-scroll-proportion="0.21931818">
+        <state line="3" column="12" selection-start="87" selection-end="87" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/DESEncrypt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="13" selection-start="874" selection-end="874" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/ModuleOperationListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="17" selection-start="67" selection-end="67" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-17/android.jar!/android/content/Context.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="117" column="45" selection-start="5920" selection-end="5920" vertical-scroll-proportion="0.33278957">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-17/android.jar!/android/os/AsyncTask.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="25" selection-start="1778" selection-end="1778" vertical-scroll-proportion="0.70962477">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/util/AESUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="77" selection-start="2482" selection-end="2551" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="195" column="30" selection-start="4142" selection-end="4156" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/CubeApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="589" column="58" selection-start="16912" selection-end="16926" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/service/ModuleOperationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="263" column="42" selection-start="9490" selection-end="9497" vertical-scroll-proportion="-13.269231">
+          <folding>
+            <element signature="e#6375#7465#0" expanded="true" />
+            <element signature="e#7455#7456#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/raw/cube1.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="75" column="16" selection-start="4084" selection-end="4084" vertical-scroll-proportion="-10.269231">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/URL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="18" selection-start="2095" selection-end="2095" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/CubeConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="13" selection-start="564" selection-end="564" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/foreveross/chameleon/phone/modules/task/DownloadFileAsyncTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="254" column="29" selection-start="7013" selection-end="7028" vertical-scroll-proportion="0.48892674">
           <folding />
         </state>
       </provider>

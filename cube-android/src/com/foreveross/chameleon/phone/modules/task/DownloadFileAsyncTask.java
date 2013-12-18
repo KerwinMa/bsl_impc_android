@@ -1,9 +1,11 @@
 package com.foreveross.chameleon.phone.modules.task;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 
+import android.widget.Toast;
+import com.foreveross.chameleon.util.AESUtils;
+import com.foreveross.chameleon.util.Base64Encoder;
+import com.foreveross.chameleon.util.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,9 +18,13 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 import android.util.Log;
 
 import com.foreveross.chameleon.util.FileWriterUtil;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 
 public abstract class DownloadFileAsyncTask extends GeneralAsynTask {
 
@@ -115,6 +121,22 @@ public abstract class DownloadFileAsyncTask extends GeneralAsynTask {
 
 			response = client.execute(post);
 			HttpEntity entity = response.getEntity();
+			if(response.getStatusLine().getStatusCode() != 200)
+			{
+				InputStream is =  entity.getContent();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				StringBuffer buffer = new StringBuffer();
+				String line = "";
+				while((line=br.readLine())!= null)
+				{
+					buffer.append(line);
+				}
+				IOUtils.closeQuietly(br);
+				Log.e("ERROR_TAG", buffer.toString());
+				return null;
+			}
+			
+			
 			
 			String contentDisposition = response.getFirstHeader(
 					"Content-Disposition").getValue();
@@ -129,13 +151,19 @@ public abstract class DownloadFileAsyncTask extends GeneralAsynTask {
 //			Log.d("cube", "Header Content-Length:" + contentLength);
 //			Log.d("cube", "Header Content-Length:" + contentDisposition);
 
-			if (length == -1) {
+//
+            if(Long.parseLong(contentLength) != length)
+            {
+                Toast.makeText(context,"文件下载不完整请重新下载",Toast.LENGTH_SHORT).show();
+                return null;
+            }
+            if (length == -1) {
 				length = Long.valueOf(contentLength);
 			}
-
 			InputStream is = entity.getContent();
 			FileOutputStream fileOutputStream = null;
-			String fileName = "";
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+            String fileName = "";
 			try {
 				if (params[1] == null || "".equals(params[1])) {
 					if (contentDisposition == null
@@ -205,25 +233,38 @@ public abstract class DownloadFileAsyncTask extends GeneralAsynTask {
 					}
 
 				}
-				// Log.d("cube", "开始下载 length=" + length);
+//				 Log.d("cube", "开始下载 length=" + length);
 
+                //文件解密
+                IOUtils.copy(is, out);
+//                Log.d("cube", out.toByteArray().length+"");
+//                byte[] in = Base64.decode(new String(out.toByteArray()), Base64.DEFAULT);
+//                Log.d("cube", in.length+"");
+                byte[] inBytes = new AESUtils().decrypt(out.toByteArray());
+                IOUtils.closeQuietly(out);
+                IOUtils.closeQuietly(is);
+                ByteArrayInputStream bis = new ByteArrayInputStream(inBytes);
 				byte[] buf = new byte[1024 * 256];
 				int ch = -1;
 				int count = 0;
-				while ((ch = is.read(buf)) != -1) {
+				while ((ch = bis.read(buf)) != -1) {
 					fileOutputStream.write(buf, 0, ch);
 					count += ch;
 					publishProgress(length == -1 ? -1
 							: (int) ((count * 100) / length));
 //					System.out.println("read:"+ch);
 				}
+				IOUtils.closeQuietly(bis);
 				publishProgress(100);
+				
+			}
+//			if (fileOutputStream != null) {
+//				fileOutputStream.flush();
+//				fileOutputStream.close();
+//			}
+			IOUtils.closeQuietly(fileOutputStream);
 
-			}
-			if (fileOutputStream != null) {
-				fileOutputStream.flush();
-				fileOutputStream.close();
-			}
+
 			Log.d("cube", "下载完成");
 
 			if (is != null) {

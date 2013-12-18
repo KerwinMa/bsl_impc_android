@@ -60,7 +60,7 @@ public class URL {
 		String DOWNLOAD = BASE_WS + "csair-mam/api/mam/clients/files/";
 		String sessionKey = Preferences.getSESSION(Application.sharePref);
 		String appKey = Application.class.cast(context.getApplicationContext()).getCubeApplication().getAppKey();
-		return DOWNLOAD + bundle + "?sessionKey=" + sessionKey + "&appKey="+ appKey;
+		return DOWNLOAD + bundle + "?sessionKey=" + sessionKey + "&appKey="+ appKey+"&encode=true";
 	}
 	
 	public static String getUpdateAppplicationUrl(Context context, String bundle) {
