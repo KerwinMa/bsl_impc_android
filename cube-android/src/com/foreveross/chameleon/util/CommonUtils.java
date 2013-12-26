@@ -2,12 +2,12 @@ package com.foreveross.chameleon.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -17,6 +17,17 @@ public class CommonUtils {
 	public static final int MIN_PAD_HEIGHT = 0;
 	public static final int MIN_PAD_SIZE = 0;
 
+	public static boolean OpenRotation(Context context)
+	{
+		int flag = Settings.System.getInt(context.getContentResolver(),
+		        Settings.System.ACCELEROMETER_ROTATION, 0);
+		    if (0 == flag) {
+		      Settings.System.putInt(context.getContentResolver(),
+		          Settings.System.ACCELEROMETER_ROTATION, 1);
+		    }
+		    return true;
+	}
+	
 	
 	
 	public static boolean isPad(Context applicationContext) {

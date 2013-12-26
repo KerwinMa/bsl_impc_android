@@ -55,6 +55,7 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -81,6 +82,7 @@ import com.foreveross.chameleon.pad.fragment.PushSettingFragment;
 import com.foreveross.chameleon.pad.fragment.SettingsFragment;
 import com.foreveross.chameleon.pad.fragment.ViewCreateCallBack;
 import com.foreveross.chameleon.pad.modle.SkinModel;
+import com.foreveross.chameleon.phone.activity.DeviceRegisterActivity;
 import com.foreveross.chameleon.phone.modules.CubeModule;
 import com.foreveross.chameleon.phone.modules.CubeModuleManager;
 import com.foreveross.chameleon.phone.modules.LoginModel;
@@ -163,8 +165,15 @@ public class FacadeActivity extends FragmentActivity implements
 		checkUpdate(url);
 		loadUrl(url);
 		registerReceiver();
+		boolean isShow = getIntent().getBooleanExtra("showRegister", false);
+		if(isShow)
+		{
+			Intent i = new Intent();
+			i.setClass(this, DeviceRegisterActivity.class);
+			startActivityForResult(i,100);
+		}
 	}
-	
+		
 	public void checkUpdate(String url) {
 		if (url != null) {
 			if (url.contains("login") || url.contains("deviceregist")){

@@ -11,6 +11,7 @@ import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.device.DeviceRegisteTask;
 import com.foreveross.chameleon.phone.mdm.DeviceAdminSampleReceiver;
+import com.foreveross.chameleon.util.CommonUtils;
 import com.foreveross.chameleon.util.PadUtils;
 
 public class AdminActivity extends BaseActivity {
@@ -27,6 +28,7 @@ public class AdminActivity extends BaseActivity {
 			{
 				mDPM.removeActiveAdmin(mDeviceAdminSample);
 			}
+			CommonUtils.OpenRotation(application);
 			new DeviceRegisteTask(this.getApplicationContext()){
 
 				@Override
@@ -41,7 +43,8 @@ public class AdminActivity extends BaseActivity {
 					{
 						if (PadUtils.isPad(application)) {
 							Intent i = new Intent(AdminActivity.this, FacadeActivity.class);
-							i.putExtra("url", URL.PAD_REGISTER_URL);
+							i.putExtra("url", URL.PAD_LOGIN_URL);
+							i.putExtra("showRegister", true);
 							i.putExtra("isPad", true);
 							startActivity(i);
 						} else {// 手机

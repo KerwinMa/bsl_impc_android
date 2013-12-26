@@ -377,6 +377,8 @@ public abstract class DroidGapFragment extends Fragment implements
 
 						if (getAssocActivity() instanceof FacadeActivity) {
 							((FacadeActivity) getAssocActivity()).popRight();
+							//将右边设置为设置界面
+							
 						}
 						detailContainer.setVisibility(View.GONE);
 						// detailContainer.setX(0);
