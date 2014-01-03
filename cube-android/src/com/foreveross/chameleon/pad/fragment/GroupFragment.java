@@ -1061,6 +1061,7 @@ public class GroupFragment extends Fragment {
 				titlebar_right.setVisibility(View.VISIBLE);
 				titlebar_right.setText("群聊");
 				collectAdapter.setShowCollectDelete(false);
+				titlebar_right.setVisibility(View.GONE);
 				showCollectDelete = false;
 				collectAdapter.notifyDataSetChanged();
 				
