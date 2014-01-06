@@ -113,7 +113,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 		String username = args.getString(0).toLowerCase();
 		String password = args.getString(1).toLowerCase();
 		boolean isremember = args.getBoolean(2);
-		boolean isoutline = false;//args.getBoolean(3);
+		boolean isoutline = args.getBoolean(3);
 		if (checkLogin(username, password)) {
 			processLogined(isremember, username, password,"", isoutline,
 					callbackContext);
@@ -310,6 +310,12 @@ public class CubeLoginPlugin extends CordovaPlugin {
 			@Override
 			protected void doPostExecute(String json) {
 				try {
+					if(json.equals(""))
+					{
+						Toast.makeText(cordova.getActivity(), "登录失败请稍后再试",
+								Toast.LENGTH_SHORT).show();
+						return;
+					}
 					JSONObject jb = new JSONObject(json);
 					boolean error = jb.has("errmsg");
 

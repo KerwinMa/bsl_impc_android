@@ -57,10 +57,22 @@ public class URL {
 																// post
 
 	public static String getDownloadUrl(Context context, String bundle) {
+		return getDownloadUrl(context, bundle, false);
+	}
+	
+	public static String getDownloadUrl(Context context, String bundle,boolean isEnconde) {
 		String DOWNLOAD = BASE_WS + "csair-mam/api/mam/clients/files/";
 		String sessionKey = Preferences.getSESSION(Application.sharePref);
 		String appKey = Application.class.cast(context.getApplicationContext()).getCubeApplication().getAppKey();
-		return DOWNLOAD + bundle + "?sessionKey=" + sessionKey + "&appKey="+ appKey+"&encode=true";
+		if(isEnconde)
+		{
+			return DOWNLOAD + bundle + "?sessionKey=" + sessionKey + "&appKey="+ appKey+"&encode=true";
+		}
+		else
+		{
+			return DOWNLOAD + bundle + "?sessionKey=" + sessionKey + "&appKey="+ appKey;
+		}
+		
 	}
 	
 	public static String getUpdateAppplicationUrl(Context context, String bundle) {

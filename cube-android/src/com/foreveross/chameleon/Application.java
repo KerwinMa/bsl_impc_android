@@ -122,6 +122,8 @@ public class Application extends android.app.Application implements
 
 	private int loginType;
 	public  static String  token = null;
+	
+	public static boolean isSettingOn =false;
 
 	private ActivityManager activityManager = null;
 	private final static Logger log = LoggerFactory

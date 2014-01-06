@@ -324,6 +324,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 			} else if (action.equals("checkDepends")) {
 				// 检查依赖
 			} else if (action.equals("showModule")) {
+				Log.e("EXECUTE_TAG", args.getString(1));
 				String type = args.getString(1);
 
 				// 效能监控点击模块保存数据

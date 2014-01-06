@@ -275,6 +275,8 @@ var activeModuleManageBarItem = function(type) {
 var module_all_click = function() {
 
 	/*$("li[identifier] .module_li_img , li[identifier] .module_push, li[identifier] .detail").bind('click', function() {*/
+	// $("li[identifier]").die('click');
+	// $("li[identifier]").live('click', function() {
 	$("li[identifier]").bind('click', function() {
 		
 
@@ -599,7 +601,7 @@ $(window).resize(function() {
 	var availHeight = $(window).height();
 	console.log("LastHeight " + LastHeight);
 	console.log("availHeight " + availHeight);
-	if (Math.abs(LastHeight - availHeight) > 100) {
+	if (Math.abs(LastHeight - availHeight) > 35) {
 		if ((LastHeight - availHeight) > 0) {
 			//键盘弹出
 			console.log("键盘弹出了");

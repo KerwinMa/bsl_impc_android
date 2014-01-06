@@ -588,7 +588,7 @@ public class CubeApplication implements Serializable {
 					cubeModule.setPrivileges(module.getPrivileges());
 					cubeModule.setHidden(module.isHidden());
 					cubeModule.setDownloadUrl(URL.getDownloadUrl(context,
-							module.getBundle()));
+							module.getBundle(),true));
 					cubeModule.setSortingWeight(module.getSortingWeight());
 					cubeModule.setInstallIcon(URL.getDownloadUrl(context,module.getIcon()));
 					
@@ -661,7 +661,7 @@ public class CubeApplication implements Serializable {
 					&& installedMap.get(identify) == null) {
 
 				cubeNew.setDownloadUrl(URL.getDownloadUrl(context,
-						cubeNew.getBundle()));
+						cubeNew.getBundle(),true));
 				// cubeNew.setIcon(URL.DOWNLOAD +
 				// cubeNew.getIcon()+"?sessionKey="
 				// + Preferences.getSESSION(Application.sharePref)
@@ -717,7 +717,7 @@ public class CubeApplication implements Serializable {
 					// + "?appKey="
 					// + oldOne.getAppKey());
 					cubeNew.setDownloadUrl(URL.getDownloadUrl(context,
-							cubeNew.getBundle()));
+							cubeNew.getBundle(),true));
 					cubeNew.setIcon(URL.getDownloadUrl(context,
 							cubeNew.getIcon()));
 					updatableMap.put(cubeNew.getIdentifier(), cubeNew);

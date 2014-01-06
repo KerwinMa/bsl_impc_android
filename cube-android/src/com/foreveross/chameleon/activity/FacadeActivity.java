@@ -938,6 +938,7 @@ public class FacadeActivity extends FragmentActivity implements
 			detailContainer.setBackgroundResource(R.drawable.shadow);
 			detailContainer.setX(parentFragment.getWidth() / 2 - 24);
 		}
+		
 		detailContainer.setVisibility(View.VISIBLE);
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager()
 				.beginTransaction();

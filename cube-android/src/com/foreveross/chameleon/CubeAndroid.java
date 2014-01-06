@@ -136,6 +136,7 @@ public class CubeAndroid extends DroidGap {
 					
 //					finish();
 					ActivityManager.getScreenManager().popAllWeb();
+					Application.isSettingOn = true;
 				}
 
 			}
@@ -235,9 +236,6 @@ public class CubeAndroid extends DroidGap {
 						Bitmap favicon) {
 					super.onPageStarted(view, url, favicon);
 					touchable = false;
-					
-					
-					
 					//效能监控点击模块保存数据
 
 					

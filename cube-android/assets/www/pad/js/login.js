@@ -106,7 +106,7 @@ $("#LoginBtn").click(function() {
         $("#LoginBtn").removeAttr("disabled");
 
 		//showAlert(err.message, null, "提示", "确定");
-	}, "CubeLogin", "login", [username, password, isRemember]);
+	}, "CubeLogin", "login", [username, password, isRemember,isOffLine]);
 
 });
 
