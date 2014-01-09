@@ -43,6 +43,7 @@ import com.foreveross.chameleon.phone.view.SlidePageView;
 import com.foreveross.chameleon.phone.view.SlidePageView.OnPageChangedListener;
 import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
 import com.foreveross.chameleon.util.HttpUtil;
+import com.foreveross.chameleon.util.Preferences;
 import com.foreveross.chameleon.util.imageTool.CubeAsyncImage;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
@@ -122,6 +123,10 @@ public class ModuleDetailFragment extends Fragment {
 		icon = (ImageView) view.findViewById(R.id.icon);
 		bar = (ProgressBar) view.findViewById(R.id.progressBar_download);
 		app_dealbtn = (ItemButton) view.findViewById(R.id.app_dealbtn);
+		if(Preferences.getOutLine(Application.sharePref))
+		{
+			app_dealbtn.setVisibility(View.GONE);
+		}
 		if ((CubeModule.INSTALLING == cubeModule.getModuleType() || CubeModule.UPGRADING == cubeModule
 				.getModuleType()) && cubeModule.getProgress() == -1) {
 			bar.setVisibility(View.VISIBLE);

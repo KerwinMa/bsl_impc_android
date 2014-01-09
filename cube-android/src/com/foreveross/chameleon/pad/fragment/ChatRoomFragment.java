@@ -339,6 +339,7 @@ public class ChatRoomFragment extends Fragment {
 		chat_emotion_btn = (Button) view.findViewById(R.id.chat_emotion_btn);
 		chat_emotion_btn.setOnClickListener(mClickListener);
 		collect_friend = (Button) view.findViewById(R.id.chatroom_collect_friend_icon);
+		collect_friend.setVisibility(View.VISIBLE);
 		collect_friend.setOnClickListener(mClickListener);
 		chat_error_message = (TextView) view.findViewById(R.id.chat_error_message);
 		chat_net_exception = (LinearLayout) view.findViewById(R.id.chat_net_exception);

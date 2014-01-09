@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -64,8 +65,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.csair.impc.R;
+import com.foreveross.chameleon.Application;
+import com.foreveross.chameleon.CubeConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.pad.component.ClosableWindow;
+import com.foreveross.chameleon.push.mina.library.util.PropertiesUtil;
+import com.foreveross.chameleon.util.PadUtils;
+import common.extras.plugins.CubeModuleOperatorPlugin;
 
 public abstract class DroidGapFragment extends Fragment implements
 		CordovaInterface {
@@ -377,7 +383,26 @@ public abstract class DroidGapFragment extends Fragment implements
 
 						if (getAssocActivity() instanceof FacadeActivity) {
 							((FacadeActivity) getAssocActivity()).popRight();
-							//将右边设置为设置界面
+							if(Application.isSettingOn)
+							{
+								Application.isSettingOn = false;
+								//将右边设置为设置界面
+								if (PadUtils.isPad(getAssocActivity())) {
+									PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
+											getAssocActivity(),
+											CubeConstants.CUBE_CONFIG);
+									String className = propertiesUtil.getString(
+											"settings", "");
+									Intent intent = new Intent();
+									if (!TextUtils.isEmpty(className)) {
+										intent.putExtra("direction", 2);
+										intent.putExtra("type", "fragment");
+										intent.putExtra("value", className);
+										intent.setClass(getAssocActivity(), FacadeActivity.class);
+										getAssocActivity().startActivity(intent);
+									}
+								}
+							}
 							
 						}
 						detailContainer.setVisibility(View.GONE);

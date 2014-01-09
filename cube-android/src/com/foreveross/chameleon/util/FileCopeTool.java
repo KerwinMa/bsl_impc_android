@@ -17,6 +17,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.phone.modules.CubeApplication;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -520,4 +521,22 @@ public class FileCopeTool {
 		}
 		return files;
 	}
+	
+	public static void scanFilesAndDeleteAtpath(int days)
+	{
+		String dir = Environment.getExternalStorageDirectory()
+				.getPath() + "/" + TmpConstants.ATTACHMENT_PATH;
+		File rootDir = new File(dir);
+		File[] files = rootDir.listFiles();
+		for(File file :files)
+		{
+			long time = file.lastModified();
+			long currentTime = System.currentTimeMillis();
+			if(currentTime - time >= days*1000*60*60*24)
+			{
+				file.delete();
+			}
+		}
+	}
+	
 }

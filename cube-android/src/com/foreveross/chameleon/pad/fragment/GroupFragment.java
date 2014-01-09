@@ -1058,7 +1058,7 @@ public class GroupFragment extends Fragment {
 				group_exlistview.setVisibility(View.VISIBLE);
 				collect_listview.setVisibility(View.GONE);
 				room_listview.setVisibility(View.GONE);
-				titlebar_right.setVisibility(View.VISIBLE);
+				titlebar_right.setVisibility(View.GONE);
 				titlebar_right.setText("群聊");
 				collectAdapter.setShowCollectDelete(false);
 				showCollectDelete = false;

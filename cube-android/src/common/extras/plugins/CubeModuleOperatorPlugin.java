@@ -89,7 +89,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 				cubeApp.loadApplication();
 				if(args.length() >0){
 					Toast.makeText(cordova.getActivity(), "离线不能管理模块", Toast.LENGTH_SHORT).show();
-					callbackContext.error("");
+					callbackContext.error("1");
 					return false;
 				}
 				callbackContext.success("sync success");

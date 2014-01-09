@@ -43,7 +43,7 @@ $("#search_del").click(function() {
 var cordovaExec = function(plugin, action, parameters, callback) {
     cordova.exec(function(data) {
         if (callback !== undefined) {
-            callback();
+            callback(data);
         }
     }, function(err) {
         //alert(err);
@@ -221,11 +221,14 @@ $(".menuItem").tap(function() {
 
 
     } else if (type === "module") {
-        $(".moduleManageBar").css("display", "block");
         //$('.account_content').hide();
         activeModuleManageBarItem("uninstall");
         //点击模块管理，加载未安装模块列表(先同步，再获取未安装列表)
-        cordovaExec("CubeModuleOperator", "sync", [], function() {
+        cordovaExec("CubeModuleOperator", "sync", [], function(data) {
+            if(data !== '1')
+            {
+                $(".moduleManageBar").css("display", "block");
+            }
             loadModuleList("CubeModuleList", "uninstallList", "uninstall");
         });
 

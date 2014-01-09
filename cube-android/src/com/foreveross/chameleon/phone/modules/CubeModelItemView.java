@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.CubeAndroid;
 import com.csair.impc.R;
 import com.foreveross.chameleon.activity.FacadeActivity;
@@ -80,6 +81,7 @@ public class CubeModelItemView extends RelativeLayout
 				
 				Intent intent = new Intent();
 				if (PadUtils.isPad(mContext)) {
+					Application.isSettingOn = true;
 					intent.setClass(mContext, FacadeActivity.class);
 					intent.putExtra("direction", 2);
 					intent.putExtra("type", "web");
