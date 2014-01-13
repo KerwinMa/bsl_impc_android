@@ -138,8 +138,8 @@
                     android:background="@drawable/list_next" />
             </RelativeLayout>
             
-            <!--RelativeLayout
-                android:id="@+id/setting_btn_pushstting"
+            <RelativeLayout
+                android:id="@+id/secruty_btn_pushstting"
                 android:layout_width="fill_parent"
                 android:layout_height="45dip"
                 android:background="@drawable/listview_select_white_cell"
@@ -160,7 +160,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="14dip"
                     android:layout_toRightOf="@id/img_pushsetting"
-                    android:text="上传"
+                    android:text="安全设置"
                     android:textColor="#212121"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -173,7 +173,7 @@
                     android:layout_marginRight="14dip"
                     android:background="@drawable/list_next" />
             </RelativeLayout>
-            
+            <!-- 
             
             <RelativeLayout
                 android:id="@+id/setting_btn_pushstting"

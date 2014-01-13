@@ -60,6 +60,7 @@ public class SettingsFragment extends Fragment {
 	private RelativeLayout setting_update;
 	private RelativeLayout setting_pushsetting;
 	private RelativeLayout setting_btn_register;
+	private RelativeLayout secruty_btn_pushstting;
 	private Button logOff;
 	private LinearLayout module_setting_layout;
 	private Application application;
@@ -96,6 +97,9 @@ public class SettingsFragment extends Fragment {
 		setting_about = (RelativeLayout) view.findViewById(R.id.setting_btn_about);
 		setting_update = (RelativeLayout) view.findViewById(R.id.setting_btn_update);
 		setting_pushsetting = (RelativeLayout) view.findViewById(R.id.setting_btn_pushstting);
+		
+		secruty_btn_pushstting = (RelativeLayout) view.findViewById(R.id.secruty_btn_pushstting);
+		secruty_btn_pushstting.setOnClickListener(listener);
 		logOff = (Button) view.findViewById(R.id.logoff);
 		logOff.setOnClickListener(listener);
 		setting_about.setOnClickListener(listener);
@@ -279,6 +283,9 @@ public class SettingsFragment extends Fragment {
 									}
 								}).create();
 				dialog.show();
+				break;
+			case R.id.secruty_btn_pushstting:
+				
 				break;
 			default:
 				break;

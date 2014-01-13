@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.csair.impc.R;
 import com.foreveross.chameleon.URL;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.device.DeviceRegisteTask;
