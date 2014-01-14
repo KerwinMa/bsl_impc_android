@@ -8,6 +8,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.csair.impc.R;
 import com.foreveross.chameleon.Application;
 import com.foreveross.chameleon.CubeConstants;
@@ -15,7 +33,7 @@ import com.foreveross.chameleon.TmpConstants;
 import com.foreveross.chameleon.activity.FacadeActivity;
 import com.foreveross.chameleon.phone.activity.AboutActivity;
 import com.foreveross.chameleon.phone.activity.PushSettingActivity;
-import com.foreveross.chameleon.phone.activity.SettingsActivity;
+import com.foreveross.chameleon.phone.activity.SecrutySettinsActivity;
 import com.foreveross.chameleon.phone.modules.CubeApplication;
 import com.foreveross.chameleon.phone.modules.CubeModelItemView;
 import com.foreveross.chameleon.phone.modules.CubeModule;
@@ -25,27 +43,6 @@ import com.foreveross.chameleon.update.CheckUpdateTask;
 import com.foreveross.chameleon.update.ManualCheckUpdateListener;
 import com.foreveross.chameleon.util.FileCopeTool;
 import com.foreveross.chameleon.util.PadUtils;
-import common.extras.plugins.CubeModuleOperatorPlugin;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * @author zhoujun
@@ -285,7 +282,28 @@ public class SettingsFragment extends Fragment {
 				dialog.show();
 				break;
 			case R.id.secruty_btn_pushstting:
-				
+				if (PadUtils.isPad(SettingsFragment.this.getAssocActivity())) {
+					PropertiesUtil propertiesUtil = PropertiesUtil.readProperties(
+							SettingsFragment.this.getAssocActivity(),
+							CubeConstants.CUBE_CONFIG);
+					String className = propertiesUtil.getString(
+							"secrutySettings", "");
+					Intent intent = new Intent();
+					if (!TextUtils.isEmpty(className)) {
+						intent.putExtra("direction", 2);
+						intent.putExtra("type", "fragment");
+						intent.putExtra("value", className);
+						intent.setClass(SettingsFragment.this.getAssocActivity(), FacadeActivity.class);
+						startActivity(intent);
+					}
+				}
+				else
+				{
+					Intent intent = new Intent();
+					intent.setClass(SettingsFragment.this.getAssocActivity(),
+							SecrutySettinsActivity.class);
+					startActivity(intent);
+				}
 				break;
 			default:
 				break;

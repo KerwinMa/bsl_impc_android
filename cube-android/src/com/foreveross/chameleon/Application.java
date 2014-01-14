@@ -168,6 +168,7 @@ public class Application extends android.app.Application implements
 		initServices();
 		initHandlers();
 		initPosts();
+		
 		httpClient = createHttpClient();
 		// 初始化自定义Activity管理器
 		activityManager = ActivityManager.getScreenManager();
@@ -186,6 +187,8 @@ public class Application extends android.app.Application implements
 
 		 mHandler.removeCallbacks(mUpdateTimeTask);
 		 mHandler.postDelayed(mUpdateTimeTask, 60000);
+		 int days = Preferences.getDayTime(sharePref);
+		 FileCopeTool.scanFilesAndDeleteAtpath(days);
 		 
 
 	}

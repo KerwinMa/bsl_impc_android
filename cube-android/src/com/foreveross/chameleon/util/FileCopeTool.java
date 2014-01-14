@@ -522,21 +522,35 @@ public class FileCopeTool {
 		return files;
 	}
 	
-	public static void scanFilesAndDeleteAtpath(int days)
+	public static void scanFilesAndDeleteAtpath(final int days)
 	{
-		String dir = Environment.getExternalStorageDirectory()
-				.getPath() + "/" + TmpConstants.ATTACHMENT_PATH;
-		File rootDir = new File(dir);
-		File[] files = rootDir.listFiles();
-		for(File file :files)
-		{
-			long time = file.lastModified();
-			long currentTime = System.currentTimeMillis();
-			if(currentTime - time >= days*1000*60*60*24)
-			{
-				file.delete();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				String dir = Environment.getExternalStorageDirectory()
+						.getPath() + "/" + TmpConstants.ATTACHMENT_PATH;
+				File rootDir = new File(dir);
+				File[] files = rootDir.listFiles();
+				if(null == files)
+				{
+					Thread.currentThread().interrupt();
+					return;
+				}
+				for(File file :files)
+				{
+					long time = file.lastModified();
+					long currentTime = System.currentTimeMillis();
+					if(currentTime - time >= days*1000*60*60*24)
+					{
+						file.delete();
+					}
+				}
+				
 			}
-		}
+		}).start();
+		
+		
 	}
 	
 }

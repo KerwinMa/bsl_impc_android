@@ -51,6 +51,8 @@ public class Preferences
     /** 离线登录 */
     public static final String OUTLINE = "outline";
     
+    public static final String DAY_TIME = "daytime";
+    
     /** 用户昵称 */
     public static final String EXPERT_DATE = "expertDate";
     public static void saveFirsttime(Boolean fristTime,SharedPreferences preference) {
@@ -143,6 +145,16 @@ public class Preferences
          editor.commit();
     }
     
+    public static void saveDayTime(int dayTime,SharedPreferences preference)
+    {
+    	 Editor editor = preference.edit();
+         editor.putInt(DAY_TIME, dayTime);
+         editor.commit();
+    }
+    public static int getDayTime(SharedPreferences preference)
+    {
+    	return preference.getInt(DAY_TIME, 3);
+    }
     
     public static void saveAutoDownload(String UserName,boolean auto,SharedPreferences preference) {
     	 Editor editor = preference.edit();

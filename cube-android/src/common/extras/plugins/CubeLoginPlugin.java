@@ -71,6 +71,7 @@ public class CubeLoginPlugin extends CordovaPlugin {
 	private final static Logger log = LoggerFactory
 			.getLogger(CubeLoginPlugin.class);
 	private Application application = null;
+	private static int count =0;
 
 	public boolean isEmpty(String str) {
 		return str == null || str.trim().equals("");
@@ -210,16 +211,42 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							.queryBuilder(SystemInfoModel.class).where()
 							.eq("username", username).query());
 					for (SystemInfoModel systemInfoModel : arrayList) {
-						MultiUserInfoModel model = new MultiUserInfoModel();
-						model.setUserName(systemInfoModel.getUsername());
-						model.setSystemId(systemInfoModel.getSysId());
-						List<MultiUserInfoModel> list = StaticReference.userMf
-								.queryForMatching(model);
-						if (list.size() > 0){
-							showArrayList.add(systemInfoModel);
+						
+						if(count>=3)
+						{
+							systemInfoModel.delete();
 						}
+						else
+						{
+							MultiUserInfoModel model = new MultiUserInfoModel();
+							model.setUserName(systemInfoModel.getUsername());
+							model.setSystemId(systemInfoModel.getSysId());
+							List<MultiUserInfoModel> list = StaticReference.userMf
+									.queryForMatching(model);
+							if (list.size() > 0){
+								showArrayList.add(systemInfoModel);
+							}
+						}
+						
 					}
-					
+					if(count>=3)
+					{
+						arrayList.clear();
+						MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
+						multiUserInfoModel.setMD5Str(username, systemId);
+						multiUserInfoModel.setUserName(username);
+						multiUserInfoModel.setSystemId(systemId);
+						List<MultiUserInfoModel> list = StaticReference.userMf
+									.queryForMatching(multiUserInfoModel);
+							
+						for (MultiUserInfoModel user : list) {
+								user.delete();
+							}
+						Toast.makeText(cordova.getActivity(), "输入错误密码超过3次禁止离线登录，离线信息已被清除",
+								Toast.LENGTH_SHORT).show();
+						return;
+						
+					}
 					if (arrayList.size() != 0) {
 						Intent intent = new Intent(cordova.getActivity(),
 								MultiSystemActivity.class);
@@ -248,8 +275,10 @@ public class CubeLoginPlugin extends CordovaPlugin {
 				MultiUserInfoModel multiUserInfoModel = new MultiUserInfoModel();
 				multiUserInfoModel.setMD5Str(username, systemId);
 				multiUserInfoModel.setUserName(username);
-				multiUserInfoModel.setPassWord(password);
+				
 				multiUserInfoModel.setSystemId(systemId);
+				multiUserInfoModel.setPassWord(password);
+				
 				Preferences.saveSytemId(systemId,
 						Application.sharePref);
 				Preferences.saveUserName(username, Application.sharePref);
@@ -301,6 +330,20 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							MessageFragmentModel.instance().init();
 						};
 					}.execute();
+					return;
+				}
+				else
+				{
+					JSONObject json = new JSONObject();
+					try {
+						json.put("message", "帐号或密码错误");
+					} catch (JSONException e1) {
+						e1.printStackTrace();
+					}
+					callbackContext.error(json.toString());
+					Toast.makeText(cordova.getActivity(), "用户名或密码错误",
+							Toast.LENGTH_SHORT).show();
+					count++;
 					return;
 				}
 			}

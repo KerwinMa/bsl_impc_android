@@ -84,6 +84,21 @@ $("#LoginBtn").click(function() {
 	}, function(err) {
 
 		err = $.parseJSON(err);
+        var tip = err.message;
+        if(tip.indexOf("用户不存在") != -1)
+        {
+            $("#realpsw").val("");
+            $("#password").val("");
+            $("#username").val("");
+                 
+        }
+        else if(tip.indexOf("帐号或密码错误") != -1)
+        {
+            $("#realpsw").val("");
+            $("#password").val("");
+            $("#username").val("");
+                 
+        }
 		$("#LoginBtn").removeAttr("disabled");
 	}, "CubeLogin", "login", [username, password, isRemember, isOffLine]);
 

@@ -13,7 +13,7 @@
 	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
 	    <TextView android:layout_height="44dip" android:layout_width="wrap_content" android:text="附件保留时间:" android:layout_marginTop="10dip" android:layout_marginLeft="10dip"
 	        android:gravity="center"/>
-	    <EditText android:id="@+id/day_time" android:layout_height="44dip" android:layout_width="36dip" android:layout_marginTop="10dip" android:inputType="number" android:text="3"/>
+	    <EditText android:id="@+id/day_time" android:layout_height="44dip" android:layout_width="44dip" android:layout_marginTop="10dip" android:inputType="number" android:text="3" android:gravity="center" />
 	    <TextView android:layout_height="44dip" android:layout_width="18dip" android:layout_marginTop="10dip" android:text="天"/>
 	</LinearLayout>
     
