@@ -172,7 +172,6 @@ public class Application extends android.app.Application implements
 		httpClient = createHttpClient();
 		// 初始化自定义Activity管理器
 		activityManager = ActivityManager.getScreenManager();
-
 		CrashReport crashReport = new CrashReport();
 		crashReport.start(this);
 		
