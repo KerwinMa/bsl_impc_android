@@ -67,6 +67,7 @@ public class CubeApplication implements Serializable {
 	private int build = 0;
 
 	private String identifier = null;
+	private Set<CubeModule> internalModules = new HashSet<CubeModule>();
 	// 已安装的模块
 	private Set<CubeModule> modules = new HashSet<CubeModule>();
 	// 模块可升级时，旧版本和新版本的容器
@@ -74,6 +75,8 @@ public class CubeApplication implements Serializable {
 	private Map<String, CubeModule> newUpdateModules = new HashMap<String, CubeModule>();
 
 	private static CubeApplication instance;
+	
+	private CubeApplication localCubeApplication;
 
 	public transient FileCopeTool tool;
 
@@ -218,8 +221,26 @@ public class CubeApplication implements Serializable {
 			String results = tool.getFromAssets("Cube.json");
 			CubeApplication app = buildApplication(results);
 			app.context = this.context;
-
 			copyProperties(app);
+			Application application = Application.class.cast(this.context);
+			localCubeApplication = null;
+			if(application.fileIsExist("CubeConfig.json"))
+			{
+				String newRes = tool.getFromAssets("CubeConfig.json");
+				if(newRes != null && newRes.length()>0)
+				{
+					Log.e("BUILD_TAG", newRes);
+					localCubeApplication = buildApplication(newRes,"local");
+					localCubeApplication.context = this.context;
+					
+				}
+			}
+//			if(newApp != null)
+//			{
+//				instance = compareAndSetApp(this, newApp);
+//				internalModules.addAll(instance.getModules());
+//				Log.e("LOAD_TAG", "加载cubeconfig.json");
+//			}
 
 			// for (CubeModule each : app.getModules()) {
 			// if(each.getLocal()!=null)
@@ -239,6 +260,18 @@ public class CubeApplication implements Serializable {
 		}
 	}
 
+	public void loadLocalModule()
+	{
+		if(localCubeApplication != null)
+		{
+			instance = compareAndSetApp(this, localCubeApplication);
+			internalModules.addAll(instance.getModules());
+			Log.e("LOAD_TAG", "加载cubeconfig.json");
+			
+		}
+	}
+	
+	
 	/**
 	 * 下载 cubejson
 	 */
@@ -798,51 +831,85 @@ public class CubeApplication implements Serializable {
 		dest.setVersion(src.getVersion());
 		dest.setBuild(src.getBuild());
 	}
-
-	public static CubeApplication buildApplication(String json) {
+	public static CubeApplication buildApplication(String json,String flag)
+	{
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 		CubeApplication result = gson.fromJson(json, CubeApplication.class);
 		Set<CubeModule> unExistModules = new HashSet<CubeModule>();
-		if (result.getModules() != null) {
-			for (CubeModule each : result.getModules()) {
-				if (each.getLocal() != null) {
-					// 判断本地模块在本地是否存在如果不存在就删除该模块
-					// 南航统一移动平台业务需要勿删
-					
-					
-					 
-					PropertiesUtil propertiesUtil = PropertiesUtil
-							.readProperties(mContext, CubeConstants.CUBE_CONFIG);
-					// 判断本地模块是否存在
-					if (!propertiesUtil.containsValue(each.getIdentifier())) {
-						unExistModules.add(each);
+		if("".equals(flag))
+		{
+			if (result.getModules() != null) {
+			
+				for (CubeModule each : result.getModules()) {
+					if (each.getLocal() != null) {
+						// 判断本地模块在本地是否存在如果不存在就删除该模块
+						// 南航统一移动平台业务需要勿删
+						
+						
+						
+						PropertiesUtil propertiesUtil = PropertiesUtil
+								.readProperties(mContext, CubeConstants.CUBE_CONFIG);
+						// 判断本地模块是否存在
+						if (!propertiesUtil.containsValue(each.getIdentifier())) {
+							unExistModules.add(each);
+						}
+						
+						
+						each.setModuleType(CubeModule.INSTALLED);
+					} else if (each.getModuleType() == -1) {
+						each.setModuleType(CubeModule.UNINSTALL);
+						// each.setDownloadUrl(URL.DOWNLOAD + each.getBundle());
+						// each.setIcon(URL.DOWNLOAD + each.getIcon());
+					} else {
+						// each.setDownloadUrl(URL.DOWNLOAD + each.getBundle());
+						// each.setIcon(URL.DOWNLOAD + each.getIcon());
 					}
-					
-					
-					each.setModuleType(CubeModule.INSTALLED);
-				} else if (each.getModuleType() == -1) {
-					each.setModuleType(CubeModule.UNINSTALL);
-					// each.setDownloadUrl(URL.DOWNLOAD + each.getBundle());
-					// each.setIcon(URL.DOWNLOAD + each.getIcon());
-				} else {
-					// each.setDownloadUrl(URL.DOWNLOAD + each.getBundle());
-					// each.setIcon(URL.DOWNLOAD + each.getIcon());
+				}
+				//result.getModules().remove(null);
+			}
+			// 特殊标记用于批量替换勿改
+//		// 删除不存在的模块
+			//效能监控点击模块保存数据
+			
+			
+			result.getModules().removeAll(unExistModules);
+			unExistModules.clear();
+		}
+		else if("local".equals(flag))
+		{
+			if (result.getModules() != null) {
+			
+				for (CubeModule each : result.getModules()) {
+					if (each.getLocal() != null) {
+						
+						PropertiesUtil propertiesUtil = PropertiesUtil
+								.readProperties(mContext, CubeConstants.CUBE_CONFIG);
+						// 判断本地模块是否存在
+						if (!propertiesUtil.containsValue(each.getIdentifier())) {
+							unExistModules.add(each);
+						}
+						each.setModuleType(CubeModule.INSTALLED);
+					} else if (each.getModuleType() == -1) {
+						each.setModuleType(CubeModule.UNINSTALL);
+//						 each.setDownloadUrl(URL.getDownloadUrl(mContext, each.getBundle()));
+						// each.setIcon(URL.DOWNLOAD + each.getIcon());
+					} else if(each.getModuleType() == CubeModule.INSTALLED){
+//						each.setAutoDownload(true);
+						each.setPrivileges("rw");
+						
+						// each.setDownloadUrl(URL.DOWNLOAD + each.getBundle());
+						// each.setIcon(URL.DOWNLOAD + each.getIcon());
+					}
 				}
 			}
-			//result.getModules().remove(null);
+			result.getModules().removeAll(unExistModules);
+			unExistModules.clear();
 		}
-		// 特殊标记用于批量替换勿改
-//		// 删除不存在的模块
-		//效能监控点击模块保存数据
-		
-		 
-		result.getModules().removeAll(unExistModules);
-		unExistModules.clear();
-		
-		
-
 		return result;
+	}
+	public static CubeApplication buildApplication(String json) {
+		return buildApplication(json, "");
 	}
 
 	public void save(CubeApplication app) {
@@ -1039,4 +1106,13 @@ public class CubeApplication implements Serializable {
 	public static Context getmContext() {
 		return mContext;
 	}
+
+	public Set<CubeModule> getInternalModules() {
+		return internalModules;
+	}
+
+	public void setInternalModules(Set<CubeModule> internalModules) {
+		this.internalModules = internalModules;
+	}
+	
 }

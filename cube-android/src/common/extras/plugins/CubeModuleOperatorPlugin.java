@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args,
 			final CallbackContext callbackContext) throws JSONException {
-		Application app = Application.class.cast(cordova.getActivity()
+		final Application app = Application.class.cast(cordova.getActivity()
 				.getApplicationContext());
 		Log.i("AAA", "action is =" + action);
 		if (args.length() > 0) {
@@ -84,7 +85,7 @@ public class CubeModuleOperatorPlugin extends CordovaPlugin {
 			// 只有同步不需要用到identifier
 
 			boolean outline = Preferences.getOutLine(Application.sharePref);
-			CubeApplication cubeApp = app.getCubeApplication();
+			final CubeApplication cubeApp = app.getCubeApplication();
 			if (outline) {
 				cubeApp.loadApplication();
 				if(args.length() >0){

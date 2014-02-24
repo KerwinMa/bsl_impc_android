@@ -260,7 +260,7 @@ public class CubeModule implements Serializable {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return identifier + " " + version + " " + build;
+		return identifier + " " + version + " " + build +" "+name+" "+category +" "+ downloadUrl;
 	}
 
 	/**
@@ -385,5 +385,8 @@ public class CubeModule implements Serializable {
 			countChangeListener.onCountChange(msgCount, displayBadge);
 		}
 	}
+	
+	
+	
 
 }

@@ -445,7 +445,8 @@ public class CubeLoginPlugin extends CordovaPlugin {
 							}
 							markLogined();
 							// 从本地读取文件cube.json
-							application.getCubeApplication().loadApplication();
+//							application.getCubeApplication().loadApplication();
+							application.installLocalModule();
 							cordova.getActivity().startActivity(successIntent);
 							application.setLoginType(TmpConstants.LOGIN_ONLINE);
 							if (!GeolocationUtil.isOpenGPSSettings(cordova.getActivity().getApplicationContext())) {

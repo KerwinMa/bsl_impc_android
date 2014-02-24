@@ -51,6 +51,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -597,6 +598,16 @@ public class Application extends android.app.Application implements
 		}
 		moduleOperationService.install(cubeModule);
 	}
+	public void installLocalModule()
+	{
+		for(CubeModule module:getCubeApplication().getInternalModules())
+		{
+			Log.e("MODULE_INFO", module.toString());
+			install(module);
+		}
+		getCubeApplication().getInternalModules().clear();
+		
+	}
 
 	/**
 	 * [卸载应用]<BR>
@@ -663,8 +674,9 @@ public class Application extends android.app.Application implements
 		CubeApplication app = CubeApplication.getInstance(this);
 		app.loadApplication();
 		this.setCubeApplication(app);
+		app.loadLocalModule();
 		// 同步前先显示ui
-		CubeModuleManager.getInstance().init(app);
+		CubeModuleManager.getInstance().init(CubeApplication.getInstance(this));
 		// 注册
 		EventBus.getEventBus(TmpConstants.EVENTBUS_COMMON).register(
 				originalParser = new OriginalParser(this));
@@ -1377,7 +1389,29 @@ public class Application extends android.app.Application implements
 			return null;
 		}
 	}
-	
+	public boolean fileIsExist(String fileName)
+	{
+		boolean flag = false;
+		try {
+			String[] files = this.getAssets().list("");
+			if(files == null || files.length == 0)
+			{
+				return flag;
+			}
+			else
+			{
+				for (String str : files) {
+					if(str.equals(fileName))
+					{
+						flag = true;
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
 	/**
 	 * 更新用户标签
 	 */
@@ -1448,5 +1482,7 @@ public class Application extends android.app.Application implements
 	public static void setModuleName(String moduleName) {
 		Application.moduleName = moduleName;
 	}
+	
+	
 
 }

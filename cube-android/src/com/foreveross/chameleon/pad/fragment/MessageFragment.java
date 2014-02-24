@@ -241,6 +241,7 @@ public class MessageFragment extends Fragment {
 		titlebar_right.setOnClickListener(clickListener);
 		titlebar_right.setBackgroundResource(R.drawable.normal_button_clickbg);
 		titlebar_right.setText("编辑");
+		titlebar_right.setVisibility(View.VISIBLE);
 		titlebar_content = (TextView) view.findViewById(R.id.title_barcontent);
 		titlebar_content.setText("消息推送");
 		msglist = (ExpandableListView) view.findViewById(R.id.msglist);

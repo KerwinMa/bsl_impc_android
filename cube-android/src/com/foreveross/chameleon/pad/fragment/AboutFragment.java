@@ -56,8 +56,8 @@ public class AboutFragment extends Fragment {
 
 		version = (TextView) view.findViewById(R.id.about_version);
 		devideId = (TextView) view.findViewById(R.id.about_device);
-		String versionText = Application.class.cast(this.getAssocActivity().getApplicationContext())
-				.getCubeApplication().getVersion();
+		String versionText = Application.class.cast(this.getAssocActivity().getApplicationContext()).getAppVersion();
+//				.getCubeApplication().getVersion();
 		version.setText(versionText);
 		devideId.setText(DeviceInfoUtil.getDeviceId(this.getAssocActivity()));
 
