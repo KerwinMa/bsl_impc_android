@@ -76,6 +76,7 @@ public class ModuleOperationService extends Service {
 		
 		if (!CubeModuleManager.getInstance().getAll_map().get(module.getCategory())
 				.contains(module)) {
+			Log.e("Module", module.toString());
 			throw new UnsupportedOperationException("你传入的对象不在管理器中");
 		}
 

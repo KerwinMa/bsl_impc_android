@@ -603,7 +603,15 @@ public class Application extends android.app.Application implements
 		for(CubeModule module:getCubeApplication().getInternalModules())
 		{
 			Log.e("MODULE_INFO", module.toString());
-			install(module);
+			if(module.getLocal() == null)
+			{
+				install(module);
+			}
+			else
+			{
+				CubeModuleManager.getInstance().add2Installed(module);
+				CubeModuleManager.getInstance().add2Main(module);
+			}
 		}
 		getCubeApplication().getInternalModules().clear();
 		
@@ -1393,7 +1401,7 @@ public class Application extends android.app.Application implements
 	{
 		boolean flag = false;
 		try {
-			String[] files = this.getAssets().list("");
+			String[] files = this.getAssets().list("ConfigModule");
 			if(files == null || files.length == 0)
 			{
 				return flag;

@@ -226,7 +226,7 @@ public class CubeApplication implements Serializable {
 			localCubeApplication = null;
 			if(application.fileIsExist("CubeConfig.json"))
 			{
-				String newRes = tool.getFromAssets("CubeConfig.json");
+				String newRes = tool.getFromAssets("ConfigModule/CubeConfig.json");
 				if(newRes != null && newRes.length()>0)
 				{
 					Log.e("BUILD_TAG", newRes);
@@ -894,7 +894,8 @@ public class CubeApplication implements Serializable {
 						each.setModuleType(CubeModule.UNINSTALL);
 //						 each.setDownloadUrl(URL.getDownloadUrl(mContext, each.getBundle()));
 						// each.setIcon(URL.DOWNLOAD + each.getIcon());
-					} else if(each.getModuleType() == CubeModule.INSTALLED){
+					} else if(each.getModuleType() == 1){
+						each.setModuleType(CubeModule.INSTALLED);
 //						each.setAutoDownload(true);
 						each.setPrivileges("rw");
 						
