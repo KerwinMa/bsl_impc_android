@@ -161,7 +161,13 @@ public class PushMessageListener implements PacketListener {
 				if (!noticModelEvent.isEmpty()) {
 					delayQueue.add(noticModelEvent);
 				}
-
+				synchronized (PushMessageListener.this) {
+					try {
+						buffer.addAll(NotificationPushContent.parseRemoteModel(null,PushMessageListener.this.context));
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				// Set<Map.Entry<String, Integer>> countEntries = countMap
 				// .entrySet();
 				// for (Map.Entry<String, Integer> countEntry : countEntries) {

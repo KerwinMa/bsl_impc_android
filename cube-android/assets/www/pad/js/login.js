@@ -81,10 +81,10 @@ $("#LoginBtn").click(function() {
 
 	cordova.exec(function(data) {
 		console.log("ddddddddd"+data);
-		data = $.parseJSON(data);
-		if (data.isSuccess === true) {
+		// data = $.parseJSON(data);
+		// if (data.isSuccess === true) {
 			$("#LoginBtn").removeAttr("disabled");
-		}
+		// }
 	}, function(err) {
 		err = $.parseJSON(err);
 
