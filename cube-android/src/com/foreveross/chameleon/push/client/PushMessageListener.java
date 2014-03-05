@@ -163,7 +163,11 @@ public class PushMessageListener implements PacketListener {
 				}
 				synchronized (PushMessageListener.this) {
 					try {
-						buffer.addAll(NotificationPushContent.parseRemoteModel(null,PushMessageListener.this.context));
+						List<Delayed> list = NotificationPushContent.parseRemoteModel(null,PushMessageListener.this.context);
+						if(null != list)
+						{
+							buffer.addAll(list);
+						}
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
